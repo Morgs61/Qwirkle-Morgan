@@ -1,6 +1,7 @@
 #include "LinkedList.h"
 #include <iostream>
 #include <vector>
+#include <fstream> 
 using std::cout;
 using std::endl;
 using std::cin;
@@ -12,14 +13,7 @@ using std::vector;
 void displayMenu();
 bool isValidPlayerName(const string& name);
 void displayStudentInformation();
-
-// Define a structure to represent student information
-struct Student {
-    string name;
-    string studentID;
-    string email;
-};
-
+void loadGame();
 
 int main(void) {
    LinkedList* list = new LinkedList();
@@ -74,6 +68,7 @@ Finally, the board starts with no tiles placed, so that when displayed, it shoul
 
         } else if (choice == 2) {
             cout << "Loading Game..." << endl;
+            loadGame();
             // Add code for loading a game
         } else if (choice == 3) {
             
@@ -133,4 +128,40 @@ void displayStudentInformation() {
     cout << "Email: alice.williams@example.com" << endl;
     cout << "--------------------------------------" << endl;
     cout << "\n<Main Menu>" << endl;
+}
+
+
+void loadGame() {
+    cout << "\nEnter the filename from which to load a game:" << endl;
+    string filename;
+    cout << "> ";
+    cin >> filename;
+
+    // Attempt to open the file
+    std::ifstream file(filename);
+    
+    if (file.good() && file.is_open()) {
+        // File exists and is open
+
+        // Add validation for the file format (replace with your actual format check logic)
+        // For example, if you have a specific format, check if it matches
+        // Here, we assume a simple check by reading a line from the file
+        string line;
+        if (getline(file, line)) {
+            cout << "\nQwirkle game successfully loaded." << endl;
+            // Add code to load the game (replace with your actual game loading logic)
+            // For example, you might read data from the file and restore the game state
+            // ...
+
+            // Continue with normal gameplay (replace with your actual gameplay logic)
+            // ...
+        } else {
+            cout << "\nInvalid file format. Unable to load the game." << endl;
+        }
+        
+        // Close the file
+        file.close();
+    } else {
+        cout << "\nFile does not exist or could not be opened. Unable to load the game." << endl;
+    }
 }

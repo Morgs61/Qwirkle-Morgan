@@ -10,7 +10,9 @@ public:
    LinkedList();
    ~LinkedList();
 
-private:
+   int getSize();
+
+   private:
    Node* head;
 };
 

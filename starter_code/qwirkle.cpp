@@ -112,8 +112,8 @@ void displayStudentInformation() {
    cout << "--------------------------------------" << endl;
     // Hardcoded information for 4 students
     cout << "\nName: Michael Moon" << endl;
-    cout << "Student ID: S12345678" << endl;
-    cout << "Email: john.doe@example.com" << endl;
+    cout << "Student ID: s3523025" << endl;
+    cout << "Email: s3523025@student.rmit.edu.au" << endl;
 
     cout << "\nName: Alexander Cowan" << endl;
     cout << "Student ID: S23456789" << endl;

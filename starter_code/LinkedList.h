@@ -14,9 +14,11 @@ public:
 
    void addTile(Tile *tile);
 
-   void addTileToHand(Tile* tile);
+   void addTileToHand(Tile *tile);
 
    bool isEmpty() const;
+
+   void displayHand();
 
 private:
    Node *head;

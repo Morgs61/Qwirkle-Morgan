@@ -201,6 +201,13 @@ void startNewGame()
     LinkedList player1Hand;
     LinkedList player2Hand;
     initializePlayerHands(player1Hand, player2Hand, tileBag);
+
+    // Print the hands of each player
+    cout << "\n" << player1 << "'s hand: ";
+    player1Hand.displayHand();  
+
+    cout << "\n" << player2 << "'s hand: ";
+    player2Hand.displayHand();  
 }
 
 void initializeTileBag(std::vector<Tile> &tileBag)

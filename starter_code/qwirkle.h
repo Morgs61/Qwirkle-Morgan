@@ -9,7 +9,7 @@ struct Tile;
 
 void initializeTileBag(std::vector<Tile> &tileBag);
 void shuffleTileBag(std::vector<Tile> &tileBag);
-void initializePlayerHands(LinkedList &player1Hand, LinkedList &player2Hand, const std::vector<Tile> &tileBag);
+void initializePlayerHands(LinkedList &player1Hand, LinkedList &player2Hand, std::vector<Tile> &tileBag);
 void startNewGame();
 
 #endif // QWIRKLE_H

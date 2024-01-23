@@ -4,16 +4,22 @@
 
 #include "Node.h"
 
-class LinkedList {
+class LinkedList
+{
 public:
-
    LinkedList();
    ~LinkedList();
 
    int getSize();
 
-   private:
-   Node* head;
+   void addTile(Tile *tile);
+
+   void addTileToHand(Tile* tile);
+
+   bool isEmpty() const;
+
+private:
+   Node *head;
 };
 
 #endif // ASSIGN2_LINKEDLIST_H

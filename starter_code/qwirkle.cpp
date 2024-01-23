@@ -213,7 +213,7 @@ void startNewGame()
 void initializeTileBag(std::vector<Tile> &tileBag)
 {
     // Define all possible colours and shapes
-    char colours[] = {'R', 'G', 'B', 'Y', 'O', 'P'};
+    char colours[] = {'R', 'O', 'Y', 'G', 'B', 'P'};
     int shapes[] = {1, 2, 3, 4, 5, 6};
 
     // Create all combinations of colours and shapes

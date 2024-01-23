@@ -4,6 +4,7 @@
 #include <vector>
 #include <fstream>
 #include <algorithm>
+#include <random>
 using std::cin;
 using std::cout;
 using std::endl;
@@ -190,12 +191,9 @@ void startNewGame()
 
     cout << "\nLet's Play!" << endl;
 
-    // Initialize the tile bag
+    // Initialize and shuffle the tile bag
     std::vector<Tile> tileBag;
     initializeTileBag(tileBag);
-
-    // Shuffle the tile bag
-    shuffleTileBag(tileBag);
 
     // Initialize player hands
     LinkedList player1Hand;
@@ -203,24 +201,40 @@ void startNewGame()
     initializePlayerHands(player1Hand, player2Hand, tileBag);
 
     // Print the hands of each player
-    cout << "\n" << player1 << "'s hand: ";
-    player1Hand.displayHand();  
+    cout << "\n"
+         << player1 << "'s hand: ";
+    player1Hand.displayHand();
 
-    cout << "\n" << player2 << "'s hand: ";
-    player2Hand.displayHand();  
+    cout << "\n"
+         << player2 << "'s hand: ";
+    player2Hand.displayHand();
 }
 
 void initializeTileBag(std::vector<Tile> &tileBag)
 {
-    // Add tiles to the tile bag
-    // Example
-    tileBag.push_back({'R', 1}); // Assuming 'R' is for Red and 1 is for Circle
-    tileBag.push_back({'B', 2}); // Assuming 'B' is for Blue and 2 is for Square
+    // Define all possible colours and shapes
+    char colours[] = {'R', 'G', 'B', 'Y', 'O', 'P'};
+    int shapes[] = {1, 2, 3, 4, 5, 6};
+
+    // Create all combinations of colours and shapes
+    for (char colour : colours)
+    {
+        for (int shape : shapes)
+        {
+            tileBag.push_back({colour, shape});
+        }
+    }
+
+    // Shuffle the tile bag
+    shuffleTileBag(tileBag);
 }
+
 void shuffleTileBag(std::vector<Tile> &tileBag)
 {
     // Shuffle the tile bag
-    std::random_shuffle(tileBag.begin(), tileBag.end());
+    std::random_device rd;
+    std::default_random_engine rng(rd());
+    std::shuffle(tileBag.begin(), tileBag.end(), rng);
 }
 
 void initializePlayerHands(LinkedList &player1Hand, LinkedList &player2Hand, std::vector<Tile> &tileBag)

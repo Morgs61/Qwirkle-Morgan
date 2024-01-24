@@ -75,7 +75,7 @@ void LinkedList::displayHand()
    Node *current = head;
    while (current != nullptr)
    {
-      std::cout << "[" << current->tile->colour << ", " << current->tile->shape << "] ";
+      std::cout << "[" << current->tile->colour << "" << current->tile->shape << "] ";
       current = current->next;
    }
    std::cout << std::endl;

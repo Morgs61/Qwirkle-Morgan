@@ -1,5 +1,8 @@
 #include "LinkedList.h"
 #include "qwirkle.h"
+#include "Tile.h"
+#include "Node.h"
+#include "Board.h"
 #include <iostream>
 #include <vector>
 #include <fstream>
@@ -17,7 +20,7 @@ bool isValidPlayerName(const string &name);
 void displayStudentInformation();
 void loadGame();
 
-int BOARD_SIZE = 26;
+
 
 int main(void)
 {
@@ -264,63 +267,7 @@ void initializePlayerHands(LinkedList &player1Hand, LinkedList &player2Hand, std
     }
 }
 
-void initializeBoard(std::vector<std::vector<Tile *>> &board)
-{
-    // Initialize the board with nullptr
-    for (int i = 0; i < BOARD_SIZE; ++i)
-    {
-        std::vector<Tile *> row;
-        for (int j = 0; j < BOARD_SIZE; ++j)
-        {
-            row.push_back(nullptr);
-        }
-        board.push_back(row);
-    }
-}
 
-void displayBoard(const std::vector<std::vector<Tile *>> &board)
-{
-    // Display the board
-    std::cout << "\nBoard:" << std::endl;
-    std::cout << "  ";
-    for (int i = 0; i < BOARD_SIZE; ++i)
-    {
-        if (i < 11)
-        {
-            std::cout << "  " << i << " ";
-        }
-        else
-        {
-            std::cout << " " << i << " ";
-        }
-    }
-    std::cout << std::endl;
-	// place underline under column headers
-	for (int i = 0; i <= BOARD_SIZE; ++i)
-	{
-    	std::cout << "____";
-
-	}
-	std::cout << std::endl;
-
-    for (int i = 0; i < BOARD_SIZE; ++i)
-    {
-        char rowLabel = 'A' + i;
-        std::cout << rowLabel << " |";
-        for (int j = 0; j < BOARD_SIZE; ++j)
-        {
-            if (board[i][j] == nullptr)
-            {
-                std::cout << "   |";
-            }
-            else
-            {
-                std::cout << " " << board[i][j]->colour << "," << board[i][j]->shape << " |";
-            }
-        }
-        std::cout << std::endl;
-    }
-}
 
 
 

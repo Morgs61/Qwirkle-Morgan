@@ -17,6 +17,8 @@ bool isValidPlayerName(const string &name);
 void displayStudentInformation();
 void loadGame();
 
+int BOARD_SIZE = 26;
+
 int main(void)
 {
     LinkedList *list = new LinkedList();
@@ -115,16 +117,16 @@ void displayStudentInformation()
     cout << "Email: s3523025@student.rmit.edu.au" << endl;
 
     cout << "\nName: Alexander Cowan" << endl;
-    cout << "Student ID: S23456789" << endl;
-    cout << "Email: jane.smith@example.com" << endl;
+    cout << "Student ID: s3863084" << endl;
+    cout << "Email: s3863084@student.rmit.edu.au" << endl;
 
     cout << "\nName: Michael Whyte" << endl;
     cout << "Student ID: s3851481" << endl;
     cout << "Email: S3851481@student.rmit.edu.au" << endl;
 
     cout << "\nName: Morgan Cassar" << endl;
-    cout << "Student ID: S45678901" << endl;
-    cout << "Email: alice.williams@example.com" << endl;
+    cout << "Student ID: s3858530" << endl;
+    cout << "Email: s3858530@student.rmit.edu.au" << endl;
     cout << "--------------------------------------" << endl;
     cout << "\n<Main Menu>" << endl;
 }
@@ -136,7 +138,7 @@ void loadGame()
     cout << "> ";
     cin >> filename;
 
-    // Attempt to open the file
+    // Attempt to open the file4
     std::ifstream file(filename);
 
     if (file.good() && file.is_open())
@@ -208,6 +210,14 @@ void startNewGame()
     cout << "\n"
          << player2 << "'s hand: ";
     player2Hand.displayHand();
+
+// Initialize the board
+    std::vector<std::vector<Tile *>> board;
+    initializeBoard(board);
+
+    // Display the board
+
+displayBoard(board);
 }
 
 void initializeTileBag(std::vector<Tile> &tileBag)
@@ -253,3 +263,66 @@ void initializePlayerHands(LinkedList &player1Hand, LinkedList &player2Hand, std
         tileBag.pop_back();
     }
 }
+
+void initializeBoard(std::vector<std::vector<Tile *>> &board)
+{
+    // Initialize the board with nullptr
+    for (int i = 0; i < BOARD_SIZE; ++i)
+    {
+        std::vector<Tile *> row;
+        for (int j = 0; j < BOARD_SIZE; ++j)
+        {
+            row.push_back(nullptr);
+        }
+        board.push_back(row);
+    }
+}
+
+void displayBoard(const std::vector<std::vector<Tile *>> &board)
+{
+    // Display the board
+    std::cout << "\nBoard:" << std::endl;
+    std::cout << "  ";
+    for (int i = 0; i < BOARD_SIZE; ++i)
+    {
+        if (i < 11)
+        {
+            std::cout << "  " << i << " ";
+        }
+        else
+        {
+            std::cout << " " << i << " ";
+        }
+    }
+    std::cout << std::endl;
+	// place underline under column headers
+	for (int i = 0; i <= BOARD_SIZE; ++i)
+	{
+    	std::cout << "____";
+
+	}
+	std::cout << std::endl;
+
+    for (int i = 0; i < BOARD_SIZE; ++i)
+    {
+        char rowLabel = 'A' + i;
+        std::cout << rowLabel << " |";
+        for (int j = 0; j < BOARD_SIZE; ++j)
+        {
+            if (board[i][j] == nullptr)
+            {
+                std::cout << "   |";
+            }
+            else
+            {
+                std::cout << " " << board[i][j]->colour << "," << board[i][j]->shape << " |";
+            }
+        }
+        std::cout << std::endl;
+    }
+}
+
+
+
+
+

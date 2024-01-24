@@ -3,6 +3,7 @@
 #include "Tile.h"
 #include "Node.h"
 #include "Board.h"
+#include "TileCodes.h"
 #include <iostream>
 #include <vector>
 #include <fstream>
@@ -225,9 +226,9 @@ displayBoard(board);
 
 void initializeTileBag(std::vector<Tile> &tileBag)
 {
-    // Define all possible colours and shapes
-    char colours[] = {'R', 'O', 'Y', 'G', 'B', 'P'};
-    int shapes[] = {1, 2, 3, 4, 5, 6};
+    // Get definitions from TileCodes.h
+    char colours[] = {RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE};
+    int shapes[] = {CIRCLE, STAR_4, DIAMOND, SQUARE, STAR_6, CLOVER};
 
     // Create all combinations of colours and shapes
     for (char colour : colours)

@@ -36,7 +36,7 @@ int main(void)
     int choice = 0;
     bool quit = false;
 
-//TEST INVALID CHOICE
+
     while (!quit)
 {
     displayMenu();
@@ -283,10 +283,15 @@ cout << "Debug Info: Tile to check: [" << tileToCheck->colour << "" << tileToChe
 
 if (!player.second->containsTile(tileToCheck)) {
     cout << "Tile not found in hand. Please try again." << endl;
-            continue;
-        } else {
-    cout << "Tile found in hand. Proceeding with the game." << endl;
-    board[row][column] = tileToCheck;
+    continue;
+} else {
+    if (board[row][column] != nullptr) {
+        cout << "There's already a tile at that location. Please try again." << endl;
+        continue;
+    } else {
+        cout << "Tile found in hand. Proceeding with the game." << endl;
+        board[row][column] = tileToCheck;
+    }
 }
 // Remove the tile from the player's hand
 if (!player.second->removeTile(tileToCheck)) {

@@ -20,7 +20,9 @@ public:
 
    void displayHand();
 
-private:
+   void removeTile(Tile *tile);
+
+   private:
    Node *head;
 };
 

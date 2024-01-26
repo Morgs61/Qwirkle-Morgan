@@ -80,3 +80,28 @@ void LinkedList::displayHand()
    }
    std::cout << std::endl;
 }
+
+
+void LinkedList::removeTile(Tile* tile) {
+    Node* current = head;
+    Node* previous = nullptr;
+
+    while (current != nullptr) {
+        if (current->tile->colour == tile->colour && current->tile->shape == tile->shape) {
+            // Found the tile to remove
+            if (previous == nullptr) {
+                // The tile to remove is at the head of the list
+                head = current->next;
+            } else {
+                // The tile to remove is somewhere else in the list
+                previous->next = current->next;
+            }
+
+            delete current;
+            break;
+        }
+
+        previous = current;
+        current = current->next;
+    }
+}

@@ -36,30 +36,30 @@ int main(void)
     int choice = 0;
     bool quit = false;
 
+//TEST INVALID CHOICE
     while (!quit)
-    {
-        displayMenu();
-        cout << "> ";
-        cin >> choice;
+{
+    displayMenu();
+    cout << "> ";
+    cin >> choice;
 
-        if (choice == 1)
+    // If the extraction fails
+    if (cin.fail()) {
+        // Clear the error state
+        cin.clear();
+
+        // Ignore the rest of the line
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        cout << "Invalid choice. Please enter a valid option." << endl;
+        continue;
+    }
+
+    if (choice == 1)
         {
             cout << "\nStarting a New Game" << endl;
             startNewGame();
-            /**  Add code to proceed with normal gameplay
-2.3.10 Special Operation: Starting a New Game
-When a new game is started, a special sequence of operations must be conducted:
-1. Create the ordering for the tile bag
-2. Set up the initial player hands
-3. Start with an empty board, with player 1 as the starting player
-You will need to devise your own algorithm to “shuffle” the bag of tiles to create a “random” initial order. This
-is left up to your own invention. The lectures will talk about randomness is C++ programs.
-Then the initial tiles are added to the player’s hands. 6 tiles are drawn from the tile bag and placed in the 1st
-player’s hand. Then 6 tiles are drawn from the tile bag and placed in the 2nd player’s hand.
-Finally, the board starts with no tiles placed, so that when displayed, it should be empty.
 
-
-            **/
         }
         else if (choice == 2)
         {
@@ -80,6 +80,7 @@ Finally, the board starts with no tiles placed, so that when displayed, it shoul
         else
         {
             cout << "Invalid choice. Please enter a valid option." << endl;
+            
         }
     }
 

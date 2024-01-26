@@ -20,10 +20,13 @@ public:
 
    void displayHand();
 
-   void removeTile(Tile *tile);
+   bool containsTile(Tile *tile);
+
+   bool removeTile(Tile *tile);
 
    private:
    Node *head;
+   Node* tail;
 };
 
 #endif // ASSIGN2_LINKEDLIST_H

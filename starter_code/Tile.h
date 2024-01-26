@@ -18,6 +18,9 @@ public:
 
    Colour colour;
    Shape  shape;
+   // bool equals(Tile* other);
+   // //bool operator==(const Tile& other) const;
+   // bool operator!=(const Tile& other) const;
 };
 
 #endif // ASSIGN2_TILE_H

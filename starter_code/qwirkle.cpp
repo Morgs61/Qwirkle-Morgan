@@ -226,82 +226,94 @@ void startNewGame()
     printTileBag(tileBag);
     
     
-//Player 1's turn
-    while(!player1Hand.isEmpty() && !player2Hand.isEmpty())
-{
+//Player turns currently it can add a tile to the board however issues remaining - 
+
+//Need to fix a tile replacing an already placed tile on the board
+while (!player1Hand.isEmpty() && !player2Hand.isEmpty()) {
     for (auto& player : {std::make_pair(player1, &player1Hand), std::make_pair(player2, &player2Hand)}) {
         cout << "\n" << player.first << "'s turn" << endl;
-        cout << player.first << "'s hand`1: ";
+        cout << player.first << "'s hand: ";
         player.second->displayHand();
 
         cout << "Place a tile using the format: place <tile> at <grid location>" << endl;
         cout << ">";
-        // Add this line to clear the input buffer
-        
+
         string command;
         getline(cin, command);
 
-    // Split the command into words
-    vector<string> words;
-    size_t pos = 0;
-    while ((pos = command.find(' ')) != string::npos) {
-        words.push_back(command.substr(0, pos));
-        command.erase(0, pos + 1);
-    }
-    words.push_back(command);
+        // Split the command into words
+        vector<string> words;
+        size_t pos = 0;
+        while ((pos = command.find(' ')) != string::npos) {
+            words.push_back(command.substr(0, pos));
+            command.erase(0, pos + 1);
+        }
+        words.push_back(command);
 
-    // Check that the command is correctly formatted
-    if (words.size() != 4 || words[0] != "place" || words[3].length() != 2) {
-        cout << "Invalid command. Please try again." << endl;
-        continue;
-    }
+        // Check that the command is correctly formatted
+        if (words.size() != 4 || words[0] != "place" || words[3].length() != 2) {
+            cout << "Invalid command. Please try again." << endl;
+            continue;
+        }
 
-    // Parse the tile and location from the command
-string tile = words[1];
-string location = words[3];
+        // Parse the tile and location from the command
+        string tile = words[1];
+        string location = words[3];
 
 // Convert the grid location to row and column
-int row = location[0] - 'A';
-int column = location[1] - '1';
+char gridLetter = location[0];
+size_t row = (gridLetter >= 'A' && gridLetter <= 'Z') ? (gridLetter - 'A') : -1; // Assuming 'A' to 'Z' for rows
+size_t column = (location[1] >= '1' && location[1] <= '9') ? (location[1] - '1') : -1; // Assuming '1' to '9' for columns
 
-// Place the tile onto the board
-board[row][column] = new Tile(tile[0], tile[1]);
-
-// Remove the tile from the player's hand
-player.second->removeTile(new Tile(tile[0], tile[1]));
-
-// Display an error message if the tile was not found in the player's hand
-bool removed = true; 
-if (!removed) {
-    cout << "Tile not found in hand. Please try again." << endl;
+// Check if the row and column are valid
+if (row == static_cast<size_t>(-1) || row >= board.size() || column == static_cast<size_t>(-1) || column >= board[0].size()) {
+    cout << "Invalid grid location. Please try again." << endl;
     continue;
 }
 
-// Draw a new tile from the tile bag and add it to the player's hand
-if (!tileBag.empty()) {
-    // Get the tile from the back of the bag
-    Tile tileFromBag = tileBag.back();
-    tileBag.pop_back();
+string color = string(1, tile[0]);
+string shape = tile.substr(1);
+Tile* tileToCheck = new Tile(color[0], stoi(shape));
 
-    // Create a new tile with the values from the tile drawn from the bag
-    Tile* newTile = new Tile(tileFromBag.colour, tileFromBag.shape);
+cout << "Debug Info: " << player.first << "'s hand: ";
+player.second->displayHand();
+cout << "Debug Info: Tile to check: [" << tileToCheck->colour << "" << tileToCheck->shape << "]" << endl;
 
-    // Add the new tile to the player's hand
-    player.second->addTileToHand(newTile);
+if (!player.second->containsTile(tileToCheck)) {
+    cout << "Tile not found in hand. Please try again." << endl;
+    continue;
+} else {
+    cout << "Tile found in hand. Proceeding with the game." << endl;
+    board[row][column] = tileToCheck;
+}
+// Remove the tile from the player's hand
+if (!player.second->removeTile(tileToCheck)) {
+    cout << "Error removing tile from hand. Please try again." << endl;
+    continue;
 }
 
-// Display the board and the player's hand
-displayBoard(board);
-cout << "\n" << player.first << "'s hand: ";
-player.second->displayHand();
+        // Draw a new tile from the tile bag and add it to the player's hand
+        if (!tileBag.empty()) {
+            // Get the tile from the back of the bag
+            Tile tileFromBag = tileBag.back();
+            tileBag.pop_back();
 
-// Display the board and the player's hand
-displayBoard(board);
+            // Create a new tile with the values from the tile drawn from the bag
+            Tile* newTile = new Tile(tileFromBag.colour, tileFromBag.shape);
+
+            // Add the new tile to the player's hand
+            player.second->addTileToHand(newTile);
+        }
+
+        // Display the board and the player's hand
+        displayBoard(board);
+        cout << "The size of the tile bag is now: " << tileBag.size() << endl;
         cout << "\n" << player.first << "'s hand: ";
         player.second->displayHand();
     }
 }
 }
+
 void initializeTileBag(std::vector<Tile> &tileBag)
 {
     // Get definitions from TileCodes.h

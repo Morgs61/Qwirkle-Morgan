@@ -4,13 +4,22 @@
 LinkedList::LinkedList()
 {
    head = nullptr;
+   tail = nullptr;
 
    // TODO
 }
 
-LinkedList::~LinkedList()
-{
+LinkedList::~LinkedList() {
+    // Destructor to free memory
+    Node* current = head;
+    while (current != nullptr) {
+        Node* next = current->next;
+        delete current->tile; // Free the memory for the tile
+        delete current; // Free the memory for the node
+        current = next;
+    }
 }
+
 
 // return size of linkedlist
 int LinkedList::getSize()
@@ -80,9 +89,23 @@ void LinkedList::displayHand()
    }
    std::cout << std::endl;
 }
+bool LinkedList::containsTile(Tile* tile) {
+    Node* current = head;
 
+    while (current != nullptr) {
+        if (current->tile->colour && current->tile->shape) {
+            // Found the tile
+            return true;
+        }
 
-void LinkedList::removeTile(Tile* tile) {
+        current = current->next;
+    }
+
+    // Tile not found
+    return false;
+}
+
+bool LinkedList::removeTile(Tile* tile) {
     Node* current = head;
     Node* previous = nullptr;
 
@@ -90,18 +113,25 @@ void LinkedList::removeTile(Tile* tile) {
         if (current->tile->colour == tile->colour && current->tile->shape == tile->shape) {
             // Found the tile to remove
             if (previous == nullptr) {
-                // The tile to remove is at the head of the list
-                head = current->next;
+               // The tile to remove is at the head of the list
+               head = current->next;
             } else {
-                // The tile to remove is somewhere else in the list
-                previous->next = current->next;
+               // The tile to remove is somewhere else in the list
+               previous->next = current->next;
+            }
+
+            // If the tile to remove is at the tail of the list
+            if (current == tail) {
+               tail = previous;
             }
 
             delete current;
-            break;
+            return true;  // Tile found and removed
         }
 
         previous = current;
         current = current->next;
     }
+
+    return false;  // Tile not found
 }

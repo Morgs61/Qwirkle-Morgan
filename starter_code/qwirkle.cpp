@@ -229,16 +229,16 @@ void startNewGame()
     
 //Player turns currently it can add a tile to the board however issues remaining - 
 
-//Need to fix a tile replacing an already placed tile on the board
+//need to fix tile not placed in hand
 while (!player1Hand.isEmpty() && !player2Hand.isEmpty()) {
     for (auto& player : {std::make_pair(player1, &player1Hand), std::make_pair(player2, &player2Hand)}) {
         cout << "\n" << player.first << "'s turn" << endl;
         cout << player.first << "'s hand: ";
         player.second->displayHand();
-
+    
         cout << "Place a tile using the format: place <tile> at <grid location>" << endl;
         cout << ">";
-        // Add this line to clear the input buffer
+
 
         string command;
         getline(cin, command);

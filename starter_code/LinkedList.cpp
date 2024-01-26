@@ -93,8 +93,9 @@ bool LinkedList::containsTile(Tile* tile) {
     Node* current = head;
 
     while (current != nullptr) {
-        if (current->tile->colour && current->tile->shape) {
+        if (current->tile->colour == tile->colour && current->tile->shape == tile->shape) {
             // Found the tile
+            std::cout << "Tile found: [" << current->tile->colour << ", " << current->tile->shape << "]" << std::endl;
             return true;
         }
 

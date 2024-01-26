@@ -207,21 +207,27 @@ void startNewGame()
     initializePlayerHands(player1Hand, player2Hand, tileBag);
 
     // Print the hands of each player
+    void printTileBag(const std::vector<Tile>& tileBag);
+
     cout << "\n"
-         << player1 << "'s hand: ";
+        << player1 << "'s hand: ";
     player1Hand.displayHand();
 
     cout << "\n"
-         << player2 << "'s hand: ";
+        << player2 << "'s hand: ";
     player2Hand.displayHand();
 
-// Initialize the board
+    // Initialize the board
     std::vector<std::vector<Tile *>> board;
     initializeBoard(board);
 
     // Display the board
+    displayBoard(board);
+    printTileBag(tileBag);
+    //Player 1's turn
 
-displayBoard(board);
+
+
 }
 
 void initializeTileBag(std::vector<Tile> &tileBag)
@@ -235,6 +241,8 @@ void initializeTileBag(std::vector<Tile> &tileBag)
     {
         for (int shape : shapes)
         {
+            // Add two tiles of each type to the tile bag
+            tileBag.push_back({colour, shape});
             tileBag.push_back({colour, shape});
         }
     }
@@ -267,10 +275,3 @@ void initializePlayerHands(LinkedList &player1Hand, LinkedList &player2Hand, std
         tileBag.pop_back();
     }
 }
-
-
-
-
-
-
-

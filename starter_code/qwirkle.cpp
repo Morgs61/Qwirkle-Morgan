@@ -237,7 +237,7 @@ void startNewGame()
         cout << "Place a tile using the format: place <tile> at <grid location>" << endl;
         cout << ">";
         // Add this line to clear the input buffer
-        
+
         string command;
         getline(cin, command);
 
@@ -250,32 +250,74 @@ void startNewGame()
     }
     words.push_back(command);
 
-    // Check that the command is correctly formatted
-    if (words.size() != 4 || words[0] != "place" || words[3].length() != 2) {
-        cout << "Invalid command. Please try again." << endl;
-        continue;
-    }
+        // Check that the command is correctly formatted
+        if (words.size() != 4 || words[0] != "place") {
+            cout << "Invalid command. Please try again." << endl;
+            continue;
+        }
 
-    // Parse the tile and location from the command
-string tile = words[1];
-string location = words[3];
+        // Parse the tile and location from the command
+        string tile = words[1];
+        string location = words[3];
 
-// Convert the grid location to row and column
-int row = location[0] - 'A';
-int column = location[1] - '1';
+        // Check that the grid location has a valid format (e.g., A1, Z20)
+        if (location.length() < 2 || !isalpha(location[0])) {
+            cout << "Invalid grid location. Please use a valid format (e.g., A1, Z20)." << endl;
+            continue;
+        }
 
-// Place the tile onto the board
-board[row][column] = new Tile(tile[0], tile[1]);
+        // Find the position of the first digit in the location
+        size_t digitPos = location.find_first_of("0123456789");
+        if (digitPos == string::npos) {
+            cout << "Invalid grid location. Please use a valid format (e.g., A1, Z20)." << endl;
+            continue;
+        }
 
-// Remove the tile from the player's hand
-player.second->removeTile(new Tile(tile[0], tile[1]));
+        // Extract row and column from the location
+        string rowStr = location.substr(0, digitPos);
+        string colStr = location.substr(digitPos);
 
-// Display an error message if the tile was not found in the player's hand
-bool removed = true; 
-if (!removed) {
-    cout << "Tile not found in hand. Please try again." << endl;
-    continue;
-}
+        // Convert the row to uppercase and check if it is a valid letter
+        if (rowStr.length() != 1 || !isalpha(rowStr[0])) {
+            cout << "Invalid row in grid location. Please use a valid letter (e.g., A, Z)." << endl;
+            continue;
+        }
+
+        // Convert the column to an integer and check if it is a valid number
+        int column;
+        try {
+            column = stoi(colStr);
+        } catch (const std::invalid_argument& e) {
+            cout << "Invalid column in grid location. Please use a valid number." << endl;
+            continue;
+        }
+
+        // Convert the grid location to row and column
+        size_t row = static_cast<size_t>(toupper(rowStr[0]) - 'A');
+        column--; // Adjust column to zero-based index
+
+        // Ensure that the row and column values are within the valid range
+        if (location.length() < 2 || !isalpha(location[0]) || !isdigit(location[1])) {
+            cout << "Invalid grid location. Please use a valid format (e.g., A1, Z20)." << endl;
+            continue;
+        }
+
+        // Add this line to adjust the column back for user-friendly display
+        column++;
+
+        // Place the tile onto the board
+        board[row][column] = new Tile(tile[0], tile[1]);
+
+        // Remove the tile from the player's hand
+        player.second->removeTile(new Tile(tile[0], tile[1]));
+
+        // Display an error message if the tile was not found in the player's hand
+        bool removed = true;
+        if (!removed) {
+            cout << "Tile not found in hand. Please try again." << endl;
+            continue;
+        }
+
 
 // Draw a new tile from the tile bag and add it to the player's hand
 if (!tileBag.empty()) {
@@ -294,12 +336,7 @@ if (!tileBag.empty()) {
 displayBoard(board);
 cout << "\n" << player.first << "'s hand: ";
 player.second->displayHand();
-
-// Display the board and the player's hand
-displayBoard(board);
-        cout << "\n" << player.first << "'s hand: ";
-        player.second->displayHand();
-    }
+}
 }
 }
 void initializeTileBag(std::vector<Tile> &tileBag)

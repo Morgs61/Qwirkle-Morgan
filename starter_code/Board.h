@@ -15,7 +15,7 @@ public:
 
    void initializeBoard();
    void displayBoard();
-   void addTileToBoard(Tile* tile, int row, int col);
+   //void addTileToBoard(Tile* tile, int row, int col);
 
 };
 

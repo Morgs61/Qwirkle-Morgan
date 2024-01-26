@@ -6,7 +6,7 @@
 #include "Tile.h"
 
 //Decalre fixed size of board here
-int BOARD_SIZE = 26;
+int BOARD_SIZE = 15;
 
 void initializeBoard(std::vector<std::vector<Tile *>> &board)
 {
@@ -59,7 +59,7 @@ void displayBoard(const std::vector<std::vector<Tile *>> &board)
             }
             else
             {
-                std::cout << " " << board[i][j]->colour << "" << board[i][j]->shape << " |";
+                std::cout << "" << board[i][j]->colour << "" << board[i][j]->shape << "|";
             }
         }
         std::cout << std::endl;

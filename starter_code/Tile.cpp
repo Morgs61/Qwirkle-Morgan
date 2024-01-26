@@ -2,7 +2,7 @@
 #include "TileCodes.h"
 #include <iostream>
 // Constructor implementation
-Tile::Tile(Color color, Shape shape) : color(color), shape(shape)
+Tile::Tile(Colour colour, Shape shape) : colour(colour), shape(shape)
 {
 }
 
@@ -20,15 +20,15 @@ void printTileBag(const std::vector<Tile> &tileBag)
     std::cout << "Tile Bag: ";
     for (const Tile &tile : tileBag)
     {
-        std::cout << tile.color << tile.shape << " ";
+        std::cout << tile.colour << tile.shape << " ";
     }
     std::cout << "\nNumber of tiles in bag: " << tileBag.size() << std::endl;
 }
 
 std::string Tile::toString()
 {
-    // Combine color and shape into a string representation
-    std::string tileString = color + std::to_string(shape);
+    // Combine colour and shape into a string representation
+    std::string tileString = colour + std::to_string(shape);
     return tileString;
 }
 
@@ -60,32 +60,33 @@ std::string Tile::toPrettierString()
         break;
     }
 
-    // Map the color to its corresponding constant
-    std::string colorStr;
-    switch (color)
+    // Map the colour to its corresponding constant
+    std::string colourStr;
+    switch (colour)
     {
     case RED:
-        colorStr = "RED";
+        colourStr = "RED";
         break;
     case ORANGE:
-        colorStr = "ORANGE";
+        colourStr = "ORANGE";
         break;
-    case YELLOW:
-        colorStr = "YELLOW";
+        case ORANGE:
+        colourStr = "ORANGE";
         break;
-    case GREEN:
-        colorStr = "GREEN";
+        case ORANGE:
+        colourStr = "ORANGE";
         break;
-    case BLUE:
-        colorStr = "BLUE";
+        case ORANGE:
+        colourStr = "ORANGE";
         break;
-    case PURPLE:
-        colorStr = "PURPLE";
+        case ORANGE:
+        colourStr = "ORANGE";
         break;
+        
     }
 
     // Build the result string
-    retval = colorStr + " " + shapeStr + " " + std::to_string(shape);
+    retval = colourStr + " " + shapeStr + " " + std::to_string(shape);
 
     return retval;
 }

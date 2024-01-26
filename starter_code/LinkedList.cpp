@@ -85,7 +85,7 @@ void LinkedList::displayHand()
    Node *current = head;
    while (current != nullptr)
    {
-      std::cout << "[" << current->tile->color << "" << current->tile->shape << "] ";
+      std::cout << "[" << current->tile->colour << "" << current->tile->shape << "] ";
       current = current->next;
    }
    std::cout << std::endl;
@@ -96,10 +96,10 @@ bool LinkedList::containsTile(Tile *tile)
 
    while (current != nullptr)
    {
-      if (current->tile->color == tile->color && current->tile->shape == tile->shape)
+      if (current->tile->colour == tile->colour && current->tile->shape == tile->shape)
       {
          // Found the tile
-         std::cout << "Tile found: [" << current->tile->color << ", " << current->tile->shape << "]" << std::endl;
+         std::cout << "Tile found: [" << current->tile->colour << ", " << current->tile->shape << "]" << std::endl;
          return true;
       }
 
@@ -117,7 +117,7 @@ bool LinkedList::removeTile(Tile *tile)
 
    while (current != nullptr)
    {
-      if (current->tile->color == tile->color && current->tile->shape == tile->shape)
+      if (current->tile->colour == tile->colour && current->tile->shape == tile->shape)
       {
          // Found the tile to remove
          if (previous == nullptr)

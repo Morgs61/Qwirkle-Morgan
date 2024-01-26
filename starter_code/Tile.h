@@ -2,8 +2,8 @@
 #ifndef ASSIGN2_TILE_H
 #define ASSIGN2_TILE_H
 
-// Define a Color type
-typedef char Color;
+// Define a Colour type
+typedef char Colour;
 
 // Define a Shape type
 typedef int Shape;
@@ -12,12 +12,12 @@ class Tile
 {
 public:
    // Constructor
-   Tile(Color color, Shape shape);
+   Tile(Colour colour, Shape shape);
 
    // Destructor
    ~Tile();
 
-   Color color;
+   Colour colour;
    Shape shape;
    // bool equals(Tile* other);
    // //bool operator==(const Tile& other) const;

@@ -325,13 +325,13 @@ void startNewGame()
                             continue;
                         }
 
-                        string color = string(1, tile[0]);
+                        string colour = string(1, tile[0]);
                         string shape = tile.substr(1);
-                        Tile *tileToCheck = new Tile(color[0], stoi(shape));
+                        Tile *tileToCheck = new Tile(colour[0], stoi(shape));
 
                         cout << "Debug Info: " << player.first << "'s hand: ";
                         player.second->displayHand();
-                        cout << "Debug Info: Tile to check: [" << tileToCheck->color << "" << tileToCheck->shape << "]" << endl;
+                        cout << "Debug Info: Tile to check: [" << tileToCheck->colour << "" << tileToCheck->shape << "]" << endl;
 
                         if (!player.second->containsTile(tileToCheck))
                         {
@@ -375,7 +375,7 @@ void startNewGame()
                         tileBag.pop_back();
 
                         // Create a new tile with the values from the tile drawn from the bag
-                        Tile *newTile = new Tile(tileFromBag.color, tileFromBag.shape);
+                        Tile *newTile = new Tile(tileFromBag.colour, tileFromBag.shape);
 
                         // Add the new tile to the player's hand
                         player.second->addTileToHand(newTile);
@@ -425,13 +425,13 @@ void startNewGame()
                         // Parse the tile from the command
                         string tile = words[1];
 
-                        string color = string(1, tile[0]);
+                        string colour = string(1, tile[0]);
                         string shape = tile.substr(1);
 
                         try
                         {
-                            // Attempt to create a tile with the provided color and shape
-                            Tile *tileToReplace = new Tile(color[0], stoi(shape));
+                            // Attempt to create a tile with the provided colour and shape
+                            Tile *tileToReplace = new Tile(colour[0], stoi(shape));
 
                             // Check if the tile to replace is in the player's hand
                             if (!player.second->containsTile(tileToReplace))
@@ -450,13 +450,13 @@ void startNewGame()
                             player.second->removeTile(tileToReplace);
 
                             // Add the replaced tile back to the tile bag
-                            tileBag.emplace_back(tileToReplace->color, tileToReplace->shape);
+                            tileBag.emplace_back(tileToReplace->colour, tileToReplace->shape);
 
                             // Print the tile bag before shuffling
                             cout << "Tile bag before shuffling: ";
                             for (const auto &tile : tileBag)
                             {
-                                cout << "[" << tile.color << ", " << tile.shape << "] ";
+                                cout << "[" << tile.colour << ", " << tile.shape << "] ";
                             }
                             cout << endl;
 
@@ -466,7 +466,7 @@ void startNewGame()
                             cout << "Tile bag after shuffling: ";
                             for (const auto &tile : tileBag)
                             {
-                                cout << "[" << tile.color << ", " << tile.shape << "] ";
+                                cout << "[" << tile.colour << ", " << tile.shape << "] ";
                             }
                             cout << endl;
 
@@ -474,7 +474,7 @@ void startNewGame()
                             Tile tileFromBag = tileBag.back();
                             tileBag.pop_back();
 
-                            Tile *newTile = new Tile(tileFromBag.color, tileFromBag.shape);
+                            Tile *newTile = new Tile(tileFromBag.colour, tileFromBag.shape);
                             player.second->addTileToHand(newTile);
 
                             // Print the player's hand after a new tile is added

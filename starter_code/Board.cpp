@@ -1,11 +1,11 @@
 // Board.cpp
 
-#include <iostream>  // Include for std::cout, std::endl
-#include <vector>    // Include for std::vector
+#include <iostream> // Include for std::cout, std::endl
+#include <vector>   // Include for std::vector
 #include "Board.h"
 #include "Tile.h"
 
-//Decalre fixed size of board here
+// Decalre fixed size of board here
 int BOARD_SIZE = 15;
 
 void initializeBoard(std::vector<std::vector<Tile *>> &board)
@@ -43,7 +43,6 @@ void displayBoard(const std::vector<std::vector<Tile *>> &board)
     for (int i = 0; i <= BOARD_SIZE; ++i)
     {
         std::cout << "____";
-
     }
     std::cout << std::endl;
 

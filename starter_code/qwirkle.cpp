@@ -226,11 +226,7 @@ void startNewGame()
     displayBoard(board);
     printTileBag(tileBag);
     
-    
-//Player turns currently it can add a tile to the board however issues remaining - 
-
-//need to fix tile not placed in hand
-// Player turns with the ability to specify the number of tiles to place
+//need to remove the conitinue statements
 while (!player1Hand.isEmpty() && !player2Hand.isEmpty()) {
     for (auto& player : {std::make_pair(player1, &player1Hand), std::make_pair(player2, &player2Hand)}) {
         cout << "\n" << player.first << "'s turn" << endl;

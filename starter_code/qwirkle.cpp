@@ -253,6 +253,8 @@ while (!player1Hand.isEmpty() && !player2Hand.isEmpty()) {
 
         // Input each tile one by one
         for (int i = 0; i < numTiles; ++i) {
+            displayBoard(board);
+            player.second->displayHand();
             cout << "Place tile " << i + 1 << " using the format: <tile> at <grid location>" << endl;
             cout << ">";
 
@@ -311,6 +313,7 @@ while (!player1Hand.isEmpty() && !player2Hand.isEmpty()) {
                 } else {
                     cout << "Tile found in hand. Proceeding with the game." << endl;
                     board[row][column] = tileToCheck;
+                    displayBoard(board);
                     tilesToPlace.push_back(tileToCheck);
                 }
             }
@@ -336,8 +339,7 @@ while (!player1Hand.isEmpty() && !player2Hand.isEmpty()) {
             player.second->addTileToHand(newTile);
         }
 
-        // Display the board and the player's hand
-        displayBoard(board);
+
         cout << "The size of the tile bag is now: " << tileBag.size() << endl;
         cout << "\n" << player.first << "'s hand: ";
         player.second->displayHand();

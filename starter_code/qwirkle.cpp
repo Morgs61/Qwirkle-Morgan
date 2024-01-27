@@ -9,6 +9,7 @@
 #include <fstream>
 #include <algorithm>
 #include <random>
+#include <cctype>
 using std::cin;
 using std::cout;
 using std::endl;
@@ -20,6 +21,8 @@ void displayMenu();
 bool isValidPlayerName(const string &name);
 void displayStudentInformation();
 void loadGame();
+bool checkSurroundingTilesMatch(const std::vector<std::vector<Tile *>> &board, int row, int col, Tile *tile);
+
 
 
 
@@ -274,29 +277,43 @@ while (!player1Hand.isEmpty() && !player2Hand.isEmpty()) {
                 for (int i = 0; i < numTiles; ++i) {
                     displayBoard(board);
                     player.second->displayHand();
-                    cout << "Place tile " << i + 1 << " using the format: place <tile> at <grid location>" << endl;
-                    cout << ">";
-
-                    string command;
-                    getline(cin, command);
-
-                    // Split the command into words
                     vector<string> words;
-                    size_t pos = 0;
-                    while ((pos = command.find(' ')) != string::npos) {
-                        words.push_back(command.substr(0, pos));
-                        command.erase(0, pos + 1);
-                    }
-                    words.push_back(command);
+                    bool validInput = false;
+                    while (!validInput) {
+                        cout << "Place tile " << i + 1 << " using the format: place <tile> at <grid location>" << endl;
+                        cout << ">";
 
-                    // Check that the command is correctly formatted
-                    if (words.size() != 4 || words[0] != "place" || words[3].length() != 2) {
-                        cout << "Invalid command. Please try again." << endl;
-                        cout << "\n" << player.first << "'s turn" << endl;
-                        cout << player.first << "'s hand: ";
-                        player.second->displayHand();
-                        cout << "> ";
-                        continue;
+                        string command;
+                        getline(cin, command);
+
+                        // Trim leading and trailing spaces
+                        command.erase(command.begin(), std::find_if(command.begin(), command.end(), [](int ch) {
+                            return !std::isspace(ch);
+                        }));
+                        command.erase(std::find_if(command.rbegin(), command.rend(), [](int ch) {
+                            return !std::isspace(ch);
+                        }).base(), command.end());
+
+                        // Split the command into words
+                        size_t pos = 0;
+                        while ((pos = command.find(' ')) != string::npos) {
+                            words.push_back(command.substr(0, pos));
+                            command.erase(0, pos + 1);
+                        }
+                        words.push_back(command);
+
+                        // Check that the command is correctly formatted
+                        if (words.size() != 4 || words[0] != "place" || words[3].length() != 2) {
+                            cout << "Invalid command. Please try again." << endl;
+                            cout << "\n" << player.first << "'s turn" << endl;
+                            cout << player.first << "'s hand: ";
+                            player.second->displayHand();
+                            cout << "> ";
+                            words.clear();  // Clear the words vector
+                            //continue;
+                        } else {
+                            validInput = true;  // Move this line inside the loop
+                        }
                     }
 
                     // Parse the tile and location from the command
@@ -336,6 +353,15 @@ while (!player1Hand.isEmpty() && !player2Hand.isEmpty()) {
                             continue;
                         } else {
                             cout << "Tile found in hand. Proceeding with the game." << endl;
+
+                            if (checkSurroundingTilesMatch(board, row, column, tileToCheck)) {
+                                cout << "Surrounding tiles match. Proceeding with the game." << endl;
+                            } else {
+                                cout << "Surrounding tiles do not match. Please try again." << endl;
+                                delete tileToCheck;  // Avoid memory leak
+                                --i;  // Decrement i to repeat the input for the same tile
+                                continue;
+                            }
                             board[row][column] = tileToCheck;
                             displayBoard(board);
                             tilesToPlace.push_back(tileToCheck);

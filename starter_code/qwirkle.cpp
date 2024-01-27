@@ -517,3 +517,26 @@ void initializePlayerHands(LinkedList &player1Hand, LinkedList &player2Hand, std
         tileBag.pop_back();
     }
 }
+
+//calculate score for a single tile
+int scorePlayersTurn()
+{
+    int score = 0;
+
+    // get the tile that was placed. THis shoudl already be checked to ensure it can be placed there so we can assume it is valid.
+
+    // start to calcualte the score using the board as well.
+
+    // check for other tiles in a both above and below the tile that was placed. The total number of tiles in the row is the score
+
+    // do the same for tiles placed horizontally
+
+    // check if either of these vaules is a 6 meaning a quirekle has occured.
+
+    // return the score
+
+    
+
+
+    return score;
+}

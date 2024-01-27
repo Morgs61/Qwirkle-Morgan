@@ -29,9 +29,19 @@ void GameSave::saveGame(Player *player1, Player *player2, Board *board, LinkedLi
     outFile << player2->getScore() << endl;
     outFile << player2->getHand()->toString() << endl;
 
+    auto boardState = board->getCurrentState(); // Use auto to deduce the type
+
     // Save board information
-    outFile << board->getRows() << "," << board->getCols() << endl;
-    outFile << board->getState() << endl;
+    outFile << board->getRows() << "," << board->getCols() << std::endl;
+
+    for (const auto &row : boardState)
+    {
+        for (char cell : row)
+        {
+            outFile << cell;
+        }
+        outFile << std::endl;
+    }
 
     // Save tile bag contents
     vector<Tile *> bagTiles = tileBag->getAllTiles();

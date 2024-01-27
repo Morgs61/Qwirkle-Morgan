@@ -70,19 +70,18 @@ std::string Tile::toPrettierString()
     case ORANGE:
         colourStr = "ORANGE";
         break;
-        case ORANGE:
-        colourStr = "ORANGE";
+    case YELLOW:
+        colourStr = "YELLOW";
         break;
-        case ORANGE:
-        colourStr = "ORANGE";
+    case GREEN:
+        colourStr = "GREEN";
         break;
-        case ORANGE:
-        colourStr = "ORANGE";
+    case BLUE:
+        colourStr = "BLUE";
         break;
-        case ORANGE:
-        colourStr = "ORANGE";
+    case PURPLE:
+        colourStr = "PURPLE";
         break;
-        
     }
 
     // Build the result string

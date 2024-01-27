@@ -1,5 +1,7 @@
 #include <iostream>
+#include <vector>
 #include "LinkedList.h"
+#include "Node.h"
 
 LinkedList::LinkedList()
 {
@@ -22,20 +24,48 @@ LinkedList::~LinkedList()
    }
 }
 
-// return size of linkedlist
-int LinkedList::getSize()
+int LinkedList::size()
 {
-   int size = 0;
-   Node *current = head;
-   while (current != nullptr)
+   int count = 0;
+
+   if (head != nullptr)
    {
-      size++;
-      current = current->next;
+      Node *currentNode = head;
+
+      // Traverse the linked list and count nodes
+      while (currentNode->getNext() != nullptr)
+      {
+         count++;
+         currentNode = currentNode->getNext();
+      }
+      count++;
    }
-   return size;
+
+   return count;
 }
 
-// LinkedList.cpp
+// Implementation of get function
+Tile *LinkedList::get(int index)
+{
+   Tile *rTile = nullptr;
+
+   // Check if the index is valid and the linked list is not empty
+   if (index >= 0 && index < size() && head != nullptr)
+   {
+      Node *currentNode = head;
+
+      // Traverse the linked list to the specified index
+      for (int i = 0; i < index; i++)
+      {
+         currentNode = currentNode->getNext();
+      }
+
+      // Get the tile at the specified index
+      rTile = currentNode->getTile();
+   }
+
+   return rTile;
+}
 
 void LinkedList::addTile(Tile *tile)
 {
@@ -173,4 +203,18 @@ std::string LinkedList::toString()
    }
 
    return linkedListString;
+}
+
+std::vector<Tile *> LinkedList::getAllTiles()
+{
+   std::vector<Tile *> tiles;
+   int listSize = size();
+
+   for (int i = 0; i < listSize; ++i)
+   {
+      Tile *tile = get(i);
+      tiles.push_back(tile);
+   }
+
+   return tiles;
 }

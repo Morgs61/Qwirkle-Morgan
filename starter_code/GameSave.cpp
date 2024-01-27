@@ -34,7 +34,7 @@ void GameSave::saveGame(Player *player1, Player *player2, Board *board, LinkedLi
     // Save board information
     outFile << board->getRows() << "," << board->getCols() << std::endl;
 
-    for (const auto &row : boardState)
+    for (auto &row : boardState)
     {
         for (char cell : row)
         {

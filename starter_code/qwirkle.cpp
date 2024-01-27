@@ -4,6 +4,7 @@
 #include "Node.h"
 #include "Board.h"
 #include "TileCodes.h"
+#include "GameSave.h"
 #include <iostream>
 #include <vector>
 #include <fstream>
@@ -177,20 +178,28 @@ void loadGame()
 void startNewGame()
 {
     // Player 1
-    string player1;
+    string player1Name;
     do
     {
         cout << "\nEnter a name for player 1 (uppercase characters only): ";
-        cin >> player1;
-    } while (!isValidPlayerName(player1));
+        cin >> player1Name;
+    } while (!isValidPlayerName(player1Name));
 
     // Player 2
-    string player2;
+    string player2Name;
     do
     {
         cout << "\nEnter a name for player 2 (uppercase characters only): ";
-        cin >> player2;
-    } while (!isValidPlayerName(player2));
+        cin >> player2Name;
+    } while (!isValidPlayerName(player2Name));
+
+    // Create instances of the Player class
+    LinkedList player1Hand;
+    Player player1(player1Name, 0, &player1Hand);
+
+    LinkedList player2Hand;
+    Player player2(player2Name, 0, &player2Hand);
+
     cin.ignore();
     cout << "\nLet's Play!" << endl;
 
@@ -198,21 +207,20 @@ void startNewGame()
     std::vector<Tile> tileBag;
     initializeTileBag(tileBag);
 
-    // Initialize player hands
     LinkedList player1Hand;
     LinkedList player2Hand;
     initializePlayerHands(player1Hand, player2Hand, tileBag);
 
     // Print the hands of each player
-    void printTileBag(const std::vector<Tile> &tileBag);
+    void printTileBag(std::vector<Tile> & tileBag);
 
     cout << "\n"
-         << player1 << "'s hand: ";
-    player1Hand.displayHand();
+         << player1.getName() << "'s hand: ";
+    player1.getHand()->displayHand();
 
     cout << "\n"
-         << player2 << "'s hand: ";
-    player2Hand.displayHand();
+         << player2.getName() << "'s hand: ";
+    player2.getHand()->displayHand();
 
     // Initialize the board
     std::vector<std::vector<Tile *>> board;
@@ -223,15 +231,20 @@ void startNewGame()
     myBoard.displayBoard(board);
     printTileBag(tileBag);
 
-    // need to remove the conitinue statements
-    while (!player1Hand.isEmpty() && !player2Hand.isEmpty())
+    // Initialize currentPlayer to player1 at the beginning
+    Player *currentPlayer = &player1;
+
+    while (!player1.getHand()->isEmpty() && !player2.getHand()->isEmpty())
     {
-        for (auto &player : {std::make_pair(player1, &player1Hand), std::make_pair(player2, &player2Hand)})
+        for (auto &playerPair : {std::make_pair(player1, &player1Hand), std::make_pair(player2, &player2Hand)})
         {
+            Player &player = playerPair.first;    // Accessing the Player object from the pair
+            LinkedList *hand = playerPair.second; // Accessing the LinkedList* from the pair
+
             cout << "\n"
-                 << player.first << "'s turn" << endl;
-            cout << player.first << "'s hand: ";
-            player.second->displayHand();
+                 << player << "'s turn" << endl;
+            cout << player << "'s hand: ";
+            hand->displayHand();
 
             bool validActionSelected = false;
             while (!validActionSelected)
@@ -456,7 +469,7 @@ void startNewGame()
 
                             // Print the tile bag before shuffling
                             cout << "Tile bag before shuffling: ";
-                            for (const auto &tile : tileBag)
+                            for (auto &tile : tileBag)
                             {
                                 cout << "[" << tile.colour << ", " << tile.shape << "] ";
                             }
@@ -466,7 +479,7 @@ void startNewGame()
 
                             // Print the tile bag after shuffling
                             cout << "Tile bag after shuffling: ";
-                            for (const auto &tile : tileBag)
+                            for (auto &tile : tileBag)
                             {
                                 cout << "[" << tile.colour << ", " << tile.shape << "] ";
                             }
@@ -488,13 +501,13 @@ void startNewGame()
                             validInput = true;
                             validActionSelected = true; // Exit the loop
                         }
-                        catch (const std::invalid_argument &e)
+                        catch (std::invalid_argument &e)
                         {
                             cout << "Invalid tile format. Please try again." << endl;
                             cout << "> ";
                             continue;
                         }
-                        catch (const std::out_of_range &e)
+                        catch (std::out_of_range &e)
                         {
                             cout << "Invalid tile format. Please try again." << endl;
                             cout << "> ";
@@ -504,7 +517,19 @@ void startNewGame()
                 }
                 else if (choice == 3)
                 {
+                    std::string outputFileName;
 
+                    // Ask the user to enter a name for the output file
+                    std::cout << "Enter a name for the output file: ";
+                    std::cin >> outputFileName;
+
+                    GameSave gs(player1, player2, board, tileBag, currentPlayer, outputFileName, outputFileName);
+
+                    // Don't switch player turn when saving
+                    returnVal = false;
+                    cout << endl
+                         << "Game successfully saved" << endl
+                         << endl;
                 }
                 else
                 {
@@ -562,10 +587,13 @@ void initializePlayerHands(LinkedList &player1Hand, LinkedList &player2Hand, std
 
 void initializeBoard(std::vector<std::vector<Tile *>> &board)
 {
-    // Your implementation here...
 }
 
 void displayBoard(std::vector<std::vector<Tile *>> &board)
 {
-    // Your implementation here...
+}
+
+void switchPlayer(Player *&currentPlayer, Player *player1, Player *player2)
+{
+    currentPlayer = (currentPlayer == player1) ? player2 : player1;
 }

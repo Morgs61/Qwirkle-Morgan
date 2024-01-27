@@ -15,10 +15,10 @@ Tile::~Tile()
 
 #include <vector>
 
-void printTileBag(const std::vector<Tile> &tileBag)
+void printTileBag(std::vector<Tile> &tileBag)
 {
     std::cout << "Tile Bag: ";
-    for (const Tile &tile : tileBag)
+    for (Tile &tile : tileBag)
     {
         std::cout << tile.colour << tile.shape << " ";
     }

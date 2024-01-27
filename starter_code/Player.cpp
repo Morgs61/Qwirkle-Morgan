@@ -39,3 +39,19 @@ void Player::addPoints(int pointsToAdd)
 {
     score += pointsToAdd;
 }
+
+bool Player::equals(Player *other)
+{
+    // Check if the pointers are equal
+    if (this == other)
+        return true;
+
+    // Check if the other pointer is null
+    if (!other)
+        return false;
+
+    // Check if the name, score, and hand are equal
+    return (name == other->getName()) &&
+           (score == other->getScore()) &&
+           (hand->equals(other->getHand())); // Assuming LinkedList has an equals function
+}

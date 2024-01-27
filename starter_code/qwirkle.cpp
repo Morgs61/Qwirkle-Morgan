@@ -216,10 +216,11 @@ void startNewGame()
 
     // Initialize the board
     std::vector<std::vector<Tile *>> board;
-    initializeBoard(board);
+    Board myBoard;
+    myBoard.initializeBoard(board);
 
     // Display the board
-    displayBoard(board);
+    myBoard.displayBoard(board);
     printTileBag(tileBag);
 
     // need to remove the conitinue statements
@@ -238,6 +239,7 @@ void startNewGame()
                 cout << "Select your action:\n";
                 cout << "1. Place tiles\n";
                 cout << "2. Replace a tile\n";
+                cout << "3. Save game\n";
                 cout << "> ";
 
                 int choice;
@@ -500,6 +502,10 @@ void startNewGame()
                         }
                     }
                 }
+                else if (choice == 3)
+                {
+
+                }
                 else
                 {
                     cout << "Invalid choice. Please enter a valid option." << endl;
@@ -552,4 +558,14 @@ void initializePlayerHands(LinkedList &player1Hand, LinkedList &player2Hand, std
         player2Hand.addTileToHand(new Tile(tileBag.back()));
         tileBag.pop_back();
     }
+}
+
+void initializeBoard(std::vector<std::vector<Tile *>> &board)
+{
+    // Your implementation here...
+}
+
+void displayBoard(std::vector<std::vector<Tile *>> &board)
+{
+    // Your implementation here...
 }

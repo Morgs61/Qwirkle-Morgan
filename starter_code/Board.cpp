@@ -1,6 +1,5 @@
-
-#include <iostream> // Include for std::cout, std::endl
-#include <vector>   // Include for std::vector
+#include <iostream>
+#include <vector>
 #include "Board.h"
 #include "Tile.h"
 
@@ -10,7 +9,17 @@
 #define ROW_MAX 25
 #define ROW_MIN 0
 
-void initializeBoard(std::vector<std::vector<Tile *>> &board)
+// Constructor definition
+Board::Board()
+{
+}
+
+// Destructor definition
+Board::~Board()
+{
+}
+
+void Board::initializeBoard(std::vector<std::vector<Tile *>> &board)
 {
     // Initialize the board with nullptr
     for (int i = ROW_MIN; i <= ROW_MAX; ++i)
@@ -24,7 +33,7 @@ void initializeBoard(std::vector<std::vector<Tile *>> &board)
     }
 }
 
-void displayBoard(std::vector<std::vector<Tile *>> &board)
+void Board::displayBoard(std::vector<std::vector<Tile *>> &board)
 {
     // Display the board
     std::cout << "\nBoard:" << std::endl;

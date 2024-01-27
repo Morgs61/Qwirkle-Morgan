@@ -13,8 +13,8 @@ public:
    Board();
    ~Board();
 
-   void initializeBoard();
-   void displayBoard();
+   void initializeBoard(std::vector<std::vector<Tile *>> &board);
+   void displayBoard(std::vector<std::vector<Tile *>> &board);
    // void addTileToBoard(Tile* tile, int row, int col);
 
    int getRows();

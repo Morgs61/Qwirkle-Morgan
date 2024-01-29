@@ -570,8 +570,6 @@ void initializePlayerHands(LinkedList &player1Hand, LinkedList &player2Hand, std
     }
 }
 
-
-
 void switchPlayer(Player *&currentPlayer, Player *player1, Player *player2)
 {
     currentPlayer = (currentPlayer == player1) ? player2 : player1;

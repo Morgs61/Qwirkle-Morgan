@@ -11,7 +11,7 @@ class GameSave
 {
 public:
     // Constructor to save the game state to a file
-    GameSave(Player *player1, Player *player2, Board *board, LinkedList *bag, Player *currentPlayer, std::string outputFileName);
+    GameSave(Player *player1, Player *player2, Board *board, LinkedList *tileBag, Player *currentPlayer, std::string outputFileName);
 
 private:
     std::ofstream outFile;

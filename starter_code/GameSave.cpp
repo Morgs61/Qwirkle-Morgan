@@ -20,7 +20,7 @@ std::ofstream &operator<<(std::ofstream &ofs, std::vector<std::vector<char>> &ve
 }
 
 // Constructor definition
-GameSave::GameSave(Player *player1, Player *player2, Board *board, LinkedList *bag, Player *currentPlayer, std::string outputFileName)
+GameSave::GameSave(Player *player1, Player *player2, Board *board, LinkedList *tileBag, Player *currentPlayer, std::string outputFileName)
 {
     outFile.open("Tests/" + outputFileName + ".txt");
 
@@ -47,7 +47,7 @@ GameSave::GameSave(Player *player1, Player *player2, Board *board, LinkedList *b
     }
 
     // Write the string representation of the tile bag
-    outFile << bag->toString() << std::endl;
+    outFile << tileBag->toString() << std::endl;
 
     // Write the name of the current player
     outFile << currentPlayer->getName();

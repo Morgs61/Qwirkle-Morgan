@@ -38,11 +38,11 @@ private:
 };
 
 // Implement the << operator for Player
-std::ostream &operator<<(std::ostream &os, Player &player)
-{
-    // Output the details of the player to the stream
-    os << "Player Name: " << player.getName() << ", Score: " << player.getScore() << ", Hand: " << player.getHand();
-    return os;
-}
+// std::ostream &operator<<(std::ostream &os, Player &player)
+// {
+//     // Output the details of the player to the stream
+//     os << "Player Name: " << player.getName() << ", Score: " << player.getScore() << ", Hand: " << player.getHand();
+//     return os;
+// }
 
 #endif // PLAYER_H

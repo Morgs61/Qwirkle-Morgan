@@ -26,6 +26,7 @@ bool checkSurroundingTilesMatch(const std::vector<std::vector<Tile *>> &board, i
 
 
 
+
 int main(void)
 {
     LinkedList *list = new LinkedList();
@@ -319,11 +320,13 @@ while (!player1Hand.isEmpty() && !player2Hand.isEmpty()) {
                     // Parse the tile and location from the command
                     string tile = words[1];
                     string location = words[3];
+					//Get the size of the board from the board vector using the getsize function in Board.cpp
+					//int boardSize = getSize(board);
+                   // Convert the grid location to row and column (corrected for 2-digit numbers)
+        char gridLetter = location[0];
+        size_t row = (gridLetter >= 'A' && gridLetter <= 'Z') ? (gridLetter - 'A') : -1;
+        size_t column = std::stoi(location.substr(1)) - 1; // Convert the rest of the string to a number
 
-                    // Convert the grid location to row and column
-                    char gridLetter = location[0];
-                    size_t row = (gridLetter >= 'A' && gridLetter <= 'Z') ? (gridLetter - 'A') : -1;
-                    size_t column = (location[1] >= '1' && location[1] <= '9') ? (location[1] - '1') : -1;
 
                     // Check if the row and column are valid
                     if (row == static_cast<size_t>(-1) || row >= board.size() || column == static_cast<size_t>(-1) || column >= board[0].size()) {

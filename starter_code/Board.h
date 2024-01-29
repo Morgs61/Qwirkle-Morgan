@@ -17,6 +17,10 @@ public:
    void displayBoard();
   // void addTileToBoard(Tile* tile, int row, int col);
     bool checkSurroundingTilesMatch();
+// Declaration in Board.h
+bool checkTilePlacement();
+int getSize();
+
  //   bool checkSurroundingTilesMatch(int row, int col, Tile* tile, bool& valid);
 
 

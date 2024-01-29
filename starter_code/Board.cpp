@@ -11,10 +11,16 @@ bool checkTilePlacement(const std::vector<std::vector<Tile *>> &board, int row, 
 //Decalre fixed size of board here
 int BOARD_SIZE = 15;
 
+//return size of board
+int Board::getSize()
+{
+    return BOARD_SIZE;
+}
+
 void initializeBoard(std::vector<std::vector<Tile *>> &board)
 {
     // Initialize the board with nullptr
-    for (int i = 0; i < BOARD_SIZE; ++i)
+    for (int i = 1; i <= BOARD_SIZE; ++i)
     {
         std::vector<Tile *> row;
         for (int j = 0; j < BOARD_SIZE; ++j)
@@ -30,7 +36,7 @@ void displayBoard(const std::vector<std::vector<Tile *>> &board)
     // Display the board
     std::cout << "\nBoard:" << std::endl;
     std::cout << "  ";
-    for (int i = 0; i < BOARD_SIZE; ++i)
+    for (int i = 1; i <= BOARD_SIZE; ++i)
     {
         if (i < 10)
         {
@@ -90,7 +96,7 @@ bool checkSurroundingTiles(const std::vector<std::vector<Tile *>> &board, int ro
 
 bool checkSurroundingTilesMatch(const std::vector<std::vector<Tile *>> &board, int row, int col, Tile *tile)
 {
-    // Check if the board is empty, allowing the first tile to be placed anywhere
+    // Check if board is empty, allowing first tile placement anywhere
     bool isBoardEmpty = std::all_of(board.begin(), board.end(), [](const std::vector<Tile *> &boardRow) {
         return std::all_of(boardRow.begin(), boardRow.end(), [](const Tile *tile) {
             return tile == nullptr;
@@ -102,55 +108,96 @@ bool checkSurroundingTilesMatch(const std::vector<std::vector<Tile *>> &board, i
         std::cout << "Board is empty" << std::endl;
         return true;
     }
-    bool check = checkTilePlacement(board, row, col);
-    if (!check)
+
+    // Check existing checks for adjacent tiles
+    bool hasNeighbor = checkTilePlacement(board, row, col);
+    if (!hasNeighbor)
     {
         std::cout << "Tile must be placed next to another tile" << std::endl;
         return false;
-    }else{
+    }
 
-    // Check if tile is on the edge of the board
-    if (row == 0 || row == BOARD_SIZE - 1 || col == 0 || col == BOARD_SIZE - 1)
+    // Check along the row within a limited range
+    bool rowMatch = true;
+    for (int i = col - 1; i >= 0 && board[row][i] != nullptr; --i)
     {
-        // Allow placement adjacent to tiles on the edge, but check if it's adjacent to the correct tile
-        if ((row > 0 && board[row - 1][col] != nullptr && (board[row - 1][col]->colour == tile->colour || board[row - 1][col]->shape == tile->shape)) ||
-            (row < BOARD_SIZE - 1 && board[row + 1][col] != nullptr && (board[row + 1][col]->colour == tile->colour || board[row + 1][col]->shape == tile->shape)) ||
-            (col > 0 && board[row][col - 1] != nullptr && (board[row][col - 1]->colour == tile->colour || board[row][col - 1]->shape == tile->shape)) ||
-            (col < BOARD_SIZE - 1 && board[row][col + 1] != nullptr && (board[row][col + 1]->colour == tile->colour || board[row][col + 1]->shape == tile->shape)))
+        if (board[row][i]->colour != tile->colour && board[row][i]->shape != tile->shape)
         {
-            return true;
+            rowMatch = false;
+            std::cout << "Tile does not match row values" << std::endl;
+            break;
         }
-        else
+    }
+    for (int i = col + 1; i < BOARD_SIZE && board[row][i] != nullptr; ++i)
+    {
+        if (board[row][i]->colour != tile->colour && board[row][i]->shape != tile->shape)
         {
+            rowMatch = false;
+            std::cout << "Tile does not match row values" << std::endl;
+            break;
+        }
+    }
+
+    // Check along the column within a limited range
+    bool colMatch = true;
+    for (int i = row - 1; i >= 0 && board[i][col] != nullptr; --i)
+    {
+        if (board[i][col]->colour != tile->colour && board[i][col]->shape != tile->shape)
+        {
+            colMatch = false;
+            std::cout << "Tile does not match column values" << std::endl;
+            break;
+        }
+    }
+    for (int i = row + 1; i < BOARD_SIZE && board[i][col] != nullptr; ++i)
+    {
+        if (board[i][col]->colour != tile->colour && board[i][col]->shape != tile->shape)
+        {
+            colMatch = false;
+            std::cout << "Tile does not match column values" << std::endl;
+            break;
+        }
+    }
+
+    // Check for duplicate tile in the row
+    for (int i = col - 1; i >= 0 && board[row][i] != nullptr; --i)
+    {
+        if (board[row][i]->colour == tile->colour && board[row][i]->shape == tile->shape)
+        {
+            std::cout << "Duplicate tile found in row, invalid placement" << std::endl;
+            return false;
+        }
+    }
+    for (int i = col + 1; i < BOARD_SIZE && board[row][i] != nullptr; ++i)
+    {
+        if (board[row][i]->colour == tile->colour && board[row][i]->shape == tile->shape)
+        {
+            std::cout << "Duplicate tile found in row, invalid placement" << std::endl;
             return false;
         }
     }
 
-
-    // Check if tile is surrounded by other tiles with the same color or shape
-    if ((board[row - 1][col] != nullptr) &&
-        (board[row - 1][col]->colour != tile->colour || board[row - 1][col]->shape != tile->shape))
+    // Check for duplicate tile in the column
+    for (int i = row - 1; i >= 0 && board[i][col] != nullptr; --i)
     {
-        return false;
+        if (board[i][col]->colour == tile->colour && board[i][col]->shape == tile->shape)
+        {
+            std::cout << "Duplicate tile found in column, invalid placement" << std::endl;
+            return false;
+        }
     }
-    else if ((board[row + 1][col] != nullptr) &&
-             (board[row + 1][col]->colour != tile->colour || board[row + 1][col]->shape != tile->shape))
+    for (int i = row + 1; i < BOARD_SIZE && board[i][col] != nullptr; ++i)
     {
-        return false;
-    }
-    else if ((board[row][col - 1] != nullptr) &&
-             (board[row][col - 1]->colour != tile->colour || board[row][col - 1]->shape != tile->shape))
-    {
-        return false;
-    }
-    else if ((board[row][col + 1] != nullptr) &&
-             (board[row][col + 1]->colour != tile->colour || board[row][col + 1]->shape != tile->shape))
-    {
-        return false;
+        if (board[i][col]->colour == tile->colour && board[i][col]->shape == tile->shape)
+        {
+            std::cout << "Duplicate tile found in column, invalid placement" << std::endl;
+            return false;
+        }
     }
 
-    return true;
-}}
+    return true && rowMatch && colMatch && hasNeighbor;
+}
+
 
 
 

@@ -2,57 +2,43 @@
 #include "Player.h"
 #include "Board.h"
 #include "LinkedList.h"
-#include "Tile.h"
-#include <fstream>
 #include <iostream>
-#include <vector>
+using std::endl;
 
-using namespace std;
-
-// Constructor for saving the game
-GameSave::GameSave(Player *player1, Player *player2, Board *board, LinkedList *tileBag, Player *currentPlayer, string filename)
+GameSave::GameSave(Player *player1, Player *player2, Board *board, LinkedList *bag, Player *currentPlayer, std::string outputFileName, int playerCount)
 {
-    saveGame(player1, player2, board, tileBag, currentPlayer, filename);
+    outFile.open("Tests/" + outputFileName + ".txt");
+
+    // Output the total number of players
+    outFile << playerCount << endl;
+
+    // Output details of player 1
+    outputPlayer(player1);
+
+    // Output details of player 2
+    outputPlayer(player2);
+
+    // Write the fixed-size board state (assuming it's a 26x26 board)
+    outFile << "26,26" << endl;
+
+    // Write the current state of the board
+    outFile << board->getState() << endl;
+
+    // Write the string representation of the tile bag
+    outFile << bag->toString() << endl;
+
+    // Write the name of the current player
+    outFile << currentPlayer->getName();
 }
 
-// Function to save the game
-void GameSave::saveGame(Player *player1, Player *player2, Board *board, LinkedList *tileBag, Player *currentPlayer, string filename)
+void GameSaver::outputPlayer(Player *player)
 {
-    ofstream outFile(filename);
+    // Write the player's name to the file
+    outFile << player->getName() << endl;
 
-    // Save player information
-    outFile << player1->getName() << endl;
-    outFile << player1->getScore() << endl;
-    outFile << player1->getHand()->toString() << endl;
+    // Write the player's points to the file
+    outFile << player->getPoints() << endl;
 
-    outFile << player2->getName() << endl;
-    outFile << player2->getScore() << endl;
-    outFile << player2->getHand()->toString() << endl;
-
-    auto boardState = board->getCurrentState(); // Use auto to deduce the type
-
-    // Save board information
-    outFile << board->getRows() << "," << board->getCols() << std::endl;
-
-    for (auto &row : boardState)
-    {
-        for (char cell : row)
-        {
-            outFile << cell;
-        }
-        outFile << std::endl;
-    }
-
-    // Save tile bag contents
-    vector<Tile *> bagTiles = tileBag->getAllTiles();
-    for (Tile *tile : bagTiles)
-    {
-        outFile << tile->toString() << ",";
-    }
-    outFile << endl;
-
-    // Save current player name
-    outFile << currentPlayer->getName() << endl;
-
-    cout << "Game successfully saved." << endl;
+    // Write the string representation of the player's hand to the file
+    outFile << player->getHand()->toString() << endl;
 }

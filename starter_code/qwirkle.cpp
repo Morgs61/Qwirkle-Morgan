@@ -178,28 +178,20 @@ void loadGame()
 void startNewGame()
 {
     // Player 1
-    string player1Name;
+    string player1;
     do
     {
         cout << "\nEnter a name for player 1 (uppercase characters only): ";
-        cin >> player1Name;
-    } while (!isValidPlayerName(player1Name));
+        cin >> player1;
+    } while (!isValidPlayerName(player1));
 
     // Player 2
-    string player2Name;
+    string player2;
     do
     {
         cout << "\nEnter a name for player 2 (uppercase characters only): ";
-        cin >> player2Name;
-    } while (!isValidPlayerName(player2Name));
-
-    // Create instances of the Player class
-    LinkedList player1Hand;
-    Player player1(player1Name, 0, &player1Hand);
-
-    LinkedList player2Hand;
-    Player player2(player2Name, 0, &player2Hand);
-
+        cin >> player2;
+    } while (!isValidPlayerName(player2));
     cin.ignore();
     cout << "\nLet's Play!" << endl;
 
@@ -207,44 +199,39 @@ void startNewGame()
     std::vector<Tile> tileBag;
     initializeTileBag(tileBag);
 
+    // Initialize player hands
     LinkedList player1Hand;
     LinkedList player2Hand;
     initializePlayerHands(player1Hand, player2Hand, tileBag);
 
     // Print the hands of each player
-    void printTileBag(std::vector<Tile> & tileBag);
+    void printTileBag(const std::vector<Tile> &tileBag);
 
     cout << "\n"
-         << player1.getName() << "'s hand: ";
-    player1.getHand()->displayHand();
+         << player1 << "'s hand: ";
+    player1Hand.displayHand();
 
     cout << "\n"
-         << player2.getName() << "'s hand: ";
-    player2.getHand()->displayHand();
+         << player2 << "'s hand: ";
+    player2Hand.displayHand();
 
     // Initialize the board
     std::vector<std::vector<Tile *>> board;
-    Board myBoard;
-    myBoard.initializeBoard(board);
+    initializeBoard(board);
 
     // Display the board
-    myBoard.displayBoard(board);
+    displayBoard(board);
     printTileBag(tileBag);
 
-    // Initialize currentPlayer to player1 at the beginning
-    Player *currentPlayer = &player1;
-
-    while (!player1.getHand()->isEmpty() && !player2.getHand()->isEmpty())
+    // need to remove the conitinue statements
+    while (!player1Hand.isEmpty() && !player2Hand.isEmpty())
     {
-        for (auto &playerPair : {std::make_pair(player1, &player1Hand), std::make_pair(player2, &player2Hand)})
+        for (auto &player : {std::make_pair(player1, &player1Hand), std::make_pair(player2, &player2Hand)})
         {
-            Player &player = playerPair.first;    // Accessing the Player object from the pair
-            LinkedList *hand = playerPair.second; // Accessing the LinkedList* from the pair
-
             cout << "\n"
-                 << player << "'s turn" << endl;
-            cout << player << "'s hand: ";
-            hand->displayHand();
+                 << player.first << "'s turn" << endl;
+            cout << player.first << "'s hand: ";
+            player.second->displayHand();
 
             bool validActionSelected = false;
             while (!validActionSelected)
@@ -252,7 +239,6 @@ void startNewGame()
                 cout << "Select your action:\n";
                 cout << "1. Place tiles\n";
                 cout << "2. Replace a tile\n";
-                cout << "3. Save game\n";
                 cout << "> ";
 
                 int choice;
@@ -340,9 +326,9 @@ void startNewGame()
                             continue;
                         }
 
-                        string colour = string(1, tile[0]);
+                        string color = string(1, tile[0]);
                         string shape = tile.substr(1);
-                        Tile *tileToCheck = new Tile(colour[0], stoi(shape));
+                        Tile *tileToCheck = new Tile(color[0], stoi(shape));
 
                         cout << "Debug Info: " << player.first << "'s hand: ";
                         player.second->displayHand();
@@ -440,13 +426,13 @@ void startNewGame()
                         // Parse the tile from the command
                         string tile = words[1];
 
-                        string colour = string(1, tile[0]);
+                        string color = string(1, tile[0]);
                         string shape = tile.substr(1);
 
                         try
                         {
-                            // Attempt to create a tile with the provided colour and shape
-                            Tile *tileToReplace = new Tile(colour[0], stoi(shape));
+                            // Attempt to create a tile with the provided color and shape
+                            Tile *tileToReplace = new Tile(color[0], stoi(shape));
 
                             // Check if the tile to replace is in the player's hand
                             if (!player.second->containsTile(tileToReplace))
@@ -469,7 +455,7 @@ void startNewGame()
 
                             // Print the tile bag before shuffling
                             cout << "Tile bag before shuffling: ";
-                            for (auto &tile : tileBag)
+                            for (const auto &tile : tileBag)
                             {
                                 cout << "[" << tile.colour << ", " << tile.shape << "] ";
                             }
@@ -479,7 +465,7 @@ void startNewGame()
 
                             // Print the tile bag after shuffling
                             cout << "Tile bag after shuffling: ";
-                            for (auto &tile : tileBag)
+                            for (const auto &tile : tileBag)
                             {
                                 cout << "[" << tile.colour << ", " << tile.shape << "] ";
                             }
@@ -501,13 +487,13 @@ void startNewGame()
                             validInput = true;
                             validActionSelected = true; // Exit the loop
                         }
-                        catch (std::invalid_argument &e)
+                        catch (const std::invalid_argument &e)
                         {
                             cout << "Invalid tile format. Please try again." << endl;
                             cout << "> ";
                             continue;
                         }
-                        catch (std::out_of_range &e)
+                        catch (const std::out_of_range &e)
                         {
                             cout << "Invalid tile format. Please try again." << endl;
                             cout << "> ";
@@ -539,6 +525,7 @@ void startNewGame()
         }
     }
 }
+
 void initializeTileBag(std::vector<Tile> &tileBag)
 {
     // Get definitions from TileCodes.h

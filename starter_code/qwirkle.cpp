@@ -570,13 +570,7 @@ void initializePlayerHands(LinkedList &player1Hand, LinkedList &player2Hand, std
     }
 }
 
-void initializeBoard(std::vector<std::vector<Tile *>> &board)
-{
-}
 
-void displayBoard(std::vector<std::vector<Tile *>> &board)
-{
-}
 
 void switchPlayer(Player *&currentPlayer, Player *player1, Player *player2)
 {

@@ -509,7 +509,7 @@ void startNewGame()
                     std::cout << "Enter a name for the output file: ";
                     std::cin >> outputFileName;
 
-                    GameSave gs(player1, player2, board, tileBag, currentPlayer, outputFileName, outputFileName);
+                    GameSave gs(player1, player2, board, tileBag, currentPlayer, outputFileName);
 
                     // Don't switch player turn when saving
                     returnVal = false;

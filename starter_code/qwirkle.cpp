@@ -215,13 +215,15 @@ void startNewGame()
          << player2Name << "'s hand: ";
     player2Hand.displayHand();
 
+    // Create an instance of the Board class
+    Board boardInstance;
+
     // Initialize the board
     std::vector<std::vector<Tile *>> board;
-    initializeBoard(board);
+    boardInstance.initializeBoard(board);
 
     // Display the board
-    displayBoard(board);
-    printTileBag(tileBag);
+    boardInstance.displayBoard(board);
 
     // Initialize the current player
     Player player1(player1Name, 0, &player1Hand);
@@ -277,7 +279,7 @@ void startNewGame()
                 // Input each tile one by one
                 for (int i = 0; i < numTiles; ++i)
                 {
-                    displayBoard(board);
+                    boardInstance.displayBoard(board);
                     (currentPlayer == &player1) ? player1Hand.displayHand() : player2Hand.displayHand();
                     cout << "Place tile " << i + 1 << " using the format: place <tile> at <grid location>" << endl;
                     cout << ">";
@@ -352,7 +354,7 @@ void startNewGame()
                         {
                             cout << "Tile found in hand. Proceeding with the game." << endl;
                             board[row][column] = tileToCheck;
-                            displayBoard(board);
+                            boardInstance.displayBoard(board);
                             tilesToPlace.push_back(tileToCheck);
                         }
                     }

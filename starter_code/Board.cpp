@@ -9,6 +9,9 @@
 #define ROW_MAX 25
 #define ROW_MIN 0
 
+// Decalre fixed size of board here
+int BOARD_SIZE = 15;
+
 // Constructor definition
 Board::Board()
 {
@@ -19,13 +22,27 @@ Board::~Board()
 {
 }
 
+// void Board::initializeBoard(std::vector<std::vector<Tile *>> &board)
+// {
+//     // Initialize the board with nullptr
+//     for (int i = ROW_MIN; i <= ROW_MAX; ++i)
+//     {
+//         std::vector<Tile *> row;
+//         for (int j = COLUMN_MIN; j <= COLUMN_MAX; ++j)
+//         {
+//             row.push_back(nullptr);
+//         }
+//         board.push_back(row);
+//     }
+// }
+
 void Board::initializeBoard(std::vector<std::vector<Tile *>> &board)
 {
     // Initialize the board with nullptr
-    for (int i = ROW_MIN; i <= ROW_MAX; ++i)
+    for (int i = 0; i < BOARD_SIZE; ++i)
     {
         std::vector<Tile *> row;
-        for (int j = COLUMN_MIN; j <= COLUMN_MAX; ++j)
+        for (int j = 0; j < BOARD_SIZE; ++j)
         {
             row.push_back(nullptr);
         }
@@ -33,12 +50,55 @@ void Board::initializeBoard(std::vector<std::vector<Tile *>> &board)
     }
 }
 
+// void Board::displayBoard(std::vector<std::vector<Tile *>> &board)
+// {
+//     // Display the board
+//     std::cout << "\nBoard:" << std::endl;
+//     std::cout << "  ";
+//     for (int i = COLUMN_MIN; i <= COLUMN_MAX; ++i)
+//     {
+//         if (i < 10)
+//         {
+//             std::cout << "  " << i << " ";
+//         }
+//         else
+//         {
+//             std::cout << " " << i << " ";
+//         }
+//     }
+//     std::cout << std::endl;
+//     // place underline under column headers
+//     for (int i = 0; i <= (COLUMN_MAX - COLUMN_MIN + 1); ++i)
+//     {
+//         std::cout << "____";
+//     }
+//     std::cout << std::endl;
+
+//     for (int i = ROW_MIN; i < (ROW_MAX + ROW_MIN); ++i)
+//     {
+//         char rowLabel = 'A' + i;
+//         std::cout << rowLabel << " |";
+//         for (int j = COLUMN_MIN; j <= COLUMN_MAX; ++j)
+//         {
+//             if (board[i][j] == nullptr)
+//             {
+//                 std::cout << "   |";
+//             }
+//             else
+//             {
+//                 std::cout << "" << board[i][j]->colour << "" << board[i][j]->shape << "|";
+//             }
+//         }
+//         std::cout << std::endl;
+//     }
+// }
+
 void Board::displayBoard(std::vector<std::vector<Tile *>> &board)
 {
     // Display the board
     std::cout << "\nBoard:" << std::endl;
     std::cout << "  ";
-    for (int i = COLUMN_MIN; i <= COLUMN_MAX; ++i)
+    for (int i = 0; i < BOARD_SIZE; ++i)
     {
         if (i < 10)
         {
@@ -51,17 +111,17 @@ void Board::displayBoard(std::vector<std::vector<Tile *>> &board)
     }
     std::cout << std::endl;
     // place underline under column headers
-    for (int i = 0; i <= (COLUMN_MAX - COLUMN_MIN + 1); ++i)
+    for (int i = 0; i <= BOARD_SIZE; ++i)
     {
         std::cout << "____";
     }
     std::cout << std::endl;
 
-    for (int i = ROW_MIN; i < (ROW_MAX + ROW_MIN); ++i)
+    for (int i = 0; i < BOARD_SIZE; ++i)
     {
         char rowLabel = 'A' + i;
         std::cout << rowLabel << " |";
-        for (int j = COLUMN_MIN; j <= COLUMN_MAX; ++j)
+        for (int j = 0; j < BOARD_SIZE; ++j)
         {
             if (board[i][j] == nullptr)
             {

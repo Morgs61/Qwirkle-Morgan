@@ -54,10 +54,13 @@ int main(void)
             continue;
         }
 
+        // Declare and initialize the board variable
+        std::vector<std::vector<Tile *>> board;
+
         if (choice == 1)
         {
             cout << "\nStarting a New Game" << endl;
-            startNewGame();
+            startNewGame(board);
         }
         else if (choice == 2)
         {
@@ -175,7 +178,7 @@ void loadGame()
     }
 }
 
-void startNewGame()
+void startNewGame(std::vector<std::vector<Tile *>> &board)
 {
     // Player 1
     string player1Name;
@@ -219,7 +222,6 @@ void startNewGame()
     Board boardInstance;
 
     // Initialize the board
-    std::vector<std::vector<Tile *>> board;
     boardInstance.initializeBoard(board);
 
     // Display the board
@@ -289,13 +291,20 @@ void startNewGame()
 
                     // Split the command into words
                     vector<string> words;
-                    size_t pos = 0;
-                    while ((pos = command.find(' ')) != string::npos)
+                    while (!command.empty())
                     {
-                        words.push_back(command.substr(0, pos));
-                        command.erase(0, pos + 1);
+                        size_t pos = command.find(' ');
+                        if (pos != string::npos)
+                        {
+                            words.push_back(command.substr(0, pos));
+                            command.erase(0, pos + 1);
+                        }
+                        else
+                        {
+                            words.push_back(command);
+                            break; // Exit the loop when no more spaces are found
+                        }
                     }
-                    words.push_back(command);
 
                     // Check that the command is correctly formatted
                     if (words.size() != 4 || words[0] != "place" || words[3].length() != 2)

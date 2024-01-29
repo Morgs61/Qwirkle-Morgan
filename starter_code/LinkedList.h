@@ -41,6 +41,9 @@ public:
    // Get a tile at a specific index
    Tile *get(int index);
 
+   // Comparison
+   bool equals(LinkedList& other);
+
 private:
    Node *head;
    Node *tail;

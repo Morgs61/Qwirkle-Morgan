@@ -218,3 +218,27 @@ std::vector<Tile *> LinkedList::getAllTiles()
 
    return tiles;
 }
+
+bool LinkedList::equals(LinkedList &other)
+{
+   // Compare list lengths
+   if (size() != other.size())
+      return false;
+
+   // Compare each element (node) in the list
+   Node *currentThis = head;
+   Node *currentOther = other.head;
+
+   while (currentThis != nullptr && currentOther != nullptr)
+   {
+      // Compare the tiles stored in the nodes
+      if (currentThis->getTile() != currentOther->getTile())
+         return false;
+
+      currentThis = currentThis->getNext();
+      currentOther = currentOther->getNext();
+   }
+
+   // If both lists reached the end simultaneously, they are equal
+   return (currentThis == nullptr && currentOther == nullptr);
+}

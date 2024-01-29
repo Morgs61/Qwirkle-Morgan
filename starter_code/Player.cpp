@@ -40,18 +40,16 @@ void Player::addPoints(int pointsToAdd)
     score += pointsToAdd;
 }
 
-bool Player::equals(Player *other)
+bool Player::equals(Player &other)
 {
-    // Check if the pointers are equal
-    if (this == other)
-        return true;
-
-    // Check if the other pointer is null
-    if (!other)
+    // Compare name
+    if (name != other.getName())
         return false;
 
-    // Check if the name, score, and hand are equal
-    return (name == other->getName()) &&
-           (score == other->getScore()) &&
-           (hand->equals(other->getHand())); 
+    // Compare score
+    if (score != other.getScore())
+        return false;
+
+    // Compare hand
+    return hand->equals(*(other.getHand()));
 }

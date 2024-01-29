@@ -28,7 +28,8 @@ public:
     // Increases the player's score by a specified amount
     void addPoints(int pointsToAdd);
 
-    bool equals(Player *other);
+    // Comparison
+    bool equals(Player &other);
 
 private:
     std::string name;

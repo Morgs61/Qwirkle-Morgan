@@ -53,5 +53,5 @@ bool Player::equals(Player *other)
     // Check if the name, score, and hand are equal
     return (name == other->getName()) &&
            (score == other->getScore()) &&
-           (hand->equals(other->getHand())); // Assuming LinkedList has an equals function
+           (hand->equals(other->getHand())); 
 }

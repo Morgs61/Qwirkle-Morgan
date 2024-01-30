@@ -21,6 +21,7 @@ void displayMenu();
 bool isValidPlayerName(const string &name);
 void displayStudentInformation();
 void loadGame();
+bool checkSurroundingTilesMatch(const std::vector<std::vector<Tile *>> &board, int row, int col, Tile *tile);
 
 
 
@@ -306,7 +307,7 @@ while (!emptyHandExists) {
             // Convert the grid location to row and column
             char gridLetter = location[0];
             size_t row = (gridLetter >= 'A' && gridLetter <= 'Z') ? (gridLetter - 'A') : -1;
-            size_t column = (location[1] >= '1' && location[1] <= '9') ? (location[1] - '1') : -1;
+            size_t column = std::stoi(location.substr(1)) - 1; // Convert the rest of the string to a number
 
             // Check if the row and column are valid
             if (row == static_cast<size_t>(-1) || row >= board.size() || column == static_cast<size_t>(-1) || column >= board[0].size()) {
@@ -336,6 +337,14 @@ while (!emptyHandExists) {
                     continue;
                 } else {
                     cout << "Tile found in hand. Proceeding with the game." << endl;
+                    if (checkSurroundingTilesMatch(board, row, column, tileToCheck)) {
+                        cout << "Surrounding tiles match. Proceeding with the game." << endl;
+                    } else {
+                        cout << "Surrounding tiles do not match. Please try again." << endl;
+                        delete tileToCheck;  // Avoid memory leak
+                        --j;  // Decrement i to repeat the input for the same tile
+                        continue;
+                    }
                     board[row][column] = tileToCheck;
                     displayBoard(board);
                     tilesToPlace.push_back(tileToCheck);

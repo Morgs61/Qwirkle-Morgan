@@ -15,7 +15,10 @@ public:
 
    void initializeBoard();
    void displayBoard();
-   //void addTileToBoard(Tile* tile, int row, int col);
+  // void addTileToBoard(Tile* tile, int row, int col);
+    bool checkSurroundingTilesMatch();
+ //   bool checkSurroundingTilesMatch(int row, int col, Tile* tile, bool& valid);
+
 
 };
 

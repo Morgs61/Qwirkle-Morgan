@@ -19,6 +19,8 @@ public:
    	bool checkSurroundingTilesMatch();
 	bool checkTilePlacement();
 	int getSize();
+	bool checkSameTypeTiles();
+    bool checkSameRowOrColumn();
 
  //   bool checkSurroundingTilesMatch(int row, int col, Tile* tile, bool& valid);
 

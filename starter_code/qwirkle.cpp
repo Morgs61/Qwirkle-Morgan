@@ -22,6 +22,7 @@ bool isValidPlayerName(const string &name);
 void displayStudentInformation();
 void loadGame();
 bool checkSurroundingTilesMatch(const std::vector<std::vector<Tile *>> &board, int row, int col, Tile *tile);
+bool checkSameTypeTiles(const std::vector<Tile *> &tiles);
 
 
 
@@ -297,6 +298,7 @@ while (!emptyHandExists) {
                 cout << players[i]->getName() << "'s hand: ";
                 players[i]->getHand()->displayHand();
                 cout << "> ";
+                --j;  // Decrement j to repeat the input for the same tile
                 continue;
             }
 
@@ -345,9 +347,17 @@ while (!emptyHandExists) {
                         --j;  // Decrement i to repeat the input for the same tile
                         continue;
                     }
+                    tilesToPlace.push_back(tileToCheck);
+                    // Check if the tiles being placed have the same color or the same shape
+                    if (!checkSameTypeTiles(tilesToPlace)) {
+                        cout << "Invalid move. Tiles must have the same color or the same shape." << endl;
+                        --j;  // Decrement j to repeat the input for the same tile
+                        continue;
+                    }
+
                     board[row][column] = tileToCheck;
                     displayBoard(board);
-                    tilesToPlace.push_back(tileToCheck);
+
                 }
             }
 

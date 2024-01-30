@@ -6,17 +6,19 @@
 #define BOARD_H
 
 
+#include <vector>
+#include "Tile.h"
 
 class Board {
 public:
+    Board();
+    void displayBoard() const;
+    void clear();
+    size_t size() const; // what is this witchcraft. Copilot suggested it.
+    std::vector<Tile*>& operator[](size_t index);
 
-   Board();
-   ~Board();
-
-   void initializeBoard();
-   void displayBoard();
-   //void addTileToBoard(Tile* tile, int row, int col);
-
+private:
+    std::vector<std::vector<Tile *>> board;
 };
 
 

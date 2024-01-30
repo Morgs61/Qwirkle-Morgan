@@ -10,18 +10,23 @@
 #include "LinkedList.h"
 #include "Player.h"
 #include "Tile.h"
+#include "Board.h"
+
 
 class Game {
 public:
-    Game(std::vector<Player*> players, LinkedList *bag, Board *board, int currentPlayerTurn, bool isEnhanced);
-    // Other methods...
-
+    Game(Player** players, int playerCount, std::vector<Tile> *bag, Board board, int currentPlayerTurn);
+    ~Game();
+    void launchGame();
+    bool checkForEmptyPlayerHands(Player** players, int playerCount);
 private:
-    std::vector<Player*> players;
-    Board* board;
-    LinkedList* bag;
+    Player** players;
+    std::vector<Tile> *bag;
+    Board board;
     int currentPlayerTurn;
     int playerCount;
+
+
 };
 
 

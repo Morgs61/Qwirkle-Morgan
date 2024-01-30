@@ -228,16 +228,16 @@ void startNewGame(std::vector<std::vector<Tile *>> &board)
     boardInstance.displayBoard(board);
 
     // Initialize the current player
-    Player player1(player1Name, 0, &player1Hand);
-    Player player2(player2Name, 0, &player2Hand);
-    Player *currentPlayer = &player1; // Start with Player 1
+    Player *player1 = new Player(player1Name, 0, &player1Hand);
+    Player *player2 = new Player(player2Name, 0, &player2Hand);
+    Player *currentPlayer = player1; // Start with Player 1
 
     while (!player1Hand.isEmpty() && !player2Hand.isEmpty())
     {
         cout << "\n"
              << currentPlayer->getName() << "'s turn" << endl;
         cout << currentPlayer->getName() << "'s hand: ";
-        (currentPlayer == &player1) ? player1Hand.displayHand() : player2Hand.displayHand();
+        (currentPlayer == player1) ? player1->getHand() : player2->getHand();
 
         bool validActionSelected = false;
         while (!validActionSelected)
@@ -270,7 +270,7 @@ void startNewGame(std::vector<std::vector<Tile *>> &board)
                     cout << "\n"
                          << currentPlayer->getName() << "'s turn" << endl;
                     cout << currentPlayer->getName() << "'s hand: ";
-                    (currentPlayer == &player1) ? player1Hand.displayHand() : player2Hand.displayHand();
+                    (currentPlayer == player1) ? player1->getHand() : player2->getHand();
                     continue;
                 }
                 cin.ignore();
@@ -282,7 +282,7 @@ void startNewGame(std::vector<std::vector<Tile *>> &board)
                 for (int i = 0; i < numTiles; ++i)
                 {
                     boardInstance.displayBoard(board);
-                    (currentPlayer == &player1) ? player1Hand.displayHand() : player2Hand.displayHand();
+                    (currentPlayer == player1) ? player1->getHand() : player2->getHand();
                     cout << "Place tile " << i + 1 << " using the format: place <tile> at <grid location>" << endl;
                     cout << ">";
 
@@ -313,7 +313,7 @@ void startNewGame(std::vector<std::vector<Tile *>> &board)
                         cout << "\n"
                              << currentPlayer->getName() << "'s turn" << endl;
                         cout << currentPlayer->getName() << "'s hand: ";
-                        (currentPlayer == &player1) ? player1Hand.displayHand() : player2Hand.displayHand();
+                        (currentPlayer == player1) ? player1->getHand() : player2->getHand();
                         cout << "> ";
                         continue;
                     }
@@ -340,10 +340,10 @@ void startNewGame(std::vector<std::vector<Tile *>> &board)
                     Tile *tileToCheck = new Tile(color[0], stoi(shape));
 
                     cout << "Debug Info: " << currentPlayer->getName() << "'s hand: ";
-                    (currentPlayer == &player1) ? player1Hand.displayHand() : player2Hand.displayHand();
+                    (currentPlayer == player1) ? player1->getHand() : player2->getHand();
                     cout << "Debug Info: Tile to check: [" << tileToCheck->colour << "" << tileToCheck->shape << "]" << endl;
 
-                    if (!(currentPlayer == &player1 ? &player1Hand : &player2Hand)->containsTile(tileToCheck))
+                    if (!((currentPlayer == player1) ? player1->getHand() : player2->getHand())->containsTile(tileToCheck))
                     {
                         cout << "Tile not found in hand. Please try again." << endl;
                         delete tileToCheck; // Avoid memory leak
@@ -369,7 +369,7 @@ void startNewGame(std::vector<std::vector<Tile *>> &board)
                     }
 
                     // Remove the tile from the player's hand
-                    if (!(currentPlayer == &player1 ? &player1Hand : &player2Hand)->removeTile(tileToCheck))
+                    if (!((currentPlayer == player1) ? player1->getHand() : player2->getHand())->removeTile(tileToCheck))
                     {
                         cout << "Error removing tile from hand. Please try again." << endl;
                         --i; // Decrement i to repeat the input for the same tile
@@ -388,13 +388,13 @@ void startNewGame(std::vector<std::vector<Tile *>> &board)
                     Tile *newTile = new Tile(tileFromBag.colour, tileFromBag.shape);
 
                     // Add the new tile to the player's hand
-                    (currentPlayer == &player1 ? &player1Hand : &player2Hand)->addTileToHand(newTile);
+                    ((currentPlayer == player1) ? player1->getHand() : player2->getHand())->addTileToHand(newTile);
                 }
 
                 cout << "The size of the tile bag is now: " << tileBag.size() << endl;
                 cout << "\n"
                      << currentPlayer->getName() << "'s hand: ";
-                (currentPlayer == &player1) ? player1Hand.displayHand() : player2Hand.displayHand();
+                (currentPlayer == player1) ? player1->getHand() : player2->getHand();
                 validActionSelected = true;
             }
             else if (choice == 2)
@@ -426,7 +426,7 @@ void startNewGame(std::vector<std::vector<Tile *>> &board)
                         cout << "\n"
                              << currentPlayer->getName() << "'s turn" << endl;
                         cout << currentPlayer->getName() << "'s hand: ";
-                        (currentPlayer == &player1) ? player1Hand.displayHand() : player2Hand.displayHand();
+                        (currentPlayer == player1) ? player1->getHand() : player2->getHand();
                         cout << "Replace a tile using the format: replace <tile>" << endl;
                         cout << ">";
                         continue;
@@ -444,20 +444,20 @@ void startNewGame(std::vector<std::vector<Tile *>> &board)
                         Tile *tileToReplace = new Tile(color[0], stoi(shape));
 
                         // Check if the tile to replace is in the player's hand
-                        if (!(currentPlayer == &player1 ? &player1Hand : &player2Hand)->containsTile(tileToReplace))
+                        if (!((currentPlayer == player1) ? player1->getHand() : player2->getHand())->containsTile(tileToReplace))
                         {
                             cout << "Tile not found in hand. Please try again." << endl;
                             delete tileToReplace; // Avoid memory leak
                             cout << "\n"
                                  << currentPlayer->getName() << "'s turn" << endl;
                             cout << currentPlayer->getName() << "'s hand: ";
-                            (currentPlayer == &player1) ? player1Hand.displayHand() : player2Hand.displayHand();
+                            (currentPlayer == player1) ? player1->getHand() : player2->getHand();
                             cout << "> ";
                             continue;
                         }
 
                         // Remove the tile from the player's hand
-                        (currentPlayer == &player1 ? &player1Hand : &player2Hand)->removeTile(tileToReplace);
+                        (currentPlayer == player1) ? player1->getHand() : player2->getHand();
 
                         // Add the replaced tile back to the tile bag
                         tileBag.emplace_back(tileToReplace->colour, tileToReplace->shape);
@@ -485,11 +485,11 @@ void startNewGame(std::vector<std::vector<Tile *>> &board)
                         tileBag.pop_back();
 
                         Tile *newTile = new Tile(tileFromBag.colour, tileFromBag.shape);
-                        (currentPlayer == &player1 ? &player1Hand : &player2Hand)->addTileToHand(newTile);
+                        (currentPlayer == player1) ? player1->getHand() : player2->getHand();
 
                         // Print the player's hand after a new tile is added
                         cout << "Player's hand after adding a new tile: ";
-                        (currentPlayer == &player1) ? player1Hand.displayHand() : player2Hand.displayHand();
+                        (currentPlayer == player1) ? player1->getHand() : player2->getHand();
                         cout << endl;
 
                         cout << "Tile replaced. Proceeding with the game." << endl;
@@ -518,10 +518,10 @@ void startNewGame(std::vector<std::vector<Tile *>> &board)
             //     std::cout << "Enter a name for the output file: ";
             //     std::cin >> outputFileName;
 
-            //     GameSave gs(player1, player2, board, &tileBag, currentPlayer, outputFileName); // Pass pointer to tileBag
+            //     GameSave gs(player1, player2, board, tileBag, currentPlayer, outputFileName); // Pass pointer to tileBag
 
             //     // Don't switch player turn when saving
-            //     returnVal = false;
+            //     // returnVal = false;
             //     std::cout << std::endl
             //               << "Game successfully saved" << std::endl
             //               << std::endl;

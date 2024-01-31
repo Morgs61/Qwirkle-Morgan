@@ -154,7 +154,7 @@ void Game::launchGame()
 
                     cout << "Debug Info: " << currentPlayer->getName() << "'s hand: ";
                     currentPlayer->getHand()->displayHand();
-                    cout << "Debug Info: Tile to check: [" << tileToCheck->colour << "" << tileToCheck->shape << "]" << endl;
+                    cout << "Debug Info: Tile to check: [" << tileToCheck->getColour() << "" << tileToCheck->getShape() << "]" << endl;
 
                     if (!currentPlayer->getHand()->containsTile(tileToCheck))
                     {
@@ -198,7 +198,7 @@ void Game::launchGame()
                     bag->pop_back();
 
                     // Add the tile pointer directly to the player's hand
-                    currentPlayer->getHand()->addTileToHand(tileFromBagPtr);
+                    currentPlayer->getHand()->addTile(tileFromBagPtr);
                 }
 
                 cout << "The size of the tile bag is now: " << bag->getSize() << endl;
@@ -276,7 +276,7 @@ void Game::launchGame()
                         cout << "Tile bag before shuffling: ";
                         for (Node *current = bag->begin(); current != bag->end(); current = current->next)
                         {
-                            cout << "[" << current->tile->colour << ", " << current->tile->shape << "] ";
+                            cout << "[" << current->tile->getColour() << ", " << current->tile->getShape() << "] ";
                         }
                         cout << endl;
 
@@ -286,7 +286,7 @@ void Game::launchGame()
                         cout << "Tile bag after shuffling: ";
                         for (Node *current = bag->begin(); current != bag->end(); current = current->next)
                         {
-                            cout << "[" << current->tile->colour << ", " << current->tile->shape << "] ";
+                            cout << "[" << current->tile->getColour() << ", " << current->tile->getShape() << "] ";
                         }
                         cout << endl;
 
@@ -294,7 +294,7 @@ void Game::launchGame()
                         Tile *tileFromBag = bag->back();
                         bag->pop_back();
 
-                        currentPlayer->getHand()->addTileToHand(tileFromBag); // Pass the Tile* directly
+                        currentPlayer->getHand()->addTile(tileFromBag); // Pass the Tile* directly
 
                         // Print the player's hand after a new tile is added
                         cout << "Player's hand after adding a new tile: ";

@@ -13,11 +13,6 @@ public:
 
    Tile *tile;
    Node *next;
-
-private:
-   // Private constructor and assignment operator to prevent copying
-   Node(Node &other);
-   Node &operator=(Node &other);
 };
 
 #endif // ASSIGN2_NODE_H

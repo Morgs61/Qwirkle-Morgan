@@ -178,7 +178,7 @@ void loadGame()
 void startNewGame()
 {
     // Number of players
-    int numPlayers = 2;
+    // int numPlayers = 2;
 
     // Initialize and shuffle the tile bag
     LinkedList *bag = new LinkedList(); // Instantiate LinkedList

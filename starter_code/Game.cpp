@@ -165,7 +165,7 @@ void Game::launchGame()
                     }
                     else
                     {
-                        if (board[row][column] != nullptr)
+                        if (board->hasTileAt(row, column))
                         {
                             cout << "There's already a tile at that location. Please try again." << endl;
                             delete tileToCheck; // Avoid memory leak
@@ -175,7 +175,7 @@ void Game::launchGame()
                         else
                         {
                             cout << "Tile found in hand. Proceeding with the game." << endl;
-                            board[row][column] = tileToCheck;
+                            board->placeTile(tileToCheck, row, column);
                             board->displayBoard();
                             tilesToPlace.push_back(tileToCheck);
                         }

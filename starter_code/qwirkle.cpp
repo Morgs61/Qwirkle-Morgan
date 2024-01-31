@@ -233,17 +233,17 @@ void initializePlayerHand(LinkedList *playerHand, LinkedList *bag)
     }
 }
 
-bool checkForEmptyPlayerHands(Player **players, int numPlayers)
-{
-    for (int i = 0; i < numPlayers; ++i)
-    {
-        if (players[i]->getHand()->isEmpty())
-        {
-            return true;
-        }
-    }
-    return false;
-}
+// bool checkForEmptyPlayerHands(Player **players, int numPlayers)
+// {
+//     for (int i = 0; i < numPlayers; ++i)
+//     {
+//         if (players[i]->getHand()->isEmpty())
+//         {
+//             return true;
+//         }
+//     }
+//     return false;
+// }
 
 //
 //    //printTileBag(tileBag);

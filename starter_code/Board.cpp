@@ -1,71 +1,153 @@
-// Board.cpp
 
-#include <iostream>  // Include for std::cout, std::endl
-#include <vector>    // Include for std::vector
+using namespace std;
+#include <iostream>
 #include "Board.h"
-#include "Tile.h"
 
-//Decalre fixed size of board here
-int BOARD_SIZE = 15;
+#define COLUMN_MAX 26
+#define COLUMN_MIN 1
+#define ROW_MAX 25
+#define ROW_MIN 0
 
-Board::Board() {
-    // Initialize the board with nullptr
-    for (int i = 0; i < BOARD_SIZE; ++i) {
-        std::vector<Tile *> row;
-        for (int j = 0; j < BOARD_SIZE; ++j) {
-            row.push_back(nullptr);
+// contains uppercase letters A to Z
+string init[COLUMN_MAX];
+
+Board::Board()
+{
+    for (int ch = 'A'; ch <= 'Z'; ch++)
+    {
+        init[ch - 'A'] = ch;
+    }
+    board = std::vector<Tile *>(ROWS * COLS, nullptr);
+}
+
+Board::~Board()
+{
+    for (auto tile : board)
+    {
+        if (tile != nullptr)
+        {
+            delete tile;
         }
-        board.push_back(row);
     }
 }
 
-void Board::displayBoard() const {
-    // Display the board
-    std::cout << "\nBoard:" << std::endl;
-    std::cout << "  ";
-    for (int i = 0; i < BOARD_SIZE; ++i) {
-        if (i < 10) {
-            std::cout << "  " << i << " ";
-        } else {
-            std::cout << " " << i << " ";
-        }
-    }
-    std::cout << std::endl;
-    // place underline under column headers
-    for (int i = 0; i <= BOARD_SIZE; ++i) {
-        std::cout << "____";
-    }
-    std::cout << std::endl;
+std::vector<Tile *> &Board::getBoard()
+{
+    return board;
+}
 
-    for (int i = 0; i < BOARD_SIZE; ++i) {
-        char rowLabel = 'A' + i;
-        std::cout << rowLabel << " |";
-        for (int j = 0; j < BOARD_SIZE; ++j) {
-            if (board[i][j] == nullptr) {
-                std::cout << "   |";
-            } else {
-                std::cout << "" << board[i][j]->colour << "" << board[i][j]->shape << "|";
+void Board::displayBoard()
+{
+    // Print the header rows
+    for (int i = 0; i < 2; i++)
+    {
+        for (int j = 0; j < COLUMN_MAX; j++)
+        {
+            // Print column indices and separators
+            if (i == 0 && j == 0)
+            {
+                cout << "   " << j << "  ";
+            }
+            else if (i == 0 && j < 10)
+            {
+                cout << j << "  ";
+            }
+            else if (i == 0 && j > 9)
+            {
+                cout << j << " ";
+            }
+            else if (i == 1 && j == 0)
+            {
+                cout << "  -"
+                     << "--";
+            }
+            else if (i == 1 && j == COLUMN_MAX - 1)
+            {
+                cout << "----";
+            }
+            else if (i == 1)
+            {
+                cout << "---";
             }
         }
-        std::cout << std::endl;
+        cout << endl;
     }
-}
-void Board::clear() {
-    for (auto & row : board) {
-        for (auto & tile : row) {
-            delete tile;
-            tile = nullptr;
+
+    // Print the board content
+    for (int i = 0; i < ROWS; i++)
+    {
+        cout << init[i] << " "; // Print row labels
+        for (int j = 0; j < COLS; ++j)
+        {
+            // Check if a tile exists at the current position
+            if (board[i * COLS + j] != nullptr)
+            {
+                string tileString = board[i * COLS + j]->toString();
+                cout << tileString + "|"; // Print the tile's string representation
+            }
+            // Print separators or empty spaces if no tile is present
+            else if (j == 0)
+            {
+                cout << "|";
+            }
+            else
+            {
+                cout << "  |";
+            }
         }
-        row.clear();
+        cout << endl;
     }
-    board.clear();
 }
 
-std::vector<Tile*>& Board::operator[](size_t index) {
-    return board[index];
+void Board::placeTile(Tile *tile, int row, int col)
+{
+    if (row >= 0 && row < ROWS && col >= 0 && col < COLS)
+    {
+        board[row * COLS + col] = tile;
+    }
 }
 
-// TODO: work out why this is needed.
-size_t Board::size() const {
-    return board.size();
+Tile *Board::getTileAt(int row, int col)
+{
+    if (row >= 0 && row < ROWS && col >= 0 && col < COLS)
+    {
+        return board[row * COLS + col];
+    }
+    return nullptr;
+}
+
+std::string Board::getBoardState()
+{
+    string stateString = "";
+    for (int i = 0; i < ROWS; i++)
+    {
+        for (int j = 0; j < COLS; ++j)
+        {
+            if (board[i * COLS + j] != nullptr)
+            {
+                stateString += board[i * COLS + j]->toString() + "@" + init[i] + to_string(j) + ", ";
+            }
+        }
+    }
+    if (!stateString.empty())
+    {
+        // Remove the last space and comma
+        stateString.pop_back();
+        stateString.pop_back();
+    }
+    return stateString;
+}
+
+bool Board::hasTileAt(int row, int col)
+{
+    if (row >= 0 && row < ROWS && col >= 0 && col < COLS)
+    {
+        return board[row * COLS + col] != nullptr;
+    }
+    return false;
+}
+
+size_t Board::size() const
+{
+    return board.size(); // Assuming board is your vector of vectors
 }

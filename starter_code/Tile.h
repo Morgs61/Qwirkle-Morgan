@@ -1,4 +1,4 @@
-
+#include <string>
 #ifndef ASSIGN2_TILE_H
 #define ASSIGN2_TILE_H
 
@@ -8,7 +8,8 @@ typedef char Colour;
 // Define a Shape type
 typedef int Shape;
 
-class Tile {
+class Tile
+{
 public:
    // Constructor
    Tile(Colour colour, Shape shape);
@@ -17,7 +18,8 @@ public:
    ~Tile();
 
    Colour colour;
-   Shape  shape;
+   Shape shape;
+   std::string toString();
    // bool equals(Tile* other);
    // //bool operator==(const Tile& other) const;
    // bool operator!=(const Tile& other) const;

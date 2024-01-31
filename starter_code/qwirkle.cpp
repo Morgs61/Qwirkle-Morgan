@@ -21,6 +21,8 @@ void displayMenu();
 bool isValidPlayerName(const string &name);
 void displayStudentInformation();
 void loadGame();
+bool checkSurroundingTilesMatch(const std::vector<std::vector<Tile *>> &board, int row, int col, Tile *tile);
+bool checkSameTypeTiles(const std::vector<Tile *> &tilesToPlace, const std::vector<std::pair<int, int>> &positions);
 
 int main(void)
 {

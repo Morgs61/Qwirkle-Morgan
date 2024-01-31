@@ -6,28 +6,25 @@
 #ifndef APT2023_A2_GAME_H
 #define APT2023_A2_GAME_H
 
-#include <vector>
 #include "LinkedList.h"
 #include "Player.h"
-#include "Tile.h"
 #include "Board.h"
 
-
-class Game {
+class Game
+{
 public:
-    Game(Player** players, int playerCount, std::vector<Tile> *bag, Board board, int currentPlayerTurn);
+    Game(Player *player1, Player *player2, LinkedList *bag, Board *board, Player *currentPlayer);
     ~Game();
     void launchGame();
-    bool checkForEmptyPlayerHands(Player** players, int playerCount);
+    bool checkForEmptyPlayerHands(Player **players, int playerCount);
+
 private:
-    Player** players;
-    std::vector<Tile> *bag;
-    Board board;
-    int currentPlayerTurn;
+    Player *player1;
+    Player *player2;
+    LinkedList *bag;
+    Board *board;
+    Player *currentPlayer;
     int playerCount;
-
-
 };
 
-
-#endif //APT2023_A2_GAME_H
+#endif // APT2023_A2_GAME_H

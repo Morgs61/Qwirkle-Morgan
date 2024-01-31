@@ -1,4 +1,5 @@
 #include <iostream>
+#include "TileCodes.h"
 #include "LinkedList.h"
 
 LinkedList::LinkedList()
@@ -210,4 +211,14 @@ void LinkedList::shuffle()
 
    // Clean up
    delete[] nodes;
+}
+
+Node *LinkedList::begin()
+{
+   return head;
+}
+
+Node *LinkedList::end()
+{
+   return nullptr; 
 }

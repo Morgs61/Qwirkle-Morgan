@@ -28,6 +28,9 @@ public:
 
    void shuffle();
 
+   Node *begin();
+   Node *end();
+
 private:
    Node *head;
    Node *tail;

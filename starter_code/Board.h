@@ -17,12 +17,7 @@ public:
    // Destructor to release memory allocated for tiles
    ~Board();
 
-   // Method to get a reference to the game board
    std::vector<Tile *> &getBoard();
-
-   // Method to display the game board
-   void displayBoard();
-
    // Method to place a tile on the board at the specified row and column
    void placeTile(Tile *tile, int row, int col);
    	void initializeBoard();

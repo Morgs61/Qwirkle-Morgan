@@ -24,9 +24,13 @@ public:
 
    bool removeTile(Tile *tile);
 
-   private:
+   void initializeAndShuffleBag();
+
+   void shuffle();
+
+private:
    Node *head;
-   Node* tail;
+   Node *tail;
 };
 
 #endif // ASSIGN2_LINKEDLIST_H

@@ -45,9 +45,6 @@ void Game::launchGame()
               << player2->getName() << "'s hand: ";
     player2->getHand()->displayHand();
 
-    bag = new LinkedList();
-    bag->initializeAndShuffleBag();
-
     bool emptyHandExists = player1->getHand()->isEmpty() || player2->getHand()->isEmpty();
 
     // continue the game until at least one player has an empty hand.
@@ -294,7 +291,7 @@ void Game::launchGame()
                         cout << endl;
 
                         // Draw a new tile from the tile bag and add it to the player's hand
-                        Tile *tileFromBag = bag->back(); 
+                        Tile *tileFromBag = bag->back();
                         bag->pop_back();
 
                         currentPlayer->getHand()->addTileToHand(tileFromBag); // Pass the Tile* directly

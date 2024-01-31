@@ -272,9 +272,10 @@ while (!emptyHandExists) {
         // Initialize a vector to store tiles to be placed
         vector<Tile*> tilesToPlace;
 		vector<std::pair<int, int>> tilePositions;
-
+		int j;
+		bool activeTurn = true;
         // Input each tile one by one
-        for (int j = 0; j < numTiles; ++j) {
+        while (activeTurn || j <= 6){
             displayBoard(board);
             players[i]->getHand()->displayHand();
             cout << "Place tile " << j + 1 << " using the format: place <tile> at <grid location>" << endl;
@@ -282,6 +283,11 @@ while (!emptyHandExists) {
 
             string command;
             getline(cin, command);
+
+		    // Check if the player wants to end their turn
+    		if (command == "end") {
+      			activeTurn = false;
+    		}
 
             // Split the command into words
             vector<string> words;

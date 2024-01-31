@@ -84,11 +84,18 @@ void LinkedList::displayHand()
    Node *current = head;
    while (current != nullptr)
    {
-      // Assuming tile is a pointer, dereference it to access its members
-      std::cout << "[" << current->tile->colour << "" << current->tile->shape << "] ";
+      std::cout << "Node: " << current << ", Tile: " << current->tile;
+      if (current->tile != nullptr)
+      {
+         std::cout << " [" << current->tile->colour << "" << current->tile->shape << "] ";
+      }
+      else
+      {
+         std::cout << " [nullptr] ";
+      }
+      std::cout << std::endl;
       current = current->next;
    }
-   std::cout << std::endl;
 }
 
 bool LinkedList::containsTile(Tile *tile)

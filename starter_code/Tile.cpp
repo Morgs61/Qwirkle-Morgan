@@ -16,13 +16,13 @@ Tile::~Tile()
 {
 }
 
-Tile::Tile(char colour, int shape)
+Tile::Tile(Colour colour, Shape shape)
 {
     this->colour = colour;
     this->shape = shape;
 }
 
-bool Tile::equals(char colour, int shape)
+bool Tile::equals(Colour colour, Shape shape)
 {
     return (this->colour == colour && this->shape == shape);
 }

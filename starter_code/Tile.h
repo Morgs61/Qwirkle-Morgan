@@ -28,11 +28,11 @@ typedef int Shape;
 class Tile
 {
 public:
-   Tile(char colour, int shape);
+   Tile(Colour colour, Shape shape);
    Tile();
    ~Tile();
    std::string toString();
-   bool equals(char colour, int shape);
+   bool equals(Colour colour, Shape shape);
 
    Colour colour;
    Shape shape;

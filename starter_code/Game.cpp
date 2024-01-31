@@ -196,15 +196,12 @@ void Game::launchGame()
                 // Draw new tiles from the tile bag and add them to the player's hand
                 for (int j = 0; j < numTiles && !bag->isEmpty(); ++j)
                 {
-                    // Get the tile from the back of the bag
-                    Tile tileFromBag = bag->back();
+                    // Get the tile pointer from the back of the bag
+                    Tile *tileFromBagPtr = bag->back();
                     bag->pop_back();
 
-                    // Create a new tile with the values from the tile drawn from the bag
-                    Tile *newTile = new Tile(tileFromBag.colour, tileFromBag.shape);
-
-                    // Add the new tile to the player's hand
-                    currentPlayer->getHand()->addTileToHand(newTile);
+                    // Add the tile pointer directly to the player's hand
+                    currentPlayer->getHand()->addTileToHand(tileFromBagPtr);
                 }
 
                 cout << "The size of the tile bag is now: " << bag->getSize() << endl;
@@ -276,7 +273,7 @@ void Game::launchGame()
                         currentPlayer->getHand()->removeTile(tileToReplace);
 
                         // Add the replaced tile back to the tile bag
-                        bag->emplace_back(tileToReplace->colour, tileToReplace->shape);
+                        bag->push_back(tileToReplace);
 
                         // Print the tile bag before shuffling
                         cout << "Tile bag before shuffling: ";
@@ -297,11 +294,10 @@ void Game::launchGame()
                         cout << endl;
 
                         // Draw a new tile from the tile bag and add it to the player's hand
-                        Tile tileFromBag = bag->back();
+                        Tile *tileFromBag = bag->back(); 
                         bag->pop_back();
 
-                        Tile *newTile = new Tile(tileFromBag.colour, tileFromBag.shape);
-                        currentPlayer->getHand()->addTileToHand(newTile);
+                        currentPlayer->getHand()->addTileToHand(tileFromBag); // Pass the Tile* directly
 
                         // Print the player's hand after a new tile is added
                         cout << "Player's hand after adding a new tile: ";

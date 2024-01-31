@@ -28,8 +28,13 @@ public:
 
    void shuffle();
 
+   void pop_back();
+
+   void push_back(Tile *tile);
+
    Node *begin();
    Node *end();
+   Tile *back();
 
 private:
    Node *head;

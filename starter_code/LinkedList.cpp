@@ -91,6 +91,7 @@ void LinkedList::displayHand()
    }
    std::cout << std::endl;
 }
+
 bool LinkedList::containsTile(Tile *tile)
 {
    Node *current = head;
@@ -160,7 +161,7 @@ void LinkedList::initializeAndShuffleBag()
    {
       for (int shape : shapes)
       {
-         // Add two tiles of each type to the tile bag
+         // Add two pointers to each type of tile to the tile bag
          addTile(new Tile(colour, shape));
          addTile(new Tile(colour, shape));
       }
@@ -220,5 +221,58 @@ Node *LinkedList::begin()
 
 Node *LinkedList::end()
 {
-   return nullptr; 
+   return nullptr;
+}
+
+Tile *LinkedList::back()
+{
+   if (tail != nullptr)
+   {
+      return tail->tile;
+   }
+   else
+   {
+      return nullptr; // Return nullptr if the list is empty
+   }
+}
+
+void LinkedList::pop_back()
+{
+   if (head == nullptr)
+   {
+      // The list is empty, nothing to pop
+      return;
+   }
+   if (head == tail)
+   {
+      // Only one node in the list
+      delete head;
+      head = tail = nullptr;
+      return;
+   }
+   // Traverse the list to find the second-to-last node
+   Node *current = head;
+   while (current->next != tail)
+   {
+      current = current->next;
+   }
+   // Remove the last node
+   delete tail;
+   tail = current;
+   tail->next = nullptr;
+}
+
+void LinkedList::push_back(Tile *tile)
+{
+   Node *newNode = new Node(tile, nullptr);
+   if (head == nullptr)
+   {
+      head = newNode;
+      tail = newNode;
+   }
+   else
+   {
+      tail->next = newNode;
+      tail = newNode;
+   }
 }

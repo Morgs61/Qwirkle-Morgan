@@ -233,3 +233,28 @@ bool checkTilePlacement(const std::vector<std::vector<Tile *>> &board, int row, 
 
     return hasNeighbor;
 }
+
+bool checkSameTypeTiles(const std::vector<Tile *> &tilesToPlace, const std::vector<std::pair<int, int>> &positions) {
+    if (tilesToPlace.size() < 2) {
+        // If there is only one tile, it is considered a valid move
+        return true;
+    }
+    char baseColor = tilesToPlace[0]->colour;
+    int baseShape = tilesToPlace[0]->shape;
+    int baseRow = positions[0].first;
+    int baseColumn = positions[0].second;
+
+	for (size_t i = 1; i < tilesToPlace.size(); ++i) {
+    // Check that all conditions are met for each tile
+		if ((tilesToPlace[i]->colour != baseColor &&
+    	tilesToPlace[i]->shape != baseShape) ||
+    	(positions[i].first != baseRow &&
+    	positions[i].second != baseColumn)) {
+    	//std::cout << "Tiles in the move have different color, shape, or they don't share the same column/row" << std::endl;
+    	return false;  // Tiles in the move have different color, shape, or they don't share the same column/row
+		}
+	}
+    return true;  // All tiles in the move have the same color, shape, and share the same column or row
+}
+
+

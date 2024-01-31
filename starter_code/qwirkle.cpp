@@ -22,6 +22,7 @@ bool isValidPlayerName(const string &name);
 void displayStudentInformation();
 void loadGame();
 bool checkSurroundingTilesMatch(const std::vector<std::vector<Tile *>> &board, int row, int col, Tile *tile);
+bool checkSameTypeTiles(const std::vector<Tile *> &tilesToPlace, const std::vector<std::pair<int, int>> &positions);
 
 
 
@@ -270,6 +271,7 @@ while (!emptyHandExists) {
 
         // Initialize a vector to store tiles to be placed
         vector<Tile*> tilesToPlace;
+		vector<std::pair<int, int>> tilePositions;
 
         // Input each tile one by one
         for (int j = 0; j < numTiles; ++j) {
@@ -297,6 +299,7 @@ while (!emptyHandExists) {
                 cout << players[i]->getName() << "'s hand: ";
                 players[i]->getHand()->displayHand();
                 cout << "> ";
+                --j;  // Decrement j to repeat the input for the same tile
                 continue;
             }
 
@@ -345,12 +348,18 @@ while (!emptyHandExists) {
                         --j;  // Decrement i to repeat the input for the same tile
                         continue;
                     }
+                    tilesToPlace.push_back(tileToCheck);
+					tilePositions.push_back(std::make_pair(row, column));
+					// Check if the tiles being placed have the same color, shape, and share the same column or row
+					if (!checkSameTypeTiles(tilesToPlace, tilePositions)) {
+    					cout << "Invalid move. Tiles must have the same color, shape, and share the same column or row." << endl;
+						--j;
+						continue;
+					}
                     board[row][column] = tileToCheck;
                     displayBoard(board);
-                    tilesToPlace.push_back(tileToCheck);
                 }
             }
-
             // Remove the tile from the player's hand
             if (!players[i]->getHand()->removeTile(tileToCheck)) {
                 cout << "Error removing tile from hand. Please try again." << endl;

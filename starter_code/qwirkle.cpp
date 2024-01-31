@@ -350,19 +350,16 @@ while (!emptyHandExists) {
                     }
                     tilesToPlace.push_back(tileToCheck);
 					tilePositions.push_back(std::make_pair(row, column));
-// Check if the tiles being placed have the same color, shape, and share the same column or row
-if (!checkSameTypeTiles(tilesToPlace, tilePositions)) {
-    cout << "Invalid move. Tiles must have the same color, shape, and share the same column or row." << endl;
---j;
-continue;
-}
-
+					// Check if the tiles being placed have the same color, shape, and share the same column or row
+					if (!checkSameTypeTiles(tilesToPlace, tilePositions)) {
+    					cout << "Invalid move. Tiles must have the same color, shape, and share the same column or row." << endl;
+						--j;
+						continue;
+					}
                     board[row][column] = tileToCheck;
                     displayBoard(board);
-
                 }
             }
-
             // Remove the tile from the player's hand
             if (!players[i]->getHand()->removeTile(tileToCheck)) {
                 cout << "Error removing tile from hand. Please try again." << endl;

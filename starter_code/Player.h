@@ -8,54 +8,64 @@
 #include <string>
 #include "LinkedList.h"
 
-class Player {
+class Player
+{
 private:
     std::string name;
     int score;
-    LinkedList* hand;
+    LinkedList *hand;
 
 public:
-    Player() : name(""), score(0), hand(nullptr) {}  // Default constructor
+    Player() : name(""), score(0), hand(nullptr) {} // Default constructor
 
-    Player(const std::string& name, int score, LinkedList* hand) {
+    Player(std::string &name, int score, LinkedList *hand)
+    {
         this->name = name;
         this->score = score;
         this->hand = hand ? new LinkedList(*hand) : nullptr;
     }
 
-    ~Player() {
+    ~Player()
+    {
         delete hand;
     }
 
-    std::string getName() const {
+    std::string getName()
+    {
         return name;
     }
 
-    void setName(const std::string& newName) {
+    void setName(std::string &newName)
+    {
         name = newName;
     }
 
-    int getScore() const {
+    int getScore()
+    {
         return score;
     }
 
-    void setScore(int newScore) {
+    void setScore(int newScore)
+    {
         score = newScore;
     }
 
-    void addScore(int points) {
+    void addScore(int points)
+    {
         score += points;
     }
 
-    LinkedList* getHand() const {
+    LinkedList *getHand()
+    {
         return hand;
     }
 
-    LinkedList* setHand(LinkedList* newHand) {
-        LinkedList* oldHand = hand;
+    LinkedList *setHand(LinkedList *newHand)
+    {
+        LinkedList *oldHand = hand;
         hand = newHand;
         return oldHand;
     }
 };
 
-#endif //APT2023_A2_PLAYER_H
+#endif // APT2023_A2_PLAYER_H

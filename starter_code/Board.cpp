@@ -9,13 +9,13 @@ using namespace std;
 #define ROW_MIN 0
 
 // contains uppercase letters A to Z
-string init[COLUMN_MAX];
+string labels[COLUMN_MAX];
 
 Board::Board()
 {
     for (int ch = 'A'; ch <= 'Z'; ch++)
     {
-        init[ch - 'A'] = ch;
+        labels[ch - 'A'] = ch;
     }
     board = std::vector<Tile *>(ROWS * COLS, nullptr);
 }
@@ -76,7 +76,7 @@ void Board::displayBoard()
     // Print the board content
     for (int i = 0; i < ROWS; i++)
     {
-        cout << init[i] << " "; // Print row labels
+        cout << labels[i] << " "; // Print row labels
         for (int j = 0; j < COLS; ++j)
         {
             // Check if a tile exists at the current position
@@ -125,7 +125,7 @@ std::string Board::getBoardState()
         {
             if (board[i * COLS + j] != nullptr)
             {
-                stateString += board[i * COLS + j]->toString() + "@" + init[i] + to_string(j) + ", ";
+                stateString += board[i * COLS + j]->toString() + "@" + labels[i] + to_string(j) + ", ";
             }
         }
     }

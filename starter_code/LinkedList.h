@@ -32,6 +32,8 @@ public:
 
    void push_back(Tile *tile);
 
+   std::string toString();
+
    Node *begin();
    Node *end();
    Tile *back();

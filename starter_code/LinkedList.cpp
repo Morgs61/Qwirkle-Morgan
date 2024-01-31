@@ -36,8 +36,6 @@ int LinkedList::getSize()
    return size;
 }
 
-// LinkedList.cpp
-
 void LinkedList::addTile(Tile *tile)
 {
    Node *newNode = new Node(tile, nullptr);
@@ -86,6 +84,7 @@ void LinkedList::displayHand()
    Node *current = head;
    while (current != nullptr)
    {
+      // Assuming tile is a pointer, dereference it to access its members
       std::cout << "[" << current->tile->colour << "" << current->tile->shape << "] ";
       current = current->next;
    }

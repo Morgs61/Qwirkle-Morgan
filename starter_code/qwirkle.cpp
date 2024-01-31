@@ -181,6 +181,7 @@ void startNewGame()
     // int numPlayers = 2;
 
     // Initialize and shuffle the tile bag
+    cout << "making the bag" << std::endl;
     LinkedList *bag = new LinkedList(); // Instantiate LinkedList
     bag->initializeAndShuffleBag();     // Populate the bag
 
@@ -202,8 +203,16 @@ void startNewGame()
     LinkedList *playerHand1 = new LinkedList();
     initializePlayerHand(playerHand1, bag); // Pass the address of tileBag
 
+    // log the hand
+    std::cout << "Player 1's hand: ";
+    playerHand1->displayHand();
+
     LinkedList *playerHand2 = new LinkedList();
     initializePlayerHand(playerHand2, bag); // Pass the address of tileBag
+
+    // log the hand
+    std::cout << "Player 2's hand: ";
+    playerHand2->displayHand();
 
     // Create players
     Player *player1 = new Player(playerName1, 0, playerHand1);
@@ -227,9 +236,15 @@ void initializePlayerHand(LinkedList *playerHand, LinkedList *bag)
     // Draw tiles from the tile bag and add them to the player's hand until there are 6 tiles
     while (playerHand->getSize() < 6 && !bag->isEmpty())
     {
-        Tile *tile = bag->back();
-        playerHand->addTileToHand(tile);
-        bag->pop_back();
+        // Get the tile pointer from the back of the bag
+        Tile* tileFromBagPtr = bag->back();
+
+        // bag->pop_back();
+        // Replaced pop_back with function that preserves the tile at the pointer, instead of deleting it.
+        bag->remove_back();
+
+        // Add the tile pointer directly to the player's hand
+        playerHand->addTile(tileFromBagPtr);
     }
 }
 
@@ -345,7 +360,7 @@ void initializePlayerHand(LinkedList *playerHand, LinkedList *bag)
 //
 //             cout << "Debug Info: " << players[i]->getName() << "'s hand: ";
 //             players[i]->getHand()->displayHand();
-//             cout << "Debug Info: Tile to check: [" << tileToCheck->colour << "" << tileToCheck->shape << "]" << endl;
+//             cout << "Debug Info: Tile to check: [" << tileToCheck->getColour() << "" << tileToCheck->getShape() << "]" << endl;
 //
 //             if (!players[i]->getHand()->containsTile(tileToCheck)) {
 //                 cout << "Tile not found in hand. Please try again." << endl;
@@ -384,7 +399,7 @@ void initializePlayerHand(LinkedList *playerHand, LinkedList *bag)
 //             Tile* newTile = new Tile(tileFromBag.colour, tileFromBag.shape);
 //
 //             // Add the new tile to the player's hand
-//             players[i]->getHand()->addTileToHand(newTile);
+//             players[i]->getHand()->addTile(newTile);
 //         }
 //
 //         cout << "The size of the tile bag is now: " << tileBag.size() << endl;
@@ -447,7 +462,7 @@ void initializePlayerHand(LinkedList *playerHand, LinkedList *bag)
 //                 players[i]->getHand()->removeTile(tileToReplace);
 //
 //                 // Add the replaced tile back to the tile bag
-//                 tileBag.emplace_back(tileToReplace->colour, tileToReplace->shape);
+//                 tileBag.emplace_back(tileToReplace->getColour(), tileToReplace->getShape());
 //
 //                 // Print the tile bag before shuffling
 //                 cout << "Tile bag before shuffling: ";
@@ -470,7 +485,7 @@ void initializePlayerHand(LinkedList *playerHand, LinkedList *bag)
 //                 tileBag.pop_back();
 //
 //                 Tile* newTile = new Tile(tileFromBag.colour, tileFromBag.shape);
-//                 players[i]->getHand()->addTileToHand(newTile);
+//                 players[i]->getHand()->addTile(newTile);
 //
 //                 // Print the player's hand after a new tile is added
 //                 cout << "Player's hand after adding a new tile: ";

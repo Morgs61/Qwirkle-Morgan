@@ -1,6 +1,8 @@
-#include <string>
 #ifndef ASSIGN2_TILE_H
 #define ASSIGN2_TILE_H
+
+#include "TileCodes.h"
+#include <string>
 
 // Color and Unicode escape sequences for printing colored text and Unicode symbols in the console
 
@@ -19,23 +21,31 @@
 #define SIX_STAR_UNICODE "\U0001F7CC"  // Six star symbol
 #define CLOVER_UNICODE "\U00002618"    // Clover symbol
 
+
+
 // Define a Colour type
 typedef char Colour;
 
 // Define a Shape type
 typedef int Shape;
 
-class Tile
-{
+class Tile {
 public:
-   Tile(Colour colour, Shape shape);
-   Tile();
-   ~Tile();
-   std::string toString();
-   bool equals(Colour colour, Shape shape);
+    Tile(Colour colour, Shape shape);
+    ~Tile();
 
-   Colour colour;
-   Shape shape;
+    Colour getColour() const;
+    Shape getShape() const;
+
+    // Add toString function declaration
+    std::string toString();
+
+    bool isValidTile(Colour colour, Shape shape);
+
+private:
+    Colour colour;
+    Shape shape;
 };
+
 
 #endif // ASSIGN2_TILE_H

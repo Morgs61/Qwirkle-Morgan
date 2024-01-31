@@ -1,1 +1,4 @@
 .idea/*
+*.o
+*.o
+starter_code/Board.o

@@ -20,6 +20,22 @@ LinkedList::~LinkedList() {
     }
 }
 
+//return tile at index
+Tile* LinkedList::getTile(int index)
+{
+   Node *current = head;
+   int count = 0;
+   while (current != nullptr)
+   {
+      if (count == index)
+      {
+         return current->tile;
+      }
+      count++;
+      current = current->next;
+   }
+   return nullptr;
+}
 
 // return size of linkedlist
 int LinkedList::getSize()

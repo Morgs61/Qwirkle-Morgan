@@ -10,6 +10,8 @@
 #include <fstream>
 #include <algorithm>
 #include <random>
+#include <limits>
+#include <unordered_map>
 using std::cin;
 using std::cout;
 using std::endl;
@@ -210,6 +212,13 @@ void startNewGame()
     cin.ignore();
     cout << "\nLet's Play!" << endl;
 
+    // Determine the starting player using findStartingPlayer
+    int startingPlayerIndex = findStartingPlayer(players, numPlayers);
+
+    std::rotate(players, players + startingPlayerIndex, players + numPlayers);
+
+    cout << players[0]->getName() << " will start the game!" << endl;
+
 
     cout << "TEST" << endl;
 
@@ -269,13 +278,11 @@ while (!emptyHandExists) {
             displayBoard(board);
             players[i]->getHand()->displayHand();
             cout << "Place tile " << j + 1 << " using the format: place <tile> at <grid location>" << endl;
+            cout << "Enter 'end' to end your turn." << endl;
             cout << ">";
 
 			string command;
-			cin >> command;
-
-
-
+            getline(cin, command);
 
             // Split the command into words
             vector<string> words;
@@ -285,15 +292,19 @@ while (!emptyHandExists) {
                 command.erase(0, pos + 1);
             }
             words.push_back(command);
+//std::cout << words << std::endl;
+            // Check if the player wants to end their turn
+            if (words.size() == 1 && words[0] == "end") {
+                cout << "Ending turn." << endl;
 
-			// Check if the player wants to end their turn
-			if (words.size() == 1 && words[0] == "end") {
-				cout << "Ending turn." << endl;
-    			activeTurn = true;
-			}
+                activeTurn = true;
+
+            }
+
 
             // Check that the command is correctly formatted
             if (words.size() != 4 || words[0] != "place" || words[3].length() != 2) {
+
                 cout << "Invalid command. Please try again." << endl;
                 cout << "\n" << players[i]->getName() << "'s turn" << endl;
                 cout << players[i]->getName() << "'s hand: ";
@@ -345,7 +356,7 @@ while (!emptyHandExists) {
                     } else {
                         cout << "Surrounding tiles do not match. Please try again." << endl;
                         delete tileToCheck;  // Avoid memory leak
-                        --j;  // Decrement i to repeat the input for the same tile
+                        //--j;  // Decrement i to repeat the input for the same tile
                         continue;
                     }
                     tilesToPlace.push_back(tileToCheck);
@@ -492,6 +503,66 @@ while (!emptyHandExists) {
     emptyHandExists = checkForEmptyPlayerHands(players, numPlayers);
 }
 }
+
+// Function to find starting player by finding the most matching types of tiles in hand
+int findStartingPlayer(Player** players, int numPlayers) {
+    int maxMatchingTiles = 0;
+    int startingPlayer = 0;
+
+    // Loop through each player to find matching tiles
+    for (int i = 0; i < numPlayers; ++i) {
+        int matchingTiles = 0;
+
+        // Use unordered_map to track counts of color and shape
+        std::unordered_map<char, int> colorCount;
+        std::unordered_map<int, int> shapeCount;
+
+        // Check the current player's hand for matching tiles
+        for (int k = 0; k < players[i]->getHand()->getSize(); ++k) {
+            Tile* currentTile = players[i]->getHand()->getTile(k);
+
+            // Update color count
+            if (colorCount.find(currentTile->colour) == colorCount.end()) {
+                colorCount[currentTile->colour] = 1;
+            } else {
+                colorCount[currentTile->colour]++;
+            }
+
+            // Update shape count
+            if (shapeCount.find(currentTile->shape) == shapeCount.end()) {
+                shapeCount[currentTile->shape] = 1;
+            } else {
+                shapeCount[currentTile->shape]++;
+            }
+        }
+
+        // Find the maximum count of matching tiles (color or shape)
+        for (const auto& pair : colorCount) {
+            matchingTiles = std::max(matchingTiles, pair.second);
+        }
+
+        for (const auto& pair : shapeCount) {
+            matchingTiles = std::max(matchingTiles, pair.second);
+        }
+
+        // Print the count for the current player
+        std::cout << "Player " << players[i]->getName() << " has " << matchingTiles << " tiles able to be played." << std::endl;
+
+        // Update startingPlayer based on the maximum count
+        if (matchingTiles > maxMatchingTiles || (matchingTiles == maxMatchingTiles && players[i]->getName() < players[startingPlayer]->getName())) {
+            maxMatchingTiles = matchingTiles;
+            startingPlayer = i;
+        }
+    }
+
+    return startingPlayer;
+}
+
+
+
+
+
+
 void initializeTileBag(std::vector<Tile> &tileBag)
 {
     // Get definitions from TileCodes.h

@@ -23,6 +23,7 @@ public:
    bool containsTile(Tile *tile);
 
    bool removeTile(Tile *tile);
+   Tile* getTile(int index);
 
    private:
    Node *head;

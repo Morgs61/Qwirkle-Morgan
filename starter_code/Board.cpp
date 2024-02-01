@@ -256,5 +256,68 @@ bool checkSameTypeTiles(const std::vector<Tile *> &tilesToPlace, const std::vect
 	}
     return true;  // All tiles in the move have the same color, shape, and share the same column or row
 }
+int calculateScore(const std::vector<Tile *> &tilesToPlace, const std::vector<std::pair<int, int>> &positions, const std::vector<std::vector<Tile *>> &board)
+{
+    int score = 0;
 
 
+
+    // Calculate the score for any tiles already on the board that are now part of a completed row or column
+    for (size_t i = 0; i < tilesToPlace.size(); ++i)
+    {
+        int row = positions[i].first;
+        int col = positions[i].second;
+        int rowScore = 0;
+        int colScore = 0;
+
+        // Check the row if there are surrounding tiles
+        if (row > 0 || row < BOARD_SIZE - 1)
+        {
+            for (int j = 0; j < BOARD_SIZE; ++j)
+            {
+                if (board[row][j] != nullptr)
+                {
+                    // Check if the line is 6 tiles long
+                    if (j - row + 1 == 6)
+                    {
+                        std::cout << "Qwirkle!" << std::endl;
+                        score += 6; // Bonus points for Qwirkle
+                    }
+                    rowScore += 1;
+                }
+            }
+        }
+
+        // Check the column if there are surrounding tiles
+        if (col > 0 || col < BOARD_SIZE - 1)
+        {
+            for (int j = 0; j < BOARD_SIZE; ++j)
+            {
+                if (board[j][col] != nullptr)
+                {
+                    // Check if the line is 6 tiles long
+                    if (j - col + 1 == 6)
+                    {
+                        std::cout << "Qwirkle!" << std::endl;
+                        score += 6; // Bonus points for Qwirkle
+                    }
+                    colScore += 1;
+
+                }
+            }
+        }
+
+        // Deduct 1 from rowScore and colScore if the current tile is not newly placed
+        if (board[row][col] != nullptr)
+        {
+            rowScore -= 1;
+            colScore -= 1;
+        }
+
+        // Add the row and column scores to the total score
+        score += rowScore + colScore;
+    }
+
+
+    return score;
+}

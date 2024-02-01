@@ -25,7 +25,7 @@ void displayStudentInformation();
 void loadGame();
 bool checkSurroundingTilesMatch(const std::vector<std::vector<Tile *>> &board, int row, int col, Tile *tile);
 bool checkSameTypeTiles(const std::vector<Tile *> &tilesToPlace, const std::vector<std::pair<int, int>> &positions);
-
+int calculateScore(const std::vector<Tile *> &tilesToPlace, const std::vector<std::pair<int, int>> &positions, const std::vector<std::vector<Tile *>> &board);
 
 
 int main(void)
@@ -292,19 +292,15 @@ while (!emptyHandExists) {
                 command.erase(0, pos + 1);
             }
             words.push_back(command);
-//std::cout << words << std::endl;
+
             // Check if the player wants to end their turn
             if (words.size() == 1 && words[0] == "end") {
                 cout << "Ending turn." << endl;
-
                 activeTurn = true;
-
             }
-
 
             // Check that the command is correctly formatted
             if (words.size() != 4 || words[0] != "place" || words[3].length() != 2) {
-
                 cout << "Invalid command. Please try again." << endl;
                 cout << "\n" << players[i]->getName() << "'s turn" << endl;
                 cout << players[i]->getName() << "'s hand: ";
@@ -380,6 +376,8 @@ while (!emptyHandExists) {
             }
         }
 
+
+
         // Draw new tiles from the tile bag and add them to the player's hand
         for (int n = 0; n < j && !tileBag.empty(); ++n) {
             // Get the tile from the back of the bag
@@ -393,9 +391,15 @@ while (!emptyHandExists) {
             players[i]->getHand()->addTileToHand(newTile);
         }
 
+        std::cout << "tiles placed: " << tilesToPlace.size() << std::endl;
+        int score = calculateScore(tilesToPlace, tilePositions, board);
+        players[i]->addScore(score);
         cout << "The size of the tile bag is now: " << tileBag.size() << endl;
         cout << "\n" << players[i]->getName() << "'s hand: ";
+
         players[i]->getHand()->displayHand();
+        cout << "\n" << players[i]->getName() << "'s score: ";
+        cout << players[i]->getScore() << endl;
         validActionSelected = true;
     }
     if (choice == 2) {

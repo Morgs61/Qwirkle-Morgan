@@ -21,6 +21,8 @@ public:
 	int getSize();
 	bool checkSameTypeTiles();
     bool checkSameRowOrColumn();
+    int calculateScore();
+
 
  //   bool checkSurroundingTilesMatch(int row, int col, Tile* tile, bool& valid);
 

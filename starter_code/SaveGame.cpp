@@ -1,31 +1,29 @@
-#include <iostream>
-#include <fstream>
-#include <sstream>
 #include "SaveGame.h"
+#include <fstream>
+#include <iostream>
 
-void SaveGame::saveGameState(std::string filename, Player *currentPlayer, Player *otherPlayer, Board *board, LinkedList *bag)
+void SaveGame::saveGameState(std::string filename, Player *player1, Player *player2, Board *board, LinkedList *bag, Player *currentPlayer)
 {
     std::ofstream file(filename);
+
     if (!file.is_open())
     {
-        std::cout << "Error: Unable to open file for saving." << std::endl;
+        std::cerr << "Failed to open file for saving: " << filename << std::endl;
         return;
     }
 
-    // Save player 1 details
+    // Save player details
+    savePlayerDetails(file, player1);
+    savePlayerDetails(file, player2);
     savePlayerDetails(file, currentPlayer);
-    // Save player 2 details
-    savePlayerDetails(file, otherPlayer);
-    // Save current board shape
-    file << board->getHeight() << "," << board->getWidth() << std::endl;
+
     // Save board state
     saveBoardState(file, board);
-    // Save tile bag contents
-    saveTileBag(file, bag);
-    // Save current player name
-    file << currentPlayer->getName() << std::endl;
 
-    std::cout << "Game successfully saved to " << filename << std::endl;
+    // Save tile bag
+    saveTileBag(file, bag);
+
+    file.close();
 }
 
 void SaveGame::savePlayerDetails(std::ofstream &file, Player *player)
@@ -37,21 +35,16 @@ void SaveGame::savePlayerDetails(std::ofstream &file, Player *player)
 
 void SaveGame::saveBoardState(std::ofstream &file, Board *board)
 {
-    for (int i = 0; i < board->getHeight(); ++i)
-    {
-        for (int j = 0; j < board->getWidth(); ++j)
-        {
-            Tile *tile = board->getTileAt(i, j);
-            if (tile != nullptr)
-            {
-                file << tile->toString() << "@" << char('A' + i) << j + 1 << ", ";
-            }
-        }
-    }
-    file << std::endl;
+    file << board->getHeight() << "," << board->getWidth() << std::endl;
+
+    // Get the board state string from the Board object
+    std::string boardState = board->getBoardState();
+
+    // Write the board state string to the file
+    file << boardState << std::endl;
 }
 
-void SaveGame::saveTileBag(std::ofstream &file, Bag *bag)
+void SaveGame::saveTileBag(std::ofstream &file, LinkedList *bag)
 {
     file << bag->toString() << std::endl;
 }

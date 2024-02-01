@@ -8,7 +8,7 @@
 class SaveGame
 {
 public:
-    static void saveGameState(std::string filename, Player *currentPlayer, Player *otherPlayer, Board *board, LinkedList *bag);
+    static void saveGameState(std::string filename, Player *player1, Player *player2, Board *board, LinkedList *bag, Player *currentPlayer);
 
 private:
     static void savePlayerDetails(std::ofstream &file, Player *player);

@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Tile.h"
 #include "Board.h"
+#include "SaveGame.h"
 
 #include <iostream>
 #include <algorithm>
@@ -61,6 +62,7 @@ void Game::launchGame()
             cout << "Select your action:\n";
             cout << "1. Place tiles\n";
             cout << "2. Replace a tile\n";
+            cout << "3. Save game\n";
             cout << "> ";
 
             int choice;
@@ -324,6 +326,15 @@ void Game::launchGame()
                         continue;
                     }
                 }
+            }
+            else if (choice == 3)
+            {
+                // Save game
+                string filename;
+                cout << "Enter the filename to save the game: ";
+                getline(cin, filename);
+                SaveGame::saveGameState(filename, player1, player2, board, bag, currentPlayer);
+                cout << "Game successfully saved" << endl;
             }
             else
             {

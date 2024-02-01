@@ -149,5 +149,5 @@ bool Board::hasTileAt(int row, int col)
 
 size_t Board::size() const
 {
-    return board.size(); // Assuming board is your vector of vectors
+    return board.size(); 
 }

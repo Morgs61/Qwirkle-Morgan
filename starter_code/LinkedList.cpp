@@ -3,260 +3,301 @@
 
 LinkedList::LinkedList()
 {
-    head = nullptr;
-    tail = nullptr;
+   head = nullptr;
+   tail = nullptr;
 
-    // TODO
+   // TODO
 }
 
-LinkedList::~LinkedList() {
-    // Destructor to free memory
-    Node* current = head;
-    while (current != nullptr) {
-        Node* next = current->next;
-        delete current->tile; // Free the memory for the tile
-        delete current; // Free the memory for the node
-        current = next;
-    }
+LinkedList::~LinkedList()
+{
+   // Destructor to free memory
+   Node *current = head;
+   while (current != nullptr)
+   {
+      Node *next = current->next;
+      delete current->tile; // Free the memory for the tile
+      delete current;       // Free the memory for the node
+      current = next;
+   }
 }
-
 
 // return size of linkedlist
 int LinkedList::getSize() const
 {
-    int size = 0;
-    Node *current = head;
-    while (current != nullptr)
-    {
-        size++;
-        current = current->next;
-    }
-    return size;
+   int size = 0;
+   Node *current = head;
+   while (current != nullptr)
+   {
+      size++;
+      current = current->next;
+   }
+   return size;
 }
 
 // LinkedList.cpp
 
-void LinkedList::addTile(Tile* tile) {
-    Node* newNode = new Node(tile, nullptr);
-    if (head == nullptr) {
-        head = newNode;
-        tail = newNode;
-    } else {
-        tail->next = newNode;
-        tail = newNode;
-    }
+void LinkedList::addTile(Tile *tile)
+{
+   Node *newNode = new Node(tile, nullptr);
+   if (head == nullptr)
+   {
+      head = newNode;
+      tail = newNode;
+   }
+   else
+   {
+      tail->next = newNode;
+      tail = newNode;
+   }
 }
 
 bool LinkedList::isEmpty() const
 {
-    return head == nullptr;
+   return head == nullptr;
 }
 
 void LinkedList::displayHand() const
 {
-    Node *current = head;
-    while (current != nullptr)
-    {
-        std::cout << "[" << current->tile->getColour() << "" << current->tile->getShape() << "] ";
-        current = current->next;
-    }
-    std::cout << std::endl;
+   Node *current = head;
+   while (current != nullptr)
+   {
+      std::cout << "[" << current->tile->getColour() << "" << current->tile->getShape() << "] ";
+      current = current->next;
+   }
+   std::cout << std::endl;
 }
 
-bool LinkedList::containsTile(Tile* tile) const {
-    Node* current = head;
+bool LinkedList::containsTile(Tile *tile) const
+{
+   Node *current = head;
 
-    while (current != nullptr) {
-        if (current->tile->getColour() == tile->getColour() && current->tile->getShape() == tile->getShape()) {
-            // Found the tile
-            std::cout << "Tile found: [" << current->tile->getColour() << ", " << current->tile->getShape() << "]" << std::endl;
-            return true;
-        }
+   while (current != nullptr)
+   {
+      if (current->tile->getColour() == tile->getColour() && current->tile->getShape() == tile->getShape())
+      {
+         // Found the tile
+         std::cout << "Tile found: [" << current->tile->getColour() << ", " << current->tile->getShape() << "]" << std::endl;
+         return true;
+      }
 
-        current = current->next;
-    }
+      current = current->next;
+   }
 
-    // Tile not found
-    return false;
+   // Tile not found
+   return false;
 }
 
-bool LinkedList::removeTile(Tile* tile) {
-    Node* current = head;
-    Node* previous = nullptr;
+bool LinkedList::removeTile(Tile *tile)
+{
+   Node *current = head;
+   Node *previous = nullptr;
 
-    while (current != nullptr) {
-        if (current->tile->getColour() == tile->getColour() && current->tile->getShape() == tile->getShape()) {
-            if (previous == nullptr) {
-                head = current->next;
-            } else {
-                previous->next = current->next;
-            }
+   while (current != nullptr)
+   {
+      if (current->tile->getColour() == tile->getColour() && current->tile->getShape() == tile->getShape())
+      {
+         if (previous == nullptr)
+         {
+            head = current->next;
+         }
+         else
+         {
+            previous->next = current->next;
+         }
 
-            if (current == tail) {
-                tail = previous;
-            }
+         if (current == tail)
+         {
+            tail = previous;
+         }
 
-            delete current;
-            return true;
-        }
+         delete current;
+         return true;
+      }
 
-        previous = current;
-        current = current->next;
-    }
+      previous = current;
+      current = current->next;
+   }
 
-    return false;  // Tile not found
+   return false; // Tile not found
 }
 
 void LinkedList::initializeAndShuffleBag()
 {
-    // Get definitions from TileCodes.h
-    char colours[] = {RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE};
-    int shapes[] = {CIRCLE, STAR_4, DIAMOND, SQUARE, STAR_6, CLOVER};
+   // Get definitions from TileCodes.h
+   char colours[] = {RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE};
+   int shapes[] = {CIRCLE, STAR_4, DIAMOND, SQUARE, STAR_6, CLOVER};
 
-    // Create all combinations of colours and shapes
-    for (char colour : colours)
-    {
-        for (int shape : shapes)
-        {
-            // log the tile being added
-            std::cout << "Adding tile: [" << colour << ", " << shape << "]" << std::endl;
-            // Add two pointers to each type of tile to the tile bag
-            addTile(new Tile(colour, shape));
-            addTile(new Tile(colour, shape));
-        }
-    }
+   // Create all combinations of colours and shapes
+   for (char colour : colours)
+   {
+      for (int shape : shapes)
+      {
+         // log the tile being added
+         std::cout << "Adding tile: [" << colour << ", " << shape << "]" << std::endl;
+         // Add two pointers to each type of tile to the tile bag
+         addTile(new Tile(colour, shape));
+         addTile(new Tile(colour, shape));
+      }
+   }
 
-    // Shuffle the tile bag
-    shuffle();
+   // Shuffle the tile bag
+   shuffle();
 }
 
 void LinkedList::shuffle()
 {
-    // Count the number of nodes in the list
-    int count = getSize();
+   // Count the number of nodes in the list
+   int count = getSize();
 
-    // Create an array to hold pointers to all nodes
-    Node **nodes = new Node *[count];
+   // Create an array to hold pointers to all nodes
+   Node **nodes = new Node *[count];
 
-    // Traverse the list and store pointers to each node in the array
-    Node *current = head;
-    int i = 0;
-    while (current != nullptr)
-    {
-        nodes[i++] = current;
-        current = current->next;
-    }
+   // Traverse the list and store pointers to each node in the array
+   Node *current = head;
+   int i = 0;
+   while (current != nullptr)
+   {
+      nodes[i++] = current;
+      current = current->next;
+   }
 
-    // Shuffle the array of node pointers using the Fisher-Yates shuffle algorithm
-    for (int i = count - 1; i > 0; --i)
-    {
-        int j = rand() % (i + 1); // Generate a random index between 0 and i
-        if (i != j)
-        {
-            // Swap the pointers at indices i and j
-            Node *temp = nodes[i];
-            nodes[i] = nodes[j];
-            nodes[j] = temp;
-        }
-    }
+   // Shuffle the array of node pointers using the Fisher-Yates shuffle algorithm
+   for (int i = count - 1; i > 0; --i)
+   {
+      int j = rand() % (i + 1); // Generate a random index between 0 and i
+      if (i != j)
+      {
+         // Swap the pointers at indices i and j
+         Node *temp = nodes[i];
+         nodes[i] = nodes[j];
+         nodes[j] = temp;
+      }
+   }
 
-    // Reconstruct the list using the shuffled array
-    head = nodes[0];
-    tail = nodes[count - 1];
-    for (int i = 0; i < count - 1; ++i)
-    {
-        nodes[i]->next = nodes[i + 1];
-    }
-    nodes[count - 1]->next = nullptr;
+   // Reconstruct the list using the shuffled array
+   head = nodes[0];
+   tail = nodes[count - 1];
+   for (int i = 0; i < count - 1; ++i)
+   {
+      nodes[i]->next = nodes[i + 1];
+   }
+   nodes[count - 1]->next = nullptr;
 
-    // Clean up
-    delete[] nodes;
+   // Clean up
+   delete[] nodes;
 }
 
 Node *LinkedList::begin()
 {
-    return head;
+   return head;
 }
 
 Node *LinkedList::end()
 {
-    return nullptr;
+   return nullptr;
 }
 
 Tile *LinkedList::back()
 {
-    if (tail != nullptr)
-    {
-        return tail->tile;
-    }
-    else
-    {
-        return nullptr; // Return nullptr if the list is empty
-    }
+   if (tail != nullptr)
+   {
+      return tail->tile;
+   }
+   else
+   {
+      return nullptr; // Return nullptr if the list is empty
+   }
 }
 
 void LinkedList::pop_back()
 {
-    if (head == nullptr)
-    {
-        // The list is empty, nothing to pop
-        return;
-    }
-    if (head == tail)
-    {
-        // Only one node in the list
-        delete head;
-        head = tail = nullptr;
-        return;
-    }
-    // Traverse the list to find the second-to-last node
-    Node *current = head;
-    while (current->next != tail)
-    {
-        current = current->next;
-    }
-    // Remove the last node
-    delete tail;
-    tail = current;
-    tail->next = nullptr;
+   if (head == nullptr)
+   {
+      // The list is empty, nothing to pop
+      return;
+   }
+   if (head == tail)
+   {
+      // Only one node in the list
+      delete head;
+      head = tail = nullptr;
+      return;
+   }
+   // Traverse the list to find the second-to-last node
+   Node *current = head;
+   while (current->next != tail)
+   {
+      current = current->next;
+   }
+   // Remove the last node
+   delete tail;
+   tail = current;
+   tail->next = nullptr;
 }
 
 // removes the last tile in the linked list but preserves the tile object.
 void LinkedList::remove_back()
 {
-    if (head == nullptr)
-    {
-        // The list is empty, nothing to remove
-        return;
-    }
-    if (head == tail)
-    {
-        // Only one node in the list
-        head = tail = nullptr;
-        return;
-    }
-    // Traverse the list to find the second-to-last node
-    Node *current = head;
-    while (current->next != tail)
-    {
-        current = current->next;
-    }
-    // Remove the last node
-    tail = current;
-    tail->next = nullptr;
+   if (head == nullptr)
+   {
+      // The list is empty, nothing to remove
+      return;
+   }
+   if (head == tail)
+   {
+      // Only one node in the list
+      head = tail = nullptr;
+      return;
+   }
+   // Traverse the list to find the second-to-last node
+   Node *current = head;
+   while (current->next != tail)
+   {
+      current = current->next;
+   }
+   // Remove the last node
+   tail = current;
+   tail->next = nullptr;
 }
 
 void LinkedList::push_back(Tile *tile)
 {
-    Node *newNode = new Node(tile, nullptr);
-    if (head == nullptr)
-    {
-        head = newNode;
-        tail = newNode;
-    }
-    else
-    {
-        tail->next = newNode;
-        tail = newNode;
-    }
+   Node *newNode = new Node(tile, nullptr);
+   if (head == nullptr)
+   {
+      head = newNode;
+      tail = newNode;
+   }
+   else
+   {
+      tail->next = newNode;
+      tail = newNode;
+   }
+}
+
+std::string LinkedList::toString()
+{
+   std::string linkedListString = "";
+   if (head != nullptr)
+   {
+      Node *currentNode = head;
+      bool cont = true;
+      while (cont)
+      {
+         linkedListString = linkedListString + currentNode->getTile()->toString();
+
+         if (currentNode->getNext() == nullptr)
+         {
+            cont = false;
+         }
+         else
+         {
+            linkedListString = linkedListString + ",";
+            currentNode = currentNode->getNext();
+         }
+      }
+   }
+
+   return linkedListString;
 }

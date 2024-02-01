@@ -88,7 +88,7 @@ bool LinkedList::containsTile(Tile *tile) const
    return false;
 }
 
-bool LinkedList::removeTile(Tile *tile)
+Tile *LinkedList::removeTile(Tile *tile)
 {
    Node *current = head;
    Node *previous = nullptr;
@@ -111,15 +111,17 @@ bool LinkedList::removeTile(Tile *tile)
             tail = previous;
          }
 
+         Tile *removedTile = current->tile;
+         current->tile = nullptr; // Remove the reference to the tile from the node
          delete current;
-         return true;
+         return removedTile; // Return the pointer to the removed tile
       }
 
       previous = current;
       current = current->next;
    }
 
-   return false; // Tile not found
+   return nullptr; // Tile not found
 }
 
 void LinkedList::initializeAndShuffleBag()

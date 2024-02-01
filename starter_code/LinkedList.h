@@ -10,7 +10,7 @@ public:
    LinkedList();
    ~LinkedList();
    void addTile(Tile *tile);
-   bool removeTile(Tile *tile);
+   Tile *removeTile(Tile *tile);
    bool containsTile(Tile *tile) const;
    int getSize() const;
    bool isEmpty() const;

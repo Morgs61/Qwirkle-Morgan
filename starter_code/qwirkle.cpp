@@ -5,6 +5,7 @@
 #include "Board.h"
 #include "TileCodes.h"
 #include "Player.h"
+#include "LoadGame.h"
 #include <iostream>
 #include <vector>
 #include <fstream>
@@ -62,9 +63,38 @@ int main(void)
         else if (choice == 2)
         {
             cout << "Loading Game..." << endl;
-            loadGame();
-            // Add code for loading a game
+
+            string filename;
+            cout << "Enter the filename to load the game: ";
+            cin >> filename;
+
+            // Check if the file exists
+            ifstream file(filename);
+            if (!file.is_open())
+            {
+                cout << "Error: File '" << filename << "' not found." << endl;
+            }
+            else
+            {
+                // File exists, attempt to load the game
+                LoadGame loader;                              // Create an instance of the LoadGame class
+                Game *loadedGame = loader.loadGame(filename); // Call the loadGame function on the instance
+                if (loadedGame != nullptr)
+                {
+                    // Start the loaded game
+                    loadedGame->launchGame();
+                    // Don't forget to delete the loadedGame object after you're done with it to avoid memory leaks
+                    delete loadedGame;
+                }
+                else
+                {
+                    cout << "Failed to load the game." << endl;
+                }
+                // Close the file after use
+                file.close();
+            }
         }
+
         else if (choice == 3)
         {
 
@@ -133,47 +163,47 @@ void displayStudentInformation()
     cout << "\n<Main Menu>" << endl;
 }
 
-void loadGame()
-{
-    cout << "\nEnter the filename from which to load a game:" << endl;
-    string filename;
-    cout << "> ";
-    cin >> filename;
+// void loadGame()
+// {
+//     cout << "\nEnter the filename from which to load a game:" << endl;
+//     string filename;
+//     cout << "> ";
+//     cin >> filename;
 
-    // Attempt to open the file4
-    std::ifstream file(filename);
+//     // Attempt to open the file4
+//     std::ifstream file(filename);
 
-    if (file.good() && file.is_open())
-    {
-        // File exists and is open
+//     if (file.good() && file.is_open())
+//     {
+//         // File exists and is open
 
-        // Add validation for the file format (replace with your actual format check logic)
-        // For example, if you have a specific format, check if it matches
-        // Here, we assume a simple check by reading a line from the file
-        string line;
-        if (getline(file, line))
-        {
-            cout << "\nQwirkle game successfully loaded." << endl;
-            // Add code to load the game (replace with your actual game loading logic)
-            // For example, you might read data from the file and restore the game state
-            // ...
+//         // Add validation for the file format (replace with your actual format check logic)
+//         // For example, if you have a specific format, check if it matches
+//         // Here, we assume a simple check by reading a line from the file
+//         string line;
+//         if (getline(file, line))
+//         {
+//             cout << "\nQwirkle game successfully loaded." << endl;
+//             // Add code to load the game (replace with your actual game loading logic)
+//             // For example, you might read data from the file and restore the game state
+//             // ...
 
-            // Continue with normal gameplay (replace with your actual gameplay logic)
-            // ...
-        }
-        else
-        {
-            cout << "\nInvalid file format. Unable to load the game." << endl;
-        }
+//             // Continue with normal gameplay (replace with your actual gameplay logic)
+//             // ...
+//         }
+//         else
+//         {
+//             cout << "\nInvalid file format. Unable to load the game." << endl;
+//         }
 
-        // Close the file
-        file.close();
-    }
-    else
-    {
-        cout << "\nFile does not exist or could not be opened. Unable to load the game." << endl;
-    }
-}
+//         // Close the file
+//         file.close();
+//     }
+//     else
+//     {
+//         cout << "\nFile does not exist or could not be opened. Unable to load the game." << endl;
+//     }
+// }
 
 void startNewGame()
 {
@@ -237,7 +267,7 @@ void initializePlayerHand(LinkedList *playerHand, LinkedList *bag)
     while (playerHand->getSize() < 6 && !bag->isEmpty())
     {
         // Get the tile pointer from the back of the bag
-        Tile* tileFromBagPtr = bag->back();
+        Tile *tileFromBagPtr = bag->back();
 
         // bag->pop_back();
         // Replaced pop_back with function that preserves the tile at the pointer, instead of deleting it.

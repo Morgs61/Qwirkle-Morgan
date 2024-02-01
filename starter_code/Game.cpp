@@ -136,7 +136,7 @@ void Game::launchGame()
                     string location = words[3];
 
                     // Convert the grid location to row and column
-                    char gridLetter = location[0];
+                    char gridLetter = toupper(location[0]); // Convert to uppercase for consistency
                     size_t row = (gridLetter >= 'A' && gridLetter <= 'Z') ? (gridLetter - 'A') : -1;
                     size_t column = (location[1] >= '1' && location[1] <= '9') ? (location[1] - '1') : -1;
 
@@ -196,8 +196,8 @@ void Game::launchGame()
                     // Get the tile pointer from the back of the bag
                     Tile *tileFromBagPtr = bag->back();
 
-                    //bag->pop_back();
-                    // Replaced pop_back with function that preserves the tile at the pointer, instead of deleting it.
+                    // bag->pop_back();
+                    //  Replaced pop_back with function that preserves the tile at the pointer, instead of deleting it.
                     bag->remove_back();
 
                     // Add the tile pointer directly to the player's hand

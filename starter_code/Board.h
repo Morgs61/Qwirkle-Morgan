@@ -42,7 +42,7 @@ public:
 
 private:
    std::vector<Tile *> board; // Vector to store pointers to tiles representing the board
-   std::string init[ROWS];    // Array to store row labels (uppercase letters A to Z)
+   std::string labels[ROWS];  // Array to store row labels (uppercase letters A to Z)
 };
 
 #endif // BOARD_H

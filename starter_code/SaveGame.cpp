@@ -15,13 +15,15 @@ void SaveGame::saveGameState(std::string filename, Player *player1, Player *play
     // Save player details
     savePlayerDetails(file, player1);
     savePlayerDetails(file, player2);
-    savePlayerDetails(file, currentPlayer);
 
     // Save board state
     saveBoardState(file, board);
 
     // Save tile bag
     saveTileBag(file, bag);
+
+    // Save the name of the current player
+    file << currentPlayer->getName() << std::endl;
 
     file.close();
 }

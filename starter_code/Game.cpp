@@ -34,6 +34,7 @@ Game::~Game()
     delete player2;
     delete board;
 }
+// ACTUAL RUNNING OF THE GAME STARTS HERE
 
 void Game::launchGame()
 {
@@ -77,6 +78,8 @@ void Game::launchGame()
             }
             cin.ignore();
 
+
+            /* NEWEST CHOICE 1
             if (choice == 1)
             {
                 // Placing tiles
@@ -214,6 +217,110 @@ void Game::launchGame()
                 currentPlayer->getHand()->displayHand();
                 validActionSelected = true;
             }
+             */
+            if (choice == 2) {
+                // Replacing a single tile
+                cout << "Replace a tile using the format: replace <tile>" << endl;
+                cout << ">";
+
+                bool validInput = false;
+                while (!validInput) {
+                    string command;
+                    getline(cin, command);
+
+                    // Split the command into words
+                    vector<string> words;
+                    size_t pos = 0;
+                    while ((pos = command.find(' ')) != string::npos) {
+                        words.push_back(command.substr(0, pos));
+                        command.erase(0, pos + 1);
+                    }
+                    words.push_back(command);
+
+                    // Check that the command is correctly formatted
+                    if (words.size() != 2 || words[0] != "replace") {
+                        cout << "Invalid command. Please try again." << endl;
+                        cout << "\n" << players[i]->getName() << "'s turn" << endl;
+                        cout << players[i]->getName() << "'s hand: ";
+                        players[i]->getHand()->displayHand();
+                        cout << "Replace a tile using the format: replace <tile>" << endl;
+                        cout << "> ";
+                        continue;
+                    }
+
+                    // Parse the tile from the command
+                    string tile = words[1];
+
+                    string color = string(1, tile[0]);
+                    string shape = tile.substr(1);
+
+                    try {
+                        // Attempt to create a tile with the provided color and shape
+                        Tile* tileToReplace = new Tile(color[0], stoi(shape));
+
+                        // Check if the tile to replace is in the player's hand
+                        if (!players[i]->getHand()->containsTile(tileToReplace)) {
+                            cout << "Tile not found in hand. Please try again." << endl;
+                            delete tileToReplace;  // Avoid memory leak
+                            cout << "\n" << players[i]->getName() << "'s turn" << endl;
+                            cout << players[i]->getName() << "'s hand: ";
+                            players[i]->getHand()->displayHand();
+                            cout << "> ";
+                            continue;
+                        }
+
+                        // Remove the tile from the player's hand
+                        players[i]->getHand()->removeTile(tileToReplace);
+
+                        // Add the replaced tile back to the tile bag
+                        tileBag.emplace_back(tileToReplace->colour, tileToReplace->shape);
+
+                        // Print the tile bag before shuffling
+                        cout << "Tile bag before shuffling: ";
+                        for (const auto& tile : tileBag) {
+                            cout << "[" << tile.colour << ", " << tile.shape << "] ";
+                        }
+                        cout << endl;
+
+                        shuffleTileBag(tileBag);
+
+                        // Print the tile bag after shuffling
+                        cout << "Tile bag after shuffling: ";
+                        for (const auto& tile : tileBag) {
+                            cout << "[" << tile.colour << ", " << tile.shape << "] ";
+                        }
+                        cout << endl;
+
+                        // Draw a new tile from the tile bag and add it to the player's hand
+                        Tile tileFromBag = tileBag.back();
+                        tileBag.pop_back();
+
+                        Tile* newTile = new Tile(tileFromBag.colour, tileFromBag.shape);
+                        players[i]->getHand()->addTileToHand(newTile);
+
+                        // Print the player's hand after a new tile is added
+                        cout << "Player's hand after adding a new tile: ";
+                        players[i]->getHand()->displayHand();
+                        cout << endl;
+
+                        cout << "Tile replaced. Proceeding with the game." << endl;
+                        validInput = true;
+                    } catch (const std::invalid_argument& e) {
+                        cout << "Invalid tile format. Please try again." << endl;
+                        cout << "> ";
+                        continue;
+                    } catch (const std::out_of_range& e) {
+                        cout << "Invalid tile format. Please try again." << endl;
+                        cout << "> ";
+                        continue;
+                    }
+                }
+            }
+
+
+
+
+            /* NEWSET CHOICe 2
             if (choice == 2)
             {
                 // Replacing a single tile
@@ -324,7 +431,7 @@ void Game::launchGame()
                         continue;
                     }
                 }
-            }
+            } */
             else
             {
                 cout << "Invalid choice. Please enter a valid option." << endl;

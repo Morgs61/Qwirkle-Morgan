@@ -4,37 +4,44 @@
 
 #include "Player.h"
 
-Player::Player(const std::string& name, int score, LinkedList* hand) {
+Player::Player(std::string &name, int score, LinkedList *hand)
+{
     this->name = name;
     this->score = score;
     this->hand = hand ? new LinkedList(*hand) : nullptr;
 }
 
-Player::~Player() {
+Player::~Player()
+{
     delete hand;
 }
 
-std::string Player::getName() const {
+std::string Player::getName()
+{
     return name;
 }
 
-void Player::setName(const std::string& newName) {
+void Player::setName(std::string &newName)
+{
     name = newName;
 }
 
-int Player::getScore() const {
+int Player::getScore()
+{
     return score;
 }
 
-void Player::setScore(int newScore) {
+void Player::setScore(int newScore)
+{
     score = newScore;
 }
 
-void Player::addScore(int points) {
+void Player::addScore(int points)
+{
     score += points;
 }
 
-LinkedList* Player::getHand() const {
+LinkedList *Player::getHand()
+{
     return hand;
 }
-

@@ -24,6 +24,7 @@ public:
     void pop_back();
     void remove_back();
     void push_back(Tile* tile);
+    Tile* getTile(int index);
 
 private:
     Node* head;

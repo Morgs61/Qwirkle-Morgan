@@ -353,7 +353,7 @@ void initializePlayerHand(LinkedList *playerHand, LinkedList *bag)
 
             cout << "Debug Info: " << players[i]->getName() << "'s hand: ";
             players[i]->getHand()->displayHand();
-            cout << "Debug Info: Tile to check: [" << tileToCheck->colour << "" << tileToCheck->shape << "]" << endl;
+            cout << "Debug Info: Tile to check: [" << tileToCheck->getColour() << "" << tileToCheck->getShape() << "]" << endl;
 
             if (!players[i]->getHand()->containsTile(tileToCheck)) {
                 cout << "Tile not found in hand. Please try again." << endl;
@@ -470,7 +470,7 @@ void initializePlayerHand(LinkedList *playerHand, LinkedList *bag)
                 players[i]->getHand()->removeTile(tileToReplace);
 
                 // Add the replaced tile back to the tile bag
-                tileBag.emplace_back(tileToReplace->colour, tileToReplace->shape);
+                tileBag.emplace_back(tileToReplace->getColour(), tileToReplace->getShape());
 
                 // Print the tile bag before shuffling
                 cout << "Tile bag before shuffling: ";
@@ -539,17 +539,17 @@ int findStartingPlayer(Player** players, int numPlayers) {
             Tile* currentTile = players[i]->getHand()->getTile(k);
 
             // Update color count
-            if (colorCount.find(currentTile->colour) == colorCount.end()) {
-                colorCount[currentTile->colour] = 1;
+            if (colorCount.find(currentTile->getColour()) == colorCount.end()) {
+                colorCount[currentTile->getColour()] = 1;
             } else {
-                colorCount[currentTile->colour]++;
+                colorCount[currentTile->getColour()]++;
             }
 
             // Update shape count
-            if (shapeCount.find(currentTile->shape) == shapeCount.end()) {
-                shapeCount[currentTile->shape] = 1;
+            if (shapeCount.find(currentTile->getShape()) == shapeCount.end()) {
+                shapeCount[currentTile->getShape()] = 1;
             } else {
-                shapeCount[currentTile->shape]++;
+                shapeCount[currentTile->getShape()]++;
             }
         }
 

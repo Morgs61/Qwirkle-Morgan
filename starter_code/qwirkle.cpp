@@ -226,6 +226,62 @@ void startNewGame()
     cin.ignore();
     cout << "\nLet's Play!" << endl;
 
+    // Initialize the board
+    Board *board = new Board(); // Instantiate Board
+
+    // Instantiate Game with the modified parameters
+    Game *game = new Game(player1, player2, bag, board, player1); // Pass player1, player2, bag, and currentPlayer
+
+    // Call the correct method
+    game->launchGame();
+}
+
+void startNewGameOLD()
+{
+    // Number of players
+    // int numPlayers = 2;
+
+    // Initialize and shuffle the tile bag
+    cout << "making the bag" << std::endl;
+    LinkedList *bag = new LinkedList(); // Instantiate LinkedList
+    bag->initializeAndShuffleBag();     // Populate the bag
+
+    // Create player names
+    string playerName1, playerName2;
+    do
+    {
+        cout << "\nEnter a name for player 1 (uppercase characters only): ";
+        cin >> playerName1;
+    } while (!isValidPlayerName(playerName1));
+
+    do
+    {
+        cout << "\nEnter a name for player 2 (uppercase characters only): ";
+        cin >> playerName2;
+    } while (!isValidPlayerName(playerName2));
+
+    // Create player hands
+    LinkedList *playerHand1 = new LinkedList();
+    initializePlayerHand(playerHand1, bag); // Pass the address of tileBag
+
+    // log the hand
+    std::cout << "Player 1's hand: ";
+    playerHand1->displayHand();
+
+    LinkedList *playerHand2 = new LinkedList();
+    initializePlayerHand(playerHand2, bag); // Pass the address of tileBag
+
+    // log the hand
+    std::cout << "Player 2's hand: ";
+    playerHand2->displayHand();
+
+    // Create players
+    Player *player1 = new Player(playerName1, 0, playerHand1);
+    Player *player2 = new Player(playerName2, 0, playerHand2);
+
+    cin.ignore();
+    cout << "\nLet's Play!" << endl;
+
     // Determine the starting player using findStartingPlayer
     int startingPlayerIndex = findStartingPlayer(players, numPlayers);
 

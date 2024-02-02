@@ -21,7 +21,10 @@ public:
 	int getSize();
 	bool checkSameTypeTiles();
     bool checkSameRowOrColumn();
-    int calculateScore();
+// Ensure the forward declaration matches this signature
+
+int calculateScore(const std::vector<Tile *> &tilesToPlace, const std::vector<std::pair<int, int>> &positions, std::vector<std::vector<Tile *>> &board);
+
 
 
  //   bool checkSurroundingTilesMatch(int row, int col, Tile* tile, bool& valid);

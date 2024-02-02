@@ -25,8 +25,8 @@ void displayStudentInformation();
 void loadGame();
 bool checkSurroundingTilesMatch(const std::vector<std::vector<Tile *>> &board, int row, int col, Tile *tile);
 bool checkSameTypeTiles(const std::vector<Tile *> &tilesToPlace, const std::vector<std::pair<int, int>> &positions);
-int calculateScore(const std::vector<Tile *> &tilesToPlace, const std::vector<std::pair<int, int>> &positions, const std::vector<std::vector<Tile *>> &board);
 
+int calculateScore(const std::vector<Tile *> &tilesToPlace, const std::vector<std::pair<int, int>> &positions, std::vector<std::vector<Tile *>> &board);
 
 int main(void)
 {
@@ -365,7 +365,7 @@ while (!emptyHandExists) {
 					}
 					++j;
                     board[row][column] = tileToCheck;
-                    displayBoard(board);
+                    //displayBoard(board);
                 }
             }
             // Remove the tile from the player's hand

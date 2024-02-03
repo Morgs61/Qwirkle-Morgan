@@ -9,32 +9,34 @@ LinkedList::LinkedList()
     // TODO
 }
 
-LinkedList::~LinkedList() {
+LinkedList::~LinkedList()
+{
     // Destructor to free memory
-    Node* current = head;
-    while (current != nullptr) {
-        Node* next = current->next;
+    Node *current = head;
+    while (current != nullptr)
+    {
+        Node *next = current->next;
         delete current->tile; // Free the memory for the tile
-        delete current; // Free the memory for the node
+        delete current;       // Free the memory for the node
         current = next;
     }
 }
 
-//return tile at index
-Tile* LinkedList::getTile(int index)
+// return tile at index
+Tile *LinkedList::getTile(int index)
 {
-   Node *current = head;
-   int count = 0;
-   while (current != nullptr)
-   {
-      if (count == index)
-      {
-         return current->tile;
-      }
-      count++;
-      current = current->next;
-   }
-   return nullptr;
+    Node *current = head;
+    int count = 0;
+    while (current != nullptr)
+    {
+        if (count == index)
+        {
+            return current->tile;
+        }
+        count++;
+        current = current->next;
+    }
+    return nullptr;
 }
 
 // return size of linkedlist
@@ -52,12 +54,16 @@ int LinkedList::getSize() const
 
 // LinkedList.cpp
 
-void LinkedList::addTile(Tile* tile) {
-    Node* newNode = new Node(tile, nullptr);
-    if (head == nullptr) {
+void LinkedList::addTile(Tile *tile)
+{
+    Node *newNode = new Node(tile, nullptr);
+    if (head == nullptr)
+    {
         head = newNode;
         tail = newNode;
-    } else {
+    }
+    else
+    {
         tail->next = newNode;
         tail = newNode;
     }
@@ -79,11 +85,14 @@ void LinkedList::displayHand() const
     std::cout << std::endl;
 }
 
-bool LinkedList::containsTile(Tile* tile) const {
-    Node* current = head;
+bool LinkedList::containsTile(Tile *tile) const
+{
+    Node *current = head;
 
-    while (current != nullptr) {
-        if (current->tile->getColour() == tile->getColour() && current->tile->getShape() == tile->getShape()) {
+    while (current != nullptr)
+    {
+        if (current->tile->getColour() == tile->getColour() && current->tile->getShape() == tile->getShape())
+        {
             // Found the tile
             std::cout << "Tile found: [" << current->tile->getColour() << ", " << current->tile->getShape() << "]" << std::endl;
             return true;
@@ -96,19 +105,26 @@ bool LinkedList::containsTile(Tile* tile) const {
     return false;
 }
 
-bool LinkedList::removeTile(Tile* tile) {
-    Node* current = head;
-    Node* previous = nullptr;
+bool LinkedList::removeTile(Tile *tile)
+{
+    Node *current = head;
+    Node *previous = nullptr;
 
-    while (current != nullptr) {
-        if (current->tile->getColour() == tile->getColour() && current->tile->getShape() == tile->getShape()) {
-            if (previous == nullptr) {
+    while (current != nullptr)
+    {
+        if (current->tile->getColour() == tile->getColour() && current->tile->getShape() == tile->getShape())
+        {
+            if (previous == nullptr)
+            {
                 head = current->next;
-            } else {
+            }
+            else
+            {
                 previous->next = current->next;
             }
 
-            if (current == tail) {
+            if (current == tail)
+            {
                 tail = previous;
             }
 
@@ -120,7 +136,7 @@ bool LinkedList::removeTile(Tile* tile) {
         current = current->next;
     }
 
-    return false;  // Tile not found
+    return false; // Tile not found
 }
 
 void LinkedList::initializeAndShuffleBag()
@@ -275,4 +291,30 @@ void LinkedList::push_back(Tile *tile)
         tail->next = newNode;
         tail = newNode;
     }
+}
+
+std::string LinkedList::toString()
+{
+    std::string linkedListString = "";
+    if (head != nullptr)
+    {
+        Node *currentNode = head;
+        bool cont = true;
+        while (cont)
+        {
+            linkedListString = linkedListString + currentNode->getTile()->toString();
+
+            if (currentNode->getNext() == nullptr)
+            {
+                cont = false;
+            }
+            else
+            {
+                linkedListString = linkedListString + ",";
+                currentNode = currentNode->getNext();
+            }
+        }
+    }
+
+    return linkedListString;
 }

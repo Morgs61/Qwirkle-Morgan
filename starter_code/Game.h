@@ -18,7 +18,7 @@ public:
     void launchGame();
     bool checkForEmptyPlayerHands(Player **players, int playerCount);
     bool checkSurroundingTilesMatch(const std::vector<std::vector<Tile *>> &board, int row, int col, Tile *tile);
-    bool checkSurroundingTilesMatch(const std::vector<std::vector<Tile *>> &board, int row, int col, Tile *tile);
+
 private:
     Player *player1;
     Player *player2;

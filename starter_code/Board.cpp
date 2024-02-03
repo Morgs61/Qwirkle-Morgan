@@ -3,8 +3,8 @@
 using namespace std;
 #include <iostream>
 #include <algorithm>
-#include <iostream>  // Include for std::cout, std::endl
-#include <vector>    // Include for std::vector
+#include <iostream> // Include for std::cout, std::endl
+#include <vector>   // Include for std::vector
 #include "Board.h"
 
 #define COLUMN_MAX 26
@@ -25,7 +25,7 @@ Board::Board()
 }
 bool checkTilePlacement(const std::vector<std::vector<Tile *>> &board, int row, int col);
 
-//Decalre fixed size of board here
+// Decalre fixed size of board here
 int BOARD_SIZE = 15;
 
 Board::~Board()
@@ -159,15 +159,15 @@ size_t Board::size() const
 {
     return board.size(); // Assuming board is your vector of vectors
 }
-//Function to check surrounding tiles for a tile
+// Function to check surrounding tiles for a tile
 bool checkSurroundingTiles(const std::vector<std::vector<Tile *>> &board, int row, int col)
 {
-    //Check if tile is on the edge of the board
+    // Check if tile is on the edge of the board
     if (row == 0 || row == BOARD_SIZE - 1 || col == 0 || col == BOARD_SIZE - 1)
     {
         return true;
     }
-    //Check if tile is surrounded by other tiles
+    // Check if tile is surrounded by other tiles
     else if (board[row - 1][col] != nullptr || board[row + 1][col] != nullptr || board[row][col - 1] != nullptr || board[row][col + 1] != nullptr)
     {
         return true;
@@ -181,11 +181,9 @@ bool checkSurroundingTiles(const std::vector<std::vector<Tile *>> &board, int ro
 bool checkSurroundingTilesMatch(const std::vector<std::vector<Tile *>> &board, int row, int col, Tile *tile)
 {
     // Check if board is empty, allowing first tile placement anywhere
-    bool isBoardEmpty = std::all_of(board.begin(), board.end(), [](const std::vector<Tile *> &boardRow) {
-        return std::all_of(boardRow.begin(), boardRow.end(), [](const Tile *tile) {
-            return tile == nullptr;
-        });
-    });
+    bool isBoardEmpty = std::all_of(board.begin(), board.end(), [](const std::vector<Tile *> &boardRow)
+                                    { return std::all_of(boardRow.begin(), boardRow.end(), [](const Tile *tile)
+                                                         { return tile == nullptr; }); });
 
     if (isBoardEmpty)
     {
@@ -282,10 +280,7 @@ bool checkSurroundingTilesMatch(const std::vector<std::vector<Tile *>> &board, i
     return true && rowMatch && colMatch && hasNeighbor;
 }
 
-
-
-
-//function to make sure the tile is placed next to another tile
+// function to make sure the tile is placed next to another tile
 bool checkTilePlacement(const std::vector<std::vector<Tile *>> &board, int row, int col)
 {
     // Check if any neighboring positions have a tile
@@ -318,8 +313,10 @@ bool checkTilePlacement(const std::vector<std::vector<Tile *>> &board, int row, 
     return hasNeighbor;
 }
 
-bool checkSameTypeTiles(const std::vector<Tile *> &tilesToPlace, const std::vector<std::pair<int, int>> &positions) {
-    if (tilesToPlace.size() < 2) {
+bool checkSameTypeTiles(const std::vector<Tile *> &tilesToPlace, const std::vector<std::pair<int, int>> &positions)
+{
+    if (tilesToPlace.size() < 2)
+    {
         // If there is only one tile, it is considered a valid move
         return true;
     }
@@ -328,17 +325,17 @@ bool checkSameTypeTiles(const std::vector<Tile *> &tilesToPlace, const std::vect
     int baseRow = positions[0].first;
     int baseColumn = positions[0].second;
 
-	for (size_t i = 1; i < tilesToPlace.size(); ++i) {
-    // Check that all conditions are met for each tile
-		if ((tilesToPlace[i]->getColour() != baseColor &&
-    	tilesToPlace[i]->getShape() != baseShape) ||
-    	(positions[i].first != baseRow &&
-    	positions[i].second != baseColumn)) {
-    	//std::cout << "Tiles in the move have different color, shape, or they don't share the same column/row" << std::endl;
-    	return false;  // Tiles in the move have different color, shape, or they don't share the same column/row
-		}
-	}
-    return true;  // All tiles in the move have the same color, shape, and share the same column or row
+    for (size_t i = 1; i < tilesToPlace.size(); ++i)
+    {
+        // Check that all conditions are met for each tile
+        if ((tilesToPlace[i]->getColour() != baseColor &&
+             tilesToPlace[i]->getShape() != baseShape) ||
+            (positions[i].first != baseRow &&
+             positions[i].second != baseColumn))
+        {
+            // std::cout << "Tiles in the move have different color, shape, or they don't share the same column/row" << std::endl;
+            return false; // Tiles in the move have different color, shape, or they don't share the same column/row
+        }
+    }
+    return true; // All tiles in the move have the same color, shape, and share the same column or row
 }
-
-

@@ -49,9 +49,9 @@ void Game::launchGame()
         //1.    Display the current player's name and hand
                   << currentPlayer->getName() << ", it's your turn" << std::endl;
         //2.    Display the Score of player A
-        std::cout << "Score for A:" << std::endl;
+        std::cout << "Score for " << player1->getName() << ": " <<  player1->getScore() << std::endl;
         //2.    Display the Score of player B
-        std::cout << "Score for B:" << std::endl;
+        std::cout << "Score for " << player2->getName() << ": " <<  player2->getScore() << std::endl;
         //3.    Display the board
         board->displayBoard();
         //4.    Display the current player's hand        
@@ -206,6 +206,11 @@ void Game::launchGame()
                             }
                             //board[row][column] = tileToCheck;
                             board->setTileAtPosition(row, column, tileToCheck);
+                            // This is checking the score of the tiles individually rather than as a single turn.
+                            // TODO: update scoring methods
+                            int score = board->calculateScore(tilesToPlace, tilePositions);
+                            // add the score to the player's score
+                            currentPlayer->addScore(score);
                             board->displayBoard();
                         }
                     }

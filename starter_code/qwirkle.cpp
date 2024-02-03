@@ -34,7 +34,7 @@ int main(void)
 
     // std::cout << "TODO: Implement Qwirkle!" << std::endl;
     // 2.1 Launch
-    cout << "Welcome to Qwirkle!" << endl;
+    cout << "\n Welcome to Qwirkle!" << endl;
     cout << "-----------------------" << endl;
 
     int choice = 0;
@@ -92,10 +92,11 @@ int main(void)
 void displayMenu()
 {
     cout << "\nMenu" << endl;
+    cout << "-----" << endl;
     cout << "1. New Game" << endl;
     cout << "2. Load Game" << endl;
     cout << "3. Credits (Show student information)" << endl;
-    cout << "4. Quit" << endl;
+    cout << "4. Quit \n" << endl;
 }
 
 // Function to check if a player name is valid

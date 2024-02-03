@@ -4,13 +4,14 @@
 #include "Node.h"
 #include "Tile.h"
 
-class LinkedList {
+class LinkedList
+{
 public:
     LinkedList();
     ~LinkedList();
-    void addTile(Tile* tile);
-    bool removeTile(Tile* tile);
-    bool containsTile(Tile* tile) const;
+    void addTile(Tile *tile);
+    bool removeTile(Tile *tile);
+    bool containsTile(Tile *tile) const;
     int getSize() const;
     bool isEmpty() const;
     void displayHand() const;
@@ -18,17 +19,18 @@ public:
     // Add missing function declarations
     void initializeAndShuffleBag();
     void shuffle();
-    Node* begin();
-    Node* end();
-    Tile* back();
+    Node *begin();
+    Node *end();
+    Tile *back();
     void pop_back();
     void remove_back();
-    void push_back(Tile* tile);
-    Tile* getTile(int index);
+    void push_back(Tile *tile);
+    Tile *getTile(int index);
+    std::string toString();
 
 private:
-    Node* head;
-    Node* tail;
+    Node *head;
+    Node *tail;
 };
 
 #endif // ASSIGN2_LINKEDLIST_H

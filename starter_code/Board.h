@@ -44,9 +44,21 @@ public:
    // Method to get the size of the board
    size_t size() const;
 
+   // Get the height of the board
+   int getHeight()
+   {
+      return ROWS;
+   }
+
+   // Get the width of the board
+   int getWidth()
+   {
+      return COLS;
+   }
+
 private:
    std::vector<Tile *> board; // Vector to store pointers to tiles representing the board
-   std::string init[ROWS];    // Array to store row labels (uppercase letters A to Z)
+   std::string labels[ROWS];  // Array to store row labels (uppercase letters A to Z)
 };
 
 #endif // BOARD_H

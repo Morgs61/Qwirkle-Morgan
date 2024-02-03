@@ -40,25 +40,25 @@ int main(void)
     int choice = 0;
     bool quit = false;
 
-    while (!quit)
+while (!quit)
+{
+    displayMenu();
+    cout << "> ";
+    cin >> choice;
+
+    // If the extraction fails
+    if (cin.fail())
     {
-        displayMenu();
-        cout << "> ";
-        cin >> choice;
+        // Clear the error state
+        cin.clear();
 
-        // If the extraction fails
-        if (cin.fail())
-        {
-            // Clear the error state
-            cin.clear();
+        // Ignore the rest of the line
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-            // Ignore the rest of the line
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-            cout << "Invalid choice. Please enter a valid option." << endl;
-            continue;
-        }
-
+        cout << "Invalid choice. Please enter a valid option." << endl;
+    }
+    else
+    {
         if (choice == 1)
         {
             cout << "\nStarting a New Game" << endl;
@@ -72,7 +72,6 @@ int main(void)
         }
         else if (choice == 3)
         {
-
             displayStudentInformation();
         }
         else if (choice == 4)
@@ -85,10 +84,10 @@ int main(void)
             cout << "Invalid choice. Please enter a valid option." << endl;
         }
     }
-
-    return EXIT_SUCCESS;
 }
 
+return EXIT_SUCCESS;
+}
 void displayMenu()
 {
     cout << "\nMenu" << endl;

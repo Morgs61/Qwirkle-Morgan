@@ -4,6 +4,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 #include "LoadGame.h"
 
@@ -38,67 +39,56 @@ Game *LoadGame::loadGame(string filename)
     Board *board = new Board();
     LinkedList *bag = new LinkedList(); // Bag initialized here
 
+    // Read and store each line of the file
+    string plyr1Name, plyr1Score, plyr1Hand, plyr2Name, plyr2Score, plyr2Hand, boardSize, boardState, bagContents, currentPlyr;
+    getline(file, plyr1Name);
+    getline(file, plyr1Score);
+    getline(file, plyr1Hand);
+    getline(file, plyr2Name);
+    getline(file, plyr2Score);
+    getline(file, plyr2Hand);
+    getline(file, boardSize);
+    getline(file, boardState);
+    getline(file, bagContents);
+    getline(file, currentPlyr);
+
+    // Output each line (for debugging purposes)
+    cout << "Player 1 Name : " << plyr1Name << endl;
+    cout << "Player 1 Score: " << plyr1Score << endl;
+    cout << "Player 1 Hand: " << plyr1Hand << endl;
+    cout << "Player 2 Name :" << plyr2Name << endl;
+    cout << "Player 2 Score :" << plyr2Score << endl;
+    cout << "Player 2 Hand :" << plyr2Hand << endl;
+    cout << "Board Size :" << boardSize << endl;
+    cout << "Board Positioning :" << boardState << endl;
+    cout << "Bag Contents :" << bagContents << endl;
+    cout << "Current Player :" << currentPlyr << endl;
+
     // Load tile bag contents
-    string bagContents;
-    if (!getline(file, bagContents))
-    {
-        cout << "Error: Invalid file format." << endl;
-        return nullptr;
-    }
     loadBagContents(bag, bagContents);
 
     // Debugging output
     cout << "Bag Contents: " << bagContents << endl;
 
-    int playerCount = 2; // Default player count
-
     vector<Player *> players;
-    for (int i = 0; i <= playerCount; i++)
-    {
-        string playerName, playerHand;
-        int playerScore;
 
-        // Read player details
-        if (!getline(file, playerName) || !getline(file, line) || !getline(file, playerHand))
-        {
-            cout << "Error: Invalid file format." << endl;
-            return nullptr;
-        }
-        playerScore = stoi(line);
+    // Load player 1
+    loadPlayer(bag, plyr1Name, stoi(plyr1Score), plyr1Hand, players);
 
-        // Debugging output
-        cout << "Player Name: " << playerName << ", Score: " << playerScore << ", Hand: " << playerHand << endl;
-
-        // Load player's hand
-        LinkedList *hand = loadHand(playerHand, bag);
-
-        // Create player object and add to vector
-        players.push_back(new Player(playerName, playerScore, hand));
-    }
+    // Load player 2
+    loadPlayer(bag, plyr2Name, stoi(plyr2Score), plyr2Hand, players);
 
     // Load board state
-    string boardState;
-    if (!getline(file, boardState))
-    {
-        cout << "Error: Invalid file format." << endl;
-        return nullptr;
-    }
     board = loadBoardState(boardState);
 
     // Debugging output
     cout << "Board State: " << boardState << endl;
 
     // Load current player
-    string currentPlayerName;
-    if (!getline(file, currentPlayerName))
-    {
-        cout << "Error: Invalid file format." << endl;
-        return nullptr;
-    }
     Player *currentPlayer = nullptr;
     for (Player *player : players)
     {
-        if (player->getName() == currentPlayerName)
+        if (player->getName() == currentPlyr)
         {
             currentPlayer = player;
             break;
@@ -111,13 +101,22 @@ Game *LoadGame::loadGame(string filename)
     }
 
     // Debugging output
-    cout << "Current Player: " << currentPlayerName << endl;
+    cout << "Current Player: " << currentPlyr << endl;
 
     // Close the file
     file.close();
 
     // Create and return game object
     return new Game(players[0], players[1], bag, board, currentPlayer);
+}
+
+void LoadGame::loadPlayer(LinkedList *bag, string playerName, int playerScore, string playerHandStr, vector<Player *> &players)
+{
+    // Load player's hand
+    LinkedList *playerHand = loadHand(playerHandStr, bag);
+
+    // Create player object and add to vector
+    players.push_back(new Player(playerName, playerScore, playerHand));
 }
 
 LinkedList *LoadGame::loadTileBag(ifstream &file)
@@ -181,7 +180,6 @@ LinkedList *LoadGame::loadHand(string handString, LinkedList *bag)
     return hand;
 }
 
-// Load board state from string representation and update the board object
 Board *LoadGame::loadBoardState(string boardState)
 {
     // Create a new Board object
@@ -194,17 +192,42 @@ Board *LoadGame::loadBoardState(string boardState)
     // Iterate through each token separated by comma
     while (getline(ss, token, ','))
     {
-        // Extract tile information from the token
-        char colour = token[0];
-        int shape = token[1] - '0';
-        int row = token[3] - 'A';
-        int col = stoi(token.substr(4)) - 1;
+        // Output the token for debugging
+        cout << "Token: " << token << endl;
 
-        // Create a new tile object
-        Tile *tile = new Tile(colour, shape);
+        // Find the '@' character to separate row and column indices
+        size_t atPos = token.find('@');
+        if (atPos != string::npos && atPos + 1 < token.size())
+        {
+            // Extract color, shape, row, and column information
+            string colorShape = token.substr(0, atPos);
+            char colour = colorShape[0];
+            string shapeStr = colorShape.substr(1); // Remove the first character (color) to get the shape string
 
-        // Place the tile on the board
-        board->placeTile(tile, row, col);
+            // Extract only numeric part from the shape string
+            string numericShape = shapeStr;
+            numericShape.erase(remove_if(numericShape.begin(), numericShape.end(), [](char c)
+                                         { return !isdigit(c); }),
+                               numericShape.end());
+            int shape = stoi(numericShape); // Convert numeric shape string to integer
+
+            int row = token[atPos + 1] - 'A';
+            int col = stoi(token.substr(atPos + 2)) - 1;
+
+            // Output the extracted information for debugging
+            cout << "Colour: " << colour << ", Shape: " << shape << ", Row: " << row << ", Col: " << col << endl;
+
+            // Create a new tile object
+            Tile *tile = new Tile(colour, shape);
+
+            // Place the tile on the board
+            board->placeTile(tile, row, col);
+        }
+        else
+        {
+            // Handle error case where '@' is not found
+            cerr << "Error: Invalid token format" << endl;
+        }
     }
 
     // Return the updated board object

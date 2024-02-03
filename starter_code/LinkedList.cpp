@@ -114,16 +114,6 @@ bool LinkedList::removeTile(Tile *tile)
 
         while (current != nullptr)
         {
-            if (current->tile != nullptr)
-            {
-                // Debugging output
-                std::cout << "Current tile: " << current->tile->toString() << std::endl;
-            }
-            else
-            {
-                // Debugging output
-                std::cout << "Current tile is null" << std::endl;
-            }
 
             if (current->tile != nullptr && current->tile->getColour() == tile->getColour() && current->tile->getShape() == tile->getShape())
             {

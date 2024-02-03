@@ -388,5 +388,15 @@ bool Board::checkSameTypeTiles(const std::vector<Tile *> &tilesToPlace, const st
 
 void Board::setTileAtPosition(int row, int col, Tile *tile)
 {
-    // function implementation goes here
+    // Check if the row and column are within the board boundaries
+    if (row >= 0 && row < ROWS && col >= 0 && col < COLS)
+    {
+        // Place the tile at the specified position on the board
+        board[row * COLS + col] = tile;
+    }
+    else
+    {
+        // Print an error message if the position is out of bounds
+        std::cout << "Error: Position (" << row << ", " << col << ") is out of bounds." << std::endl;
+    }
 }

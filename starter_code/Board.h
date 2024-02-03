@@ -25,12 +25,14 @@ public:
    void displayBoard();
    // void addTileToBoard(Tile* tile, int row, int col);
    bool checkSurroundingTilesMatch();
-   bool checkTilePlacement();
+   bool checkTilePlacement(const std::vector<std::vector<Tile *>> &board, int row, int col);
    int getSize();
+   size_t size() const;
    bool checkSameTypeTiles();
    bool checkSameRowOrColumn();
-
-   //   bool checkSurroundingTilesMatch(int row, int col, Tile* tile, bool& valid);
+   void setTileAtPosition(int row, int col, Tile *tile);
+   bool checkSameTypeTiles(const std::vector<Tile *> &tilesToPlace, const std::vector<std::pair<int, int>> &positions);
+   bool checkSurroundingTilesMatch(int row, int col, Tile *tile);
 
    // Method to get the tile at the specified row and column
    Tile *getTileAt(int row, int col);
@@ -41,8 +43,6 @@ public:
    // Method to check if a tile exists at the specified row and column
    bool hasTileAt(int row, int col);
 
-   // Method to get the size of the board
-   size_t size() const;
 
    // Get the height of the board
    int getHeight()

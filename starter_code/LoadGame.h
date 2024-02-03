@@ -1,42 +1,24 @@
-#ifndef GAME_H
-#define GAME_H
+#ifndef LOADGAME_H
+#define LOADGAME_H
 
-#include "Player.h"
+#include "Game.h"
 #include "LinkedList.h"
-#include "Board.h"
+#include <fstream>
+#include <iostream>
+#include <string>
 
-class Game
+using namespace std;
+
+class LoadGame
 {
-private:
-    Player *player1;
-    Player *player2;
-    LinkedList *bag;
-    Board *board;
-    Player *currentPlayer;
-
 public:
-    Game(Player *player1, Player *player2, LinkedList *bag, Board *board, Player *currentPlayer);
-    ~Game();
-    void launchGame();
-    void loadGame(std::string &filename); // Declaration of loadGame function
+    Game *loadGame(std::string filename);
+    LinkedList *loadTileBag(std::ifstream &file);
+    LinkedList *loadHand(std::string handString, LinkedList *bag);
 
-    // Add other member functions as needed
-
-    // Getters and setters
-    void setPlayer1(Player *player1) { this->player1 = player1; }
-    Player *getPlayer1() { return player1; }
-
-    void setPlayer2(Player *player2) { this->player2 = player2; }
-    Player *getPlayer2() { return player2; }
-
-    void setBag(LinkedList *bag) { this->bag = bag; }
-    LinkedList *getBag() { return bag; }
-
-    void setBoard(Board *board) { this->board = board; }
-    Board *getBoard() { return board; }
-
-    void setCurrentPlayer(Player *currentPlayer) { this->currentPlayer = currentPlayer; }
-    Player *getCurrentPlayer() { return currentPlayer; }
+private:
+    Board *loadBoardState(std::string boardState);
+    void loadBagContents(LinkedList *bag, std::string bagContents);
 };
 
-#endif // GAME_H
+#endif // LOADGAME_H

@@ -38,13 +38,7 @@ Game::~Game()
 
 void Game::launchGame()
 {
-    // Print the hands of each player
-    std::cout << "\n"
-              << player1->getName() << "'s hand: ";
-    player1->getHand()->displayHand();
-    std::cout << "\n"
-              << player2->getName() << "'s hand: ";
-    player2->getHand()->displayHand();
+
 
     bool emptyHandExists = player1->getHand()->isEmpty() || player2->getHand()->isEmpty();
 
@@ -52,17 +46,26 @@ void Game::launchGame()
     while (!emptyHandExists)
     {
         std::cout << "\n"
-                  << currentPlayer->getName() << "'s turn" << std::endl;
-        std::cout << currentPlayer->getName() << "'s hand: ";
+        //1.    Display the current player's name and hand
+                  << currentPlayer->getName() << ", it's your turn" << std::endl;
+        //2.    Display the Score of player A
+        std::cout << "Score for A:" << std::endl;
+        //2.    Display the Score of player B
+        std::cout << "Score for B:" << std::endl;
+        //3.    Display the board
+        board->displayBoard();
+        //4.    Display the current player's hand        
+        std::cout << "\nYour hand is "<< std::endl;
         currentPlayer->getHand()->displayHand();
-
+        //5.    The user prompt  
         bool validActionSelected = false;
         while (!validActionSelected)
         {
-            cout << "Select your action:\n";
+            cout << "\nSelect your action:\n";
             cout << "1. Place tiles\n";
             cout << "2. Replace a tile\n";
             cout << "3. Save game\n";
+            cout << "4. Quit game\n";
             cout << "> ";
 
             int choice;
@@ -356,6 +359,12 @@ void Game::launchGame()
                 getline(cin, filename);
                 SaveGame::saveGameState(filename, player1, player2, board, bag, currentPlayer);
                 cout << "Game successfully saved" << endl;
+            }
+            else if (choice == 4)
+            {
+                // Quit game
+                cout << "Quitting game..." << endl;
+                return;
             }
             else
             {

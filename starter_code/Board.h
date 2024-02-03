@@ -9,7 +9,8 @@
 #define COLS 27
 #define STATE_TOKEN_LEN 5
 
-class Board {
+class Board
+{
 public:
    // Constructor to initialize the board
    Board();
@@ -20,17 +21,16 @@ public:
    std::vector<Tile *> &getBoard();
    // Method to place a tile on the board at the specified row and column
    void placeTile(Tile *tile, int row, int col);
-   	void initializeBoard();
-   	void displayBoard();
-   	//void addTileToBoard(Tile* tile, int row, int col);
-   	bool checkSurroundingTilesMatch();
-	bool checkTilePlacement();
-	int getSize();
-	bool checkSameTypeTiles();
-    bool checkSameRowOrColumn();
+   void initializeBoard();
+   void displayBoard();
+   // void addTileToBoard(Tile* tile, int row, int col);
+   bool checkSurroundingTilesMatch();
+   bool checkTilePlacement();
+   int getSize();
+   bool checkSameTypeTiles();
+   bool checkSameRowOrColumn();
 
- //   bool checkSurroundingTilesMatch(int row, int col, Tile* tile, bool& valid);
-
+   //   bool checkSurroundingTilesMatch(int row, int col, Tile* tile, bool& valid);
 
    // Method to get the tile at the specified row and column
    Tile *getTileAt(int row, int col);

@@ -27,6 +27,7 @@ public:
     void push_back(Tile *tile);
     Tile *getTile(int index);
     std::string toString();
+    Node *getHead(); // Declaration of the getHead() method
 
 private:
     Node *head;

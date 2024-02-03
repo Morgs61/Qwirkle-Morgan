@@ -53,3 +53,8 @@ void Node::setNextNullptr()
 {
    this->next = nullptr;
 }
+
+Tile *Node::getData()
+{
+   return data;
+}

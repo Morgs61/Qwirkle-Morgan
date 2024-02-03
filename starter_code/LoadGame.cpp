@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "Tile.h"
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -35,12 +36,24 @@ Game *LoadGame::loadGame(string filename)
 
     // Initialize game components
     Board *board = new Board();
-    LinkedList *bag = new LinkedList();
+    LinkedList *bag = new LinkedList(); // Bag initialized here
+
+    // Load tile bag contents
+    string bagContents;
+    if (!getline(file, bagContents))
+    {
+        cout << "Error: Invalid file format." << endl;
+        return nullptr;
+    }
+    loadBagContents(bag, bagContents);
+
+    // Debugging output
+    cout << "Bag Contents: " << bagContents << endl;
 
     int playerCount = 2; // Default player count
 
     vector<Player *> players;
-    for (int i = 0; i < playerCount; i++)
+    for (int i = 0; i <= playerCount; i++)
     {
         string playerName, playerHand;
         int playerScore;
@@ -64,26 +77,16 @@ Game *LoadGame::loadGame(string filename)
     }
 
     // Load board state
-    if (!getline(file, line))
+    string boardState;
+    if (!getline(file, boardState))
     {
         cout << "Error: Invalid file format." << endl;
         return nullptr;
     }
-    board = loadBoardState(line);
+    board = loadBoardState(boardState);
 
     // Debugging output
-    cout << "Board State: " << line << endl;
-
-    // Load tile bag contents
-    if (!getline(file, line))
-    {
-        cout << "Error: Invalid file format." << endl;
-        return nullptr;
-    }
-    loadBagContents(bag, line);
-
-    // Debugging output
-    cout << "Bag Contents: " << line << endl;
+    cout << "Board State: " << boardState << endl;
 
     // Load current player
     string currentPlayerName;
@@ -135,32 +138,46 @@ LinkedList *LoadGame::loadTileBag(ifstream &file)
 
 LinkedList *LoadGame::loadHand(string handString, LinkedList *bag)
 {
-    cout << "Hand String: " << handString << endl;
-
     // Load player's hand from string representation and return LinkedList object
     LinkedList *hand = new LinkedList();
     istringstream ss(handString);
-    char colour;
-    int shape;
-    while (ss >> colour >> shape)
+    string token;
+    while (getline(ss, token, ',')) // Assuming handString is comma-separated
     {
+        char colour = token[0];
+        int shape = stoi(token.substr(1)); // Assuming the shape is represented by the digits after the color
+
         // Create a Tile object with the specified color and shape
         Tile *tile = new Tile(colour, shape);
 
         // Attempt to remove the tile from the bag
         bool tileRemoved = bag->removeTile(tile);
 
+        // Debugging output
+        cout << "Removing tile: " << tile->toString() << " from bag... ";
+        if (tileRemoved)
+        {
+            cout << "Successfully removed." << endl;
+        }
+        else
+        {
+            cout << "Tile not found in bag." << endl;
+        }
+
         // Check if the tile was successfully removed
         if (tileRemoved)
         {
+            // If the tile was removed from the bag, add it to the player's hand
             hand->push_back(tile);
         }
         else
         {
+            // If the tile couldn't be added to the hand, delete it to avoid memory leaks
             cout << "Error: Invalid tile in player hand." << endl;
-            delete tile; // Since the tile couldn't be added to the hand, we need to delete it to avoid memory leaks
+            delete tile;
         }
     }
+
     return hand;
 }
 

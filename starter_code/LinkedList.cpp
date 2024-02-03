@@ -107,35 +107,48 @@ bool LinkedList::containsTile(Tile *tile) const
 
 bool LinkedList::removeTile(Tile *tile)
 {
-    Node *current = head;
-    Node *previous = nullptr;
-
-    while (current != nullptr)
+    if (head != nullptr)
     {
-        if (current->tile->getColour() == tile->getColour() && current->tile->getShape() == tile->getShape())
+        Node *current = head;
+        Node *previous = nullptr;
+
+        while (current != nullptr)
         {
-            if (previous == nullptr)
+            if (current->tile != nullptr)
             {
-                head = current->next;
+                // Debugging output
+                std::cout << "Current tile: " << current->tile->toString() << std::endl;
             }
             else
             {
-                previous->next = current->next;
+                // Debugging output
+                std::cout << "Current tile is null" << std::endl;
             }
 
-            if (current == tail)
+            if (current->tile != nullptr && current->tile->getColour() == tile->getColour() && current->tile->getShape() == tile->getShape())
             {
-                tail = previous;
+                if (previous == nullptr)
+                {
+                    head = current->next;
+                }
+                else
+                {
+                    previous->next = current->next;
+                }
+
+                if (current == tail)
+                {
+                    tail = previous;
+                }
+
+                delete current;
+                return true;
             }
 
-            delete current;
-            return true;
+            previous = current;
+            current = current->next;
         }
-
-        previous = current;
-        current = current->next;
     }
-
     return false; // Tile not found
 }
 
@@ -215,6 +228,11 @@ Node *LinkedList::end()
     return nullptr;
 }
 
+Node *LinkedList::getHead()
+{
+    return head;
+}
+
 Tile *LinkedList::back()
 {
     if (tail != nullptr)
@@ -280,16 +298,19 @@ void LinkedList::remove_back()
 
 void LinkedList::push_back(Tile *tile)
 {
-    Node *newNode = new Node(tile, nullptr);
-    if (head == nullptr)
+    Node *newNode = new Node(tile); // Create a new node with the given tile
+    if (head == nullptr)            // If the list is empty, set the new node as the head
     {
         head = newNode;
-        tail = newNode;
     }
     else
     {
-        tail->next = newNode;
-        tail = newNode;
+        Node *current = head;
+        while (current->getNext() != nullptr) // Traverse the list to find the last node
+        {
+            current = current->getNext();
+        }
+        current->setNext(newNode); // Set the next pointer of the last node to the new node
     }
 }
 

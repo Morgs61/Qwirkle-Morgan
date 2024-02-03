@@ -62,6 +62,7 @@ void Game::launchGame()
             cout << "Select your action:\n";
             cout << "1. Place tiles\n";
             cout << "2. Replace a tile\n";
+            cout << "3. Save game\n";
             cout << "> ";
 
             int choice;

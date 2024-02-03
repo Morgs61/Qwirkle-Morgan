@@ -32,6 +32,8 @@ Game::~Game()
     delete player2;
     delete board;
 }
+
+
 // ACTUAL RUNNING OF THE GAME STARTS HERE
 
 void Game::launchGame()
@@ -177,7 +179,7 @@ void Game::launchGame()
                         else
                         {
                             cout << "Tile found in hand. Proceeding with the game." << endl;
-                            if (checkSurroundingTilesMatch(board->getBoardState(), row, column, tileToCheck))
+                            if (board->checkSurroundingTilesMatch(row, column, tileToCheck))
 
                             {
                                 cout << "Surrounding tiles match. Proceeding with the game." << endl;
@@ -192,13 +194,14 @@ void Game::launchGame()
                             tilesToPlace.push_back(tileToCheck);
                             tilePositions.push_back(std::make_pair(row, column));
                             // Check if the tiles being placed have the same color, shape, and share the same column or row
-                            if (!checkSameTypeTiles(tilesToPlace, tilePositions))
+                            if (!board->checkSameTypeTiles(tilesToPlace, tilePositions))
                             {
                                 cout << "Invalid move. Tiles must have the same color, shape, and share the same column or row." << endl;
                                 --j;
                                 continue;
                             }
-                            board[row][column] = tileToCheck;
+                            //board[row][column] = tileToCheck;
+                            board->setTileAtPosition(row, column, tileToCheck);
                             board->displayBoard();
                         }
                     }

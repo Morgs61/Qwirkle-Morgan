@@ -84,32 +84,34 @@ void Game::launchGame()
 
             if (choice == 1)
             {
-                // Placing tiles
-                cout << "How many tiles do you want to place? ";
-                int numTiles;
-                if (!(cin >> numTiles))
-                {
-                    cin.clear();
-                    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                    cout << "Invalid input. Please enter a number." << endl;
-                    cout << "\n"
-                         << currentPlayer->getName() << "'s turn" << endl;
-                    cout << currentPlayer->getName() << "'s hand: ";
-                    currentPlayer->getHand()->displayHand();
-                    continue;
-                }
-                cin.ignore();
+                // // Placing tiles
+                // cout << "How many tiles do you want to place? ";
+                 int numTiles = 0;
+                // if (!(cin >> numTiles))
+                // {
+                //     cin.clear();
+                //     cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                //     cout << "Invalid input. Please enter a number." << endl;
+                //     cout << "\n"
+                //          << currentPlayer->getName() << "'s turn" << endl;
+                //     cout << currentPlayer->getName() << "'s hand: ";
+                //     currentPlayer->getHand()->displayHand();
+                //     continue;
+                // }
+                // cin.ignore();
 
                 // Initialize a vector to store tiles to be placed
                 vector<Tile *> tilesToPlace;
                 vector<std::pair<int, int>> tilePositions;
-
+                int j = 0;
+                bool activeTurn = false;
                 // Input each tile one by one
-                for (int j = 0; j < numTiles; ++j)
+                while (!activeTurn && j < 6){
                 {
-                    board->displayBoard();
+
                     currentPlayer->getHand()->displayHand();
                     cout << "Place tile " << j + 1 << " using the format: place <tile> at <grid location>" << endl;
+                    cout << "Enter 'end' to end your turn." << endl;
                     cout << ">";
 
                     string command;
@@ -125,6 +127,12 @@ void Game::launchGame()
                     }
                     words.push_back(command);
 
+                    // Check if the player wants to end their turn
+                    if (words.size() == 1 && words[0] == "end") {
+                        cout << "Ending turn." << endl;
+                        activeTurn = true;
+                    }
+
                     // Check that the command is correctly formatted
                     if (words.size() != 4 || words[0] != "place" || words[3].length() != 2)
                     {
@@ -134,7 +142,7 @@ void Game::launchGame()
                         cout << currentPlayer->getName() << "'s hand: ";
                         currentPlayer->getHand()->displayHand();
                         cout << "> ";
-                        --j; // Decrement j to repeat the input for the same tile
+                        //--j; // Decrement j to repeat the input for the same tile
                         continue;
                     }
 
@@ -152,7 +160,7 @@ void Game::launchGame()
                     if (row == static_cast<size_t>(-1) || row >= static_cast<size_t>(board->getSize()) || column == static_cast<size_t>(-1) || column >= static_cast<size_t>(board[0].size()))
                     {
                         cout << "Invalid grid location. Please try again." << endl;
-                        --j; // Decrement j to repeat the input for the same tile
+                        //--j; // Decrement j to repeat the input for the same tile
                         continue;
                     }
 
@@ -168,7 +176,7 @@ void Game::launchGame()
                     {
                         cout << "Tile not found in hand. Please try again." << endl;
                         delete tileToCheck; // Avoid memory leak
-                        --j;                // Decrement j to repeat the input for the same tile
+                        //--j;                // Decrement j to repeat the input for the same tile
                         continue;
                     }
                     else
@@ -177,7 +185,7 @@ void Game::launchGame()
                         {
                             cout << "There's already a tile at that location. Please try again." << endl;
                             delete tileToCheck; // Avoid memory leak
-                            --j;                // Decrement j to repeat the input for the same tile
+                            //--j;                // Decrement j to repeat the input for the same tile
                             continue;
                         }
                         else
@@ -192,7 +200,7 @@ void Game::launchGame()
                             {
                                 cout << "Surrounding tiles do not match. Please try again." << endl;
                                 delete tileToCheck; // Avoid memory leak
-                                --j;                // Decrement i to repeat the input for the same tile
+                                //--j;                // Decrement i to repeat the input for the same tile
                                 continue;
                             }
                             tilesToPlace.push_back(tileToCheck);
@@ -201,16 +209,14 @@ void Game::launchGame()
                             if (!board->checkSameTypeTiles(tilesToPlace, tilePositions))
                             {
                                 cout << "Invalid move. Tiles must have the same color, shape, and share the same column or row." << endl;
-                                --j;
+                                //--j;
                                 continue;
                             }
+                            ++numTiles;
                             //board[row][column] = tileToCheck;
                             board->setTileAtPosition(row, column, tileToCheck);
                             // This is checking the score of the tiles individually rather than as a single turn.
-                            // TODO: update scoring methods
-                            int score = board->calculateScore(tilesToPlace, tilePositions);
-                            // add the score to the player's score
-                            currentPlayer->addScore(score);
+
                             board->displayBoard();
                         }
                     }
@@ -218,10 +224,11 @@ void Game::launchGame()
                     if (!currentPlayer->getHand()->removeTile(tileToCheck))
                     {
                         cout << "Error removing tile from hand. Please try again." << endl;
-                        --j; // Decrement j to repeat the input for the same tile
+                       //--j; // Decrement j to repeat the input for the same tile
                         continue;
                     }
-                }
+}
+}
 
                 // Draw new tiles from the tile bag and add them to the player's hand
                 for (int j = 0; j < numTiles && !bag->isEmpty(); ++j)
@@ -232,18 +239,23 @@ void Game::launchGame()
 
                     // Add the new tile to the player's hand
                     currentPlayer->getHand()->addTile(tileFromBagPtr);
-
-                    // output the player hand
-                    cout << "Player's hand after adding a new tile: ";
-                    currentPlayer->getHand()->displayHand();
                 }
+                // TODO: update scoring methods
+                int score = board->calculateScore(tilesToPlace, tilePositions);
+                // add the score to the player's score
+                currentPlayer->addScore(score);
+
+                // output the player hand
+                cout << "Player's hand after adding a new tile: ";
+                currentPlayer->getHand()->displayHand();
 
                 cout << "The size of the tile bag is now: " << bag->getSize() << endl;
                 cout << "\n"
                      << currentPlayer->getName() << "'s hand: ";
                 currentPlayer->getHand()->displayHand();
                 validActionSelected = true;
-            }
+
+}
 
             else if (choice == 2)
             {

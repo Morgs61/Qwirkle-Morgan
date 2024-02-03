@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <cctype>
 
 #include "LoadGame.h"
 
@@ -180,6 +181,8 @@ LinkedList *LoadGame::loadHand(string handString, LinkedList *bag)
     return hand;
 }
 
+#include <cctype> // Include the necessary header file for isalpha function
+
 Board *LoadGame::loadBoardState(string boardState)
 {
     // Create a new Board object
@@ -201,15 +204,60 @@ Board *LoadGame::loadBoardState(string boardState)
         {
             // Extract color, shape, row, and column information
             string colorShape = token.substr(0, atPos);
-            char colour = colorShape[0];
-            string shapeStr = colorShape.substr(1); // Remove the first character (color) to get the shape string
+            char colour = ' '; // Initialize colour with a default value
 
-            // Extract only numeric part from the shape string
-            string numericShape = shapeStr;
-            numericShape.erase(remove_if(numericShape.begin(), numericShape.end(), [](char c)
-                                         { return !isdigit(c); }),
-                               numericShape.end());
-            int shape = stoi(numericShape); // Convert numeric shape string to integer
+            // Extract the color part from the colorShape string
+            for (char c : colorShape)
+            {
+                if (isalpha(c)) // Check if the character is alphabetic (a letter)
+                {
+                    colour = c; // Set the colour if the character is a letter
+                    break;      // Break the loop once we find the first letter
+                }
+            }
+
+            if (colour == ' ') // Check if the colour is still the default value
+            {
+                // Handle error case where no color is found
+                cerr << "Error: No color found in token: " << token << endl;
+                continue; // Skip processing this token
+            }
+
+            // Extract the shape part from the colorShape string
+            string shapeStr = "";
+            bool foundAtSymbol = false; // Flag to track if '@' symbol is found
+
+            for (char c : colorShape)
+            {
+                cout << "Current character: " << c << endl; // Debugging output
+
+                if (isdigit(c)) // Check if the character is a digit
+                {
+                    if (!foundAtSymbol) // Check if '@' symbol is not found yet
+                    {
+                        shapeStr += c; // Append the character to the shape string if it's a digit
+                    }
+                }
+                else if (c == '@') // Handle '@' symbol
+                {
+                    foundAtSymbol = true; // Set flag to true when '@' symbol is found
+                }
+            }
+
+            cout << "Shape String: " << shapeStr << endl; // Debugging output
+
+            // Convert shape string to integer
+            int shape;
+            try
+            {
+                shape = stoi(shapeStr);
+            }
+            catch (const std::invalid_argument &ia)
+            {
+                cerr << "Error: Invalid shape value in token: " << token << endl;
+                cerr << "Shape String: " << shapeStr << endl; // Debugging output
+                continue;                                     // Skip processing this token
+            }
 
             int row = token[atPos + 1] - 'A';
             int col = stoi(token.substr(atPos + 2)) - 1;

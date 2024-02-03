@@ -400,3 +400,48 @@ void Board::setTileAtPosition(int row, int col, Tile *tile)
         std::cout << "Error: Position (" << row << ", " << col << ") is out of bounds." << std::endl;
     }
 }
+
+int Board::calculateScore(const std::vector<Tile *> &tilesToPlace, const std::vector<std::pair<int, int>> &positions) {
+    int totalScore = 0;
+
+    // Score each tile placement individually
+    for (size_t i = 0; i < tilesToPlace.size(); ++i) {
+        int row = positions[i].first;
+        int col = positions[i].second;
+
+        // Temporarily place tile for scoring
+        board[row * COLS + col] = tilesToPlace[i];
+
+        // Score horizontally and vertically
+        int scoreHorizontal = 1;
+        int scoreVertical = 1;
+
+        // Check left
+        for (int j = col - 1; j >= 0 && board[row * COLS + j] != nullptr; --j) scoreHorizontal++;
+        // Check right
+        for (int j = col + 1; j < COLS && board[row * COLS + j] != nullptr; ++j) scoreHorizontal++;
+        // Check up
+        for (int j = row - 1; j >= 0 && board[j * COLS + col] != nullptr; --j) scoreVertical++;
+        // Check down
+        for (int j = row + 1; j < ROWS && board[j * COLS + col] != nullptr; ++j) scoreVertical++;
+
+        // If tile doesn't form a new sequence, score for that direction is 0 (excluding the tile itself)
+        if (scoreHorizontal == 1) scoreHorizontal = 0;
+        if (scoreVertical == 1) scoreVertical = 0;
+
+
+        totalScore += scoreHorizontal + scoreVertical;
+
+        // Remove the tile after scoring
+        //board[row * COLS + col] = nullptr;
+    }
+//    // Restore tiles placed for accurate game state
+//    for (size_t i = 0; i < tilesToPlace.size(); ++i) {
+//        int row = positions[i].first;
+//        int col = positions[i].second;
+//        board[row * COLS + col] = tilesToPlace[i];
+//    }
+    std::cout << "Score for this move: " << totalScore << std::endl;
+    // if total score is 0, It must be the first move and the score is 1
+    return totalScore;
+}

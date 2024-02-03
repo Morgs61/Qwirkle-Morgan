@@ -15,7 +15,7 @@ using std::vector;
 
 Game *LoadGame::loadGame(string filename)
 {
-    ifstream file(filename + ".txt");
+    ifstream file(filename);
     if (!file.is_open())
     {
         cout << "Error: File '" << filename << "' not found." << endl;
@@ -28,6 +28,8 @@ Game *LoadGame::loadGame(string filename)
         cout << "Error: File '" << filename << "' is empty." << endl;
         return nullptr;
     }
+
+    cout << "Loading Game..." << endl;
 
     string line;
 
@@ -51,6 +53,9 @@ Game *LoadGame::loadGame(string filename)
         }
         playerScore = stoi(line);
 
+        // Debugging output
+        cout << "Player Name: " << playerName << ", Score: " << playerScore << ", Hand: " << playerHand << endl;
+
         // Load player's hand
         LinkedList *hand = loadHand(playerHand, bag);
 
@@ -66,6 +71,9 @@ Game *LoadGame::loadGame(string filename)
     }
     board = loadBoardState(line);
 
+    // Debugging output
+    cout << "Board State: " << line << endl;
+
     // Load tile bag contents
     if (!getline(file, line))
     {
@@ -73,6 +81,9 @@ Game *LoadGame::loadGame(string filename)
         return nullptr;
     }
     loadBagContents(bag, line);
+
+    // Debugging output
+    cout << "Bag Contents: " << line << endl;
 
     // Load current player
     string currentPlayerName;
@@ -95,6 +106,9 @@ Game *LoadGame::loadGame(string filename)
         cout << "Error: Current player not found." << endl;
         return nullptr;
     }
+
+    // Debugging output
+    cout << "Current Player: " << currentPlayerName << endl;
 
     // Close the file
     file.close();
@@ -121,6 +135,8 @@ LinkedList *LoadGame::loadTileBag(ifstream &file)
 
 LinkedList *LoadGame::loadHand(string handString, LinkedList *bag)
 {
+    cout << "Hand String: " << handString << endl;
+
     // Load player's hand from string representation and return LinkedList object
     LinkedList *hand = new LinkedList();
     istringstream ss(handString);

@@ -5,6 +5,8 @@
 #include "Board.h"
 #include "TileCodes.h"
 #include "Player.h"
+#include "Game.h"
+#include "LoadGame.h"
 #include <iostream>
 #include <vector>
 #include <fstream>
@@ -144,38 +146,21 @@ void loadGame()
     cout << "> ";
     cin >> filename;
 
-    // Attempt to open the file4
-    std::ifstream file(filename);
+    // Create an instance of LoadGame
+    LoadGame loader;
 
-    if (file.good() && file.is_open())
+    // Call the loadGame method with the filename
+    Game *loadedGame = loader.loadGame(filename);
+
+    // Check if the game is successfully loaded
+    if (loadedGame != nullptr)
     {
-        // File exists and is open
-
-        // Add validation for the file format (replace with your actual format check logic)
-        // For example, if you have a specific format, check if it matches
-        // Here, we assume a simple check by reading a line from the file
-        string line;
-        if (getline(file, line))
-        {
-            cout << "\nQwirkle game successfully loaded." << endl;
-            // Add code to load the game (replace with your actual game loading logic)
-            // For example, you might read data from the file and restore the game state
-            // ...
-
-            // Continue with normal gameplay (replace with your actual gameplay logic)
-            // ...
-        }
-        else
-        {
-            cout << "\nInvalid file format. Unable to load the game." << endl;
-        }
-
-        // Close the file
-        file.close();
+        cout << "\nQwirkle game successfully loaded." << endl;
+        // Proceed with the loaded game, if needed
     }
     else
     {
-        cout << "\nFile does not exist or could not be opened. Unable to load the game." << endl;
+        cout << "\nError: Unable to load the game." << endl;
     }
 }
 

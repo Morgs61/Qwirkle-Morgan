@@ -203,101 +203,78 @@ bool Board::checkSurroundingTilesMatch(int row, int col, Tile *tile) {
         });
     });
 
-    if (isBoardEmpty)
-    {
-        std::cout << "Board is empty" << std::endl;
-        return true;
-    }
-
-    // Check existing checks for adjacent tiles
-    bool hasNeighbor = checkTilePlacement(board2D, row, col);
-    if (!hasNeighbor)
-    {
-        std::cout << "Tile must be placed next to another tile" << std::endl;
-        return false;
-    }
-
-    // Check along the row within a limited range
-    bool rowMatch = true;
-    for (int i = col - 1; i >= 0 && board2D[row][i] != nullptr; --i)
-    {
-        if (board2D[row][i]->getColour() != tile->getColour() && board2D[row][i]->getShape() != tile->getShape())
-        {
-            rowMatch = false;
-            std::cout << "Tile does not match row values" << std::endl;
-            break;
-        }
-    }
-    for (int i = col + 1; i < BOARD_SIZE && board2D[row][i] != nullptr; ++i)
-    {
-        if (board2D[row][i]->getColour() != tile->getColour() && board2D[row][i]->getShape() != tile->getShape())
-        {
-            rowMatch = false;
-            std::cout << "Tile does not match row values" << std::endl;
-            break;
-        }
-    }
-
-    // Check along the column within a limited range
-    bool colMatch = true;
-    for (int i = row - 1; i >= 0 && board2D[i][col] != nullptr; --i)
-    {
-        if (board2D[i][col]->getColour() != tile->getColour() && board2D[i][col]->getShape() != tile->getShape())
-        {
-            colMatch = false;
-            std::cout << "Tile does not match column values" << std::endl;
-            break;
-        }
-    }
-    for (int i = row + 1; i < BOARD_SIZE && board2D[i][col] != nullptr; ++i)
-    {
-        if (board2D[i][col]->getColour() != tile->getColour() && board2D[i][col]->getShape() != tile->getShape())
-        {
-            colMatch = false;
-            std::cout << "Tile does not match column values" << std::endl;
-            break;
-        }
-    }
-
-    // Check for duplicate tile in the row
-    for (int i = col - 1; i >= 0 && board2D[row][i] != nullptr; --i)
-    {
-        if (board2D[row][i]->getColour() == tile->getColour() && board2D[row][i]->getShape() == tile->getShape())
-        {
-            std::cout << "Duplicate tile found in row, invalid placement" << std::endl;
-            return false;
-        }
-    }
-    for (int i = col + 1; i < BOARD_SIZE && board2D[row][i] != nullptr; ++i)
-    {
-        if (board2D[row][i]->getColour() == tile->getColour() && board2D[row][i]->getShape() == tile->getShape())
-        {
-            std::cout << "Duplicate tile found in row, invalid placement" << std::endl;
-            return false;
-        }
-    }
-
-    // Check for duplicate tile in the column
-    for (int i = row - 1; i >= 0 && board2D[i][col] != nullptr; --i)
-    {
-        if (board2D[i][col]->getColour() == tile->getColour() && board2D[i][col]->getShape() == tile->getShape())
-        {
-            std::cout << "Duplicate tile found in column, invalid placement" << std::endl;
-            return false;
-        }
-    }
-    for (int i = row + 1; i < BOARD_SIZE && board2D[i][col] != nullptr; ++i)
-    {
-        if (board2D[i][col]->getColour() == tile->getColour() && board2D[i][col]->getShape() == tile->getShape())
-        {
-            std::cout << "Duplicate tile found in column, invalid placement" << std::endl;
-            return false;
-        }
-    }
-
-    return true && rowMatch && colMatch && hasNeighbor;
+    if (isBoardEmpty) {
+    std::cout << "Board is empty" << std::endl;
+    return true;
 }
 
+// Check existing checks for adjacent tiles
+bool hasNeighbor = checkTilePlacement(board2D, row, col);
+if (!hasNeighbor) {
+    std::cout << "Tile must be placed next to another tile" << std::endl;
+    return false;
+}
+
+// Check along the row within a limited range
+bool rowMatch = true;
+for (int i = col - 1; i >= 0 && board2D[row][i] != nullptr && rowMatch; --i) {
+    if (board2D[row][i]->getColour() != tile->getColour() && board2D[row][i]->getShape() != tile->getShape()) {
+        rowMatch = false;
+        std::cout << "Tile does not match row values" << std::endl;
+    }
+}
+for (int i = col + 1; i < BOARD_SIZE && board2D[row][i] != nullptr && rowMatch; ++i) {
+    if (board2D[row][i]->getColour() != tile->getColour() && board2D[row][i]->getShape() != tile->getShape()) {
+        rowMatch = false;
+        std::cout << "Tile does not match row values" << std::endl;
+    }
+}
+
+// Check along the column within a limited range
+bool colMatch = true;
+for (int i = row - 1; i >= 0 && board2D[i][col] != nullptr && colMatch; --i) {
+    if (board2D[i][col]->getColour() != tile->getColour() && board2D[i][col]->getShape() != tile->getShape()) {
+        colMatch = false;
+        std::cout << "Tile does not match column values" << std::endl;
+    }
+}
+for (int i = row + 1; i < BOARD_SIZE && board2D[i][col] != nullptr && colMatch; ++i) {
+    if (board2D[i][col]->getColour() != tile->getColour() && board2D[i][col]->getShape() != tile->getShape()) {
+        colMatch = false;
+        std::cout << "Tile does not match column values" << std::endl;
+    }
+}
+
+// Check for duplicate tile in the row
+for (int i = col - 1; i >= 0 && board2D[row][i] != nullptr; --i) {
+    if (board2D[row][i]->getColour() == tile->getColour() && board2D[row][i]->getShape() == tile->getShape()) {
+        std::cout << "Duplicate tile found in row, invalid placement" << std::endl;
+        return false;
+    }
+}
+for (int i = col + 1; i < BOARD_SIZE && board2D[row][i] != nullptr; ++i) {
+    if (board2D[row][i]->getColour() == tile->getColour() && board2D[row][i]->getShape() == tile->getShape()) {
+        std::cout << "Duplicate tile found in row, invalid placement" << std::endl;
+        return false;
+    }
+}
+
+// Check for duplicate tile in the column
+for (int i = row - 1; i >= 0 && board2D[i][col] != nullptr; --i) {
+    if (board2D[i][col]->getColour() == tile->getColour() && board2D[i][col]->getShape() == tile->getShape()) {
+        std::cout << "Duplicate tile found in column, invalid placement" << std::endl;
+        return false;
+    }
+}
+for (int i = row + 1; i < BOARD_SIZE && board2D[i][col] != nullptr; ++i) {
+    if (board2D[i][col]->getColour() == tile->getColour() && board2D[i][col]->getShape() == tile->getShape()) {
+        std::cout << "Duplicate tile found in column, invalid placement" << std::endl;
+        return false;
+    }
+}
+
+return rowMatch && colMatch && hasNeighbor;
+}
 // function to make sure the tile is placed next to another tile
 bool Board::checkTilePlacement(const std::vector<std::vector<Tile *>> &board, int row, int col) {
 

@@ -1,22 +1,22 @@
 
 #include "Node.h"
 
-Node::Node(Tile *tile, Node *next)
+Node::Node(Tile *tile, Node *nextNodePtr)
 {
    this->tile = tile;
-   this->next = next;
+   this->nextNodePtr = nextNodePtr;
 }
 
 Node::Node(Tile *tile)
 {
    this->tile = tile;
-   this->next = nullptr;
+   this->nextNodePtr = nullptr;
 }
 
 Node::Node(Node &other)
 {
    this->tile = other.tile;
-   this->next = other.next;
+   this->nextNodePtr = other.nextNodePtr;
 }
 
 Node::~Node()
@@ -29,9 +29,9 @@ Node::~Node()
 
 void Node::clearNodeList()
 {
-   if (next != nullptr)
+   if (nextNodePtr != nullptr)
    {
-      next->~Node();
+      nextNodePtr->~Node();
    }
 }
 
@@ -41,15 +41,15 @@ Tile *Node::getTile()
 }
 Node *Node::getNext()
 {
-   return next;
+   return nextNodePtr;
 }
 
-void Node::setNext(Node *next)
+void Node::setNext(Node *nextNodePtr)
 {
-   this->next = next;
+   this->nextNodePtr = nextNodePtr;
 }
 
 void Node::setNextNullptr()
 {
-   this->next = nullptr;
+   this->nextNodePtr = nullptr;
 }

@@ -116,7 +116,7 @@ void Game::launchGame()
             words.push_back(command);
 
             // Check that the command is correctly formatted
-            if (words.size() != 4 || words[0] != "place" || words[3].length() != 2)
+            if (words.size() != 4 || words[0] != "place" || words[3].length() >= 4)
             {
                 cout << "Invalid command. Please try again." << endl;
                 cout << "\n" << currentPlayer->getName() << "'s turn" << endl;
@@ -131,12 +131,15 @@ void Game::launchGame()
             string location = words[3];
 
             // Convert the grid location to row and column
+            const int COLUMN_MAX =26; // Define the constant COLUMN_MAX with an appropriate value
+
             char gridLetter = location[0];
             size_t row = (gridLetter >= 'A' && gridLetter <= 'Z') ? (gridLetter - 'A') : -1;
-            size_t column = std::stoi(location.substr(1)) - 1; // Convert the rest of the string to a number
+            // Convert the rest of the string to a number
+            size_t column = std::stoi(location.substr(1)) - 1;
 
             // Check if the row and column are valid
-            if (validInput && (row == static_cast<size_t>(-1) || row >= static_cast<size_t>(board->getSize()) || column == static_cast<size_t>(-1) || column >= static_cast<size_t>(board[0].size())))
+            if (validInput && (row == static_cast<size_t>(-1) || row >= static_cast<size_t>(board->getSize()) || column >= COLUMN_MAX))
             {
                 cout << "Invalid grid location. Please try again." << endl;
                 validInput = false;

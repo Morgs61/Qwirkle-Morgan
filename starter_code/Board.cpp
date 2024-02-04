@@ -1,7 +1,5 @@
 // Board.cpp
 
-//change using namespace std; to the include statements
-
 #include <iostream>
 #include <algorithm>
 #include <iostream> // Include for std::cout, std::endl
@@ -17,6 +15,7 @@ using std::cin;
 using std::cout;
 using std::endl;
 using std::string;
+using std::to_string;
 // contains uppercase letters A to Z
 string labels[COLUMN_MAX];
 

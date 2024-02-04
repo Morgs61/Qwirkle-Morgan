@@ -55,6 +55,7 @@ int LinkedList::getSize() const
 void LinkedList::addTile(Tile *tile)
 {
     Node *newNode = new Node(tile, nullptr);
+
     if (head == nullptr)
     {
         head = newNode;
@@ -292,18 +293,15 @@ void LinkedList::remove_back()
 void LinkedList::push_back(Tile *tile)
 {
     Node *newNode = new Node(tile); // Create a new node with the given tile
-    if (head == nullptr)            // If the list is empty, set the new node as the head
+    if (head == nullptr)            // If the list is empty, set the new node as the head and tail
     {
         head = newNode;
+        tail = newNode;
     }
     else
     {
-        Node *current = head;
-        while (current->getNext() != nullptr) // Traverse the list to find the last node
-        {
-            current = current->getNext();
-        }
-        current->setNext(newNode); // Set the next pointer of the last node to the new node
+        tail->setNext(newNode); // Set the next pointer of the last node to the new node
+        tail = newNode; // Update the tail to the new node
     }
 }
 

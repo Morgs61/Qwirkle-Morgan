@@ -6,6 +6,7 @@ using namespace std;
 #include <iostream> // Include for std::cout, std::endl
 #include <vector>   // Include for std::vector
 #include "Board.h"
+#include <set>
 
 #define COLUMN_MAX 26
 #define COLUMN_MIN 1
@@ -396,20 +397,24 @@ void Board::setTileAtPosition(int row, int col, Tile *tile)
         std::cout << "Error: Position (" << row << ", " << col << ") is out of bounds." << std::endl;
     }
 }
+
+
+
 int Board::calculateScore(const std::vector<Tile *> &tilesToPlace, const std::vector<std::pair<int, int>> &positions) {
     int totalScore = 0;
     bool qwirkleDetected = false; // Flag to check for QWIRKLE
 
-    // Keep track of tiles that have already been scored in this move
-    std::vector<bool> tilesScored(tilesToPlace.size(), false);
+    // Keep track of positions of tiles that have already been scored in this move
+    std::set<std::pair<int, int>> scoredPositions;
 
     // Score each tile placement individually
     for (size_t i = 0; i < tilesToPlace.size(); ++i) {
         int row = positions[i].first;
         int col = positions[i].second;
 
-        // If this tile has already been scored in this move, skip it
-        if (tilesScored[i]) {
+        // If this position has already been scored in this move, skip it
+        if (scoredPositions.count({row, col}) > 0) {
+            std::cout << "Tile at position (" << row << ", " << col << ") has already been scored" << std::endl;
             continue;
         }
 
@@ -423,18 +428,22 @@ int Board::calculateScore(const std::vector<Tile *> &tilesToPlace, const std::ve
         // Check left
         for (int j = col - 1; j >= 0 && board[row * COLS + j] != nullptr; --j) {
             scoreHorizontal++;
+            scoredPositions.insert({row, j}); // Mark this position as scored
         }
         // Check right
         for (int j = col + 1; j < COLS && board[row * COLS + j] != nullptr; ++j) {
             scoreHorizontal++;
+            scoredPositions.insert({row, j}); // Mark this position as scored
         }
         // Check up
         for (int j = row - 1; j >= 0 && board[j * COLS + col] != nullptr; --j) {
             scoreVertical++;
+            scoredPositions.insert({j, col}); // Mark this position as scored
         }
         // Check down
         for (int j = row + 1; j < ROWS && board[j * COLS + col] != nullptr; ++j) {
             scoreVertical++;
+            scoredPositions.insert({j, col}); // Mark this position as scored
         }
 
         // If tile doesn't form a new sequence, score for that direction is 0 (excluding the tile itself)
@@ -452,9 +461,6 @@ int Board::calculateScore(const std::vector<Tile *> &tilesToPlace, const std::ve
         if (scoreVertical == 6) {
             qwirkleDetected = true;
         }
-
-        // Mark this tile as scored
-        tilesScored[i] = true;
 
         // Remove the tile after scoring
         board[row * COLS + col] = nullptr;
@@ -477,4 +483,6 @@ int Board::calculateScore(const std::vector<Tile *> &tilesToPlace, const std::ve
     // If the total score is 0, it must be the first move, and the score is 1
     return (totalScore == 0) ? 1 : totalScore;
 }
+
+
 

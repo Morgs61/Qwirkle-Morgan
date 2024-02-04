@@ -8,6 +8,11 @@ class LinkedList
 {
 public:
     LinkedList();
+    void initialize()
+    {
+        head = nullptr;
+        tail = nullptr;
+    }
     ~LinkedList();
     void addTile(Tile *tile);
     bool removeTile(Tile *tile);

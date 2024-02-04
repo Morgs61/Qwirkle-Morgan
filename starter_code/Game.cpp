@@ -143,7 +143,7 @@ void Game::launchGame()
                         // Convert the grid location to row and column
                         char gridLetter = location[0];
                         size_t row = (gridLetter >= 'A' && gridLetter <= 'Z') ? (gridLetter - 'A') : -1;
-                        size_t column = std::stoi(location.substr(1)) - 1; // Convert the rest of the string to a number
+                        size_t column = std::stoi(location.substr(1)); // Convert the rest of the string to a number
 
                         // Check if the row and column are valid
                         // TODO: Weird cast to size_t Check it this is needed. Unsure why I needed to add it - Alex

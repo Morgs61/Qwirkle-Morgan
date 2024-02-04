@@ -39,6 +39,7 @@ Game *LoadGame::loadGame(string filename)
     // Initialize game components
     Board *board = new Board();
     LinkedList *bag = new LinkedList(); // Bag initialized here
+    bag->initialize();                  // Reset the linked list
 
     // Read and store each line of the file
     string plyr1Name, plyr1Score, plyr1Hand, plyr2Name, plyr2Score, plyr2Hand, boardSize, boardState, bagContents, currentPlyr;
@@ -260,7 +261,7 @@ Board *LoadGame::loadBoardState(string boardState)
             }
 
             int row = token[atPos + 1] - 'A';
-            int col = stoi(token.substr(atPos + 2)) - 1;
+            int col = stoi(token.substr(atPos + 2));
 
             // Output the extracted information for debugging
             cout << "Colour: " << colour << ", Shape: " << shape << ", Row: " << row << ", Col: " << col << endl;

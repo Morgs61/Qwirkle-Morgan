@@ -144,7 +144,7 @@ bool LinkedList::removeTile(Tile *tile)
 
 void LinkedList::initializeAndShuffleBag()
 {
-// Get definitions from TileCodes.h
+    // Get definitions from TileCodes.h
     char colours[] = {RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE};
     int shapes[] = {CIRCLE, STAR_4, DIAMOND, SQUARE, STAR_6, CLOVER};
 
@@ -212,7 +212,6 @@ void LinkedList::shuffle()
     // Clean up
     delete[] nodes;
 }
-
 
 Node *LinkedList::begin()
 {

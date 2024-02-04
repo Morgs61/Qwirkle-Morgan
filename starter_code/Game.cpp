@@ -55,7 +55,7 @@ void Game::launchGame()
         //3.    Display the board
         board->displayBoard();
         //4.    Display the current player's hand        
-        std::cout << "\nYour hand is "<< std::endl;
+        std::cout << currentPlayer->getName() << " Your hand is "<< std::endl;
         currentPlayer->getHand()->displayHand();
         //5.    The user prompt  
         bool validActionSelected = false;
@@ -335,7 +335,7 @@ else if (choice == 2)
 
                     // Draw a new tile from the tile bag and add it to the player's hand
                     Tile *tileFromBag = bag->back();
-                    bag->pop_back();
+                    //bag->pop_back();
 
                     currentPlayer->getHand()->addTile(tileFromBag); // Pass the Tile* directly
 
@@ -344,8 +344,11 @@ else if (choice == 2)
                     currentPlayer->getHand()->displayHand();
                     cout << endl;
 
-                    cout << "Tile replaced. Proceeding with the game." << endl;
+                    cout << "Tile replaced. Proceeding with the game" << endl;
                     validInput = true;
+                    currentPlayer = (currentPlayer == player1) ? player2 : player1;
+                    cout << currentPlayer->getName() << "'s turn" << endl;
+                    currentPlayer->getHand()->displayHand();
                 }
             }
             catch (const std::invalid_argument &e)

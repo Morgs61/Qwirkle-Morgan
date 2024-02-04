@@ -129,14 +129,19 @@ void Game::launchGame()
             // Parse the tile and location from the command
             string tile = words[1];
             string location = words[3];
-
+            
             // Convert the grid location to row and column
             const int COLUMN_MAX =26; // Define the constant COLUMN_MAX with an appropriate value
 
             char gridLetter = location[0];
             size_t row = (gridLetter >= 'A' && gridLetter <= 'Z') ? (gridLetter - 'A') : -1;
             // Convert the rest of the string to a number
-            size_t column = std::stoi(location.substr(1)) - 1;
+size_t column;
+if (location.substr(1) == "0") {
+    column = 0;
+} else {
+    column = std::stoi(location.substr(1)) - 1;
+}
 
             // Check if the row and column are valid
             if (validInput && (row == static_cast<size_t>(-1) || row >= static_cast<size_t>(board->getSize()) || column >= COLUMN_MAX))

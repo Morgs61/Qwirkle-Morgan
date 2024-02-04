@@ -9,6 +9,7 @@
 #include <iostream>
 #include <algorithm>
 #include <random>
+#include <limits>
 using std::cin;
 using std::cout;
 using std::endl;
@@ -70,9 +71,20 @@ void Game::launchGame()
             cout << "4. Quit game\n";
             cout << "> ";
 
-            int choice;
-            cin >> choice;
-            cin.ignore();
+    int choice;
+    // Read an integer or handle non-integer input
+    //DO NOT DELETE THIS AS IT STOPS LOOPING
+    if (cin >> choice)
+    {
+        cin.ignore(); // Clear the input buffer
+        validActionSelected = true;
+    }
+    else
+    {
+        cout << "Invalid input. Please enter a valid option." << endl;
+        cin.clear(); // Clear the error flag
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
+    }
 
  if (choice == 1)
 {

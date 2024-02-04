@@ -15,10 +15,10 @@ LinkedList::~LinkedList()
     Node *current = head;
     while (current != nullptr)
     {
-        Node *next = current->next;
+        Node *nextNodePtr = current->nextNodePtr;
         delete current->tile; // Free the memory for the tile
         delete current;       // Free the memory for the node
-        current = next;
+        current = nextNodePtr;
     }
 }
 
@@ -34,7 +34,7 @@ Tile *LinkedList::getTile(int index)
             return current->tile;
         }
         count++;
-        current = current->next;
+        current = current->nextNodePtr;
     }
     return nullptr;
 }
@@ -47,7 +47,7 @@ int LinkedList::getSize() const
     while (current != nullptr)
     {
         size++;
-        current = current->next;
+        current = current->nextNodePtr;
     }
     return size;
 }
@@ -64,7 +64,7 @@ void LinkedList::addTile(Tile *tile)
     }
     else
     {
-        tail->next = newNode;
+        tail->nextNodePtr = newNode;
         tail = newNode;
     }
 }
@@ -80,7 +80,7 @@ void LinkedList::displayHand() const
     while (current != nullptr)
     {
         std::cout << "[" << current->tile->getColour() << "" << current->tile->getShape() << "] ";
-        current = current->next;
+        current = current->nextNodePtr;
     }
     std::cout << std::endl;
 }
@@ -98,7 +98,7 @@ bool LinkedList::containsTile(Tile *tile) const
             return true;
         }
 
-        current = current->next;
+        current = current->nextNodePtr;
     }
 
     // Tile not found
@@ -116,11 +116,11 @@ bool LinkedList::removeTile(Tile *tile)
         {
             if (previous == nullptr)
             {
-                head = current->next;
+                head = current->nextNodePtr;
             }
             else
             {
-                previous->next = current->next;
+                previous->nextNodePtr = current->nextNodePtr;
             }
 
             if (current == tail)
@@ -133,7 +133,7 @@ bool LinkedList::removeTile(Tile *tile)
         }
 
         previous = current;
-        current = current->next;
+        current = current->nextNodePtr;
     }
 
     return false; // Tile not found
@@ -141,7 +141,7 @@ bool LinkedList::removeTile(Tile *tile)
 
 void LinkedList::initializeAndShuffleBag()
 {
-// Get definitions from TileCodes.h
+    // Get definitions from TileCodes.h
     char colours[] = {RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE};
     int shapes[] = {CIRCLE, STAR_4, DIAMOND, SQUARE, STAR_6, CLOVER};
 
@@ -151,7 +151,7 @@ void LinkedList::initializeAndShuffleBag()
         for (int shape : shapes)
         {
             // log the tile being added
-            //std::cout << "Adding tile: [" << colour << ", " << shape << "]" << std::endl;
+            // std::cout << "Adding tile: [" << colour << ", " << shape << "]" << std::endl;
             // Add two pointers to each type of tile to the tile bag
             addTile(new Tile(colour, shape));
             addTile(new Tile(colour, shape));
@@ -181,7 +181,7 @@ void LinkedList::shuffle()
     while (current != nullptr)
     {
         nodes[i++] = current;
-        current = current->next;
+        current = current->nextNodePtr;
     }
     srand(static_cast<unsigned int>(time(nullptr)));
     // Shuffle the array of node pointers using the Fisher-Yates shuffle algorithm
@@ -202,14 +202,13 @@ void LinkedList::shuffle()
     tail = nodes[count - 1];
     for (int i = 0; i < count - 1; ++i)
     {
-        nodes[i]->next = nodes[i + 1];
+        nodes[i]->nextNodePtr = nodes[i + 1];
     }
-    nodes[count - 1]->next = nullptr;
+    nodes[count - 1]->nextNodePtr = nullptr;
 
     // Clean up
     delete[] nodes;
 }
-
 
 Node *LinkedList::begin()
 {
@@ -249,14 +248,14 @@ void LinkedList::pop_back()
     }
     // Traverse the list to find the second-to-last node
     Node *current = head;
-    while (current->next != tail)
+    while (current->nextNodePtr != tail)
     {
-        current = current->next;
+        current = current->nextNodePtr;
     }
     // Remove the last node
     delete tail;
     tail = current;
-    tail->next = nullptr;
+    tail->nextNodePtr = nullptr;
 }
 
 // removes the last tile in the linked list but preserves the tile object.
@@ -275,13 +274,13 @@ void LinkedList::remove_back()
     }
     // Traverse the list to find the second-to-last node
     Node *current = head;
-    while (current->next != tail)
+    while (current->nextNodePtr != tail)
     {
-        current = current->next;
+        current = current->nextNodePtr;
     }
     // Remove the last node
     tail = current;
-    tail->next = nullptr;
+    tail->nextNodePtr = nullptr;
 }
 
 void LinkedList::push_back(Tile *tile)
@@ -294,7 +293,7 @@ void LinkedList::push_back(Tile *tile)
     }
     else
     {
-        tail->next = newNode;
+        tail->nextNodePtr = newNode;
         tail = newNode;
     }
 }
@@ -310,14 +309,14 @@ std::string LinkedList::toString()
         {
             linkedListString = linkedListString + currentNode->getTile()->toString();
 
-            if (currentNode->getNext() == nullptr)
+            if (currentNode->getNextNodePtr() == nullptr)
             {
                 cont = false;
             }
             else
             {
                 linkedListString = linkedListString + ",";
-                currentNode = currentNode->getNext();
+                currentNode = currentNode->getNextNodePtr();
             }
         }
     }

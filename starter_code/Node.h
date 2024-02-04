@@ -7,7 +7,7 @@
 class Node
 {
 public:
-   Node(Tile *tile, Node *next);
+   Node(Tile *tile, Node *nextNodePtr);
    Node(Tile *tile);
    Node(Node &other);
    ~Node();
@@ -15,12 +15,12 @@ public:
    void clearNodeList();
 
    Tile *getTile();
-   Node *getNext();
-   void setNext(Node *next);
-   void setNextNullptr();
+   Node *getNextNodePtr();
+   void setNextNodePtr(Node *nextNodePtr);
+   void setNextNodePtrNullptr();
 
    Tile *tile;
-   Node *next;
+   Node *nextNodePtr;
 };
 
 #endif // ASSIGN2_NODE_H

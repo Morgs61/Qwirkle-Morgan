@@ -157,6 +157,7 @@ void loadGame()
     {
         cout << "\nQwirkle game successfully loaded." << endl;
         // Proceed with the loaded game, if needed
+        loadedGame->launchGame();
     }
     else
     {

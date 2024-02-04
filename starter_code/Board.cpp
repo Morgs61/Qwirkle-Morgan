@@ -1,6 +1,7 @@
 // Board.cpp
 
-using namespace std;
+//change using namespace std; to the include statements
+
 #include <iostream>
 #include <algorithm>
 #include <iostream> // Include for std::cout, std::endl
@@ -12,6 +13,10 @@ using namespace std;
 #define ROW_MAX 25
 #define ROW_MIN 0
 
+using std::cin;
+using std::cout;
+using std::endl;
+using std::string;
 // contains uppercase letters A to Z
 string labels[COLUMN_MAX];
 

@@ -380,7 +380,6 @@ void Board::setTileAtPosition(int row, int col, Tile *tile)
 }
 
 
-
 int Board::calculateScore(const std::vector<Tile *> &tilesToPlace, const std::vector<std::pair<int, int>> &positions) {
     int totalScore = 0;
     bool qwirkleDetected = false; // Flag to check for QWIRKLE
@@ -464,6 +463,5 @@ int Board::calculateScore(const std::vector<Tile *> &tilesToPlace, const std::ve
     // If the total score is 0, it must be the first move, and the score is 1
     return (totalScore == 0) ? 1 : totalScore;
 }
-
 
 

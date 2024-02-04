@@ -39,7 +39,7 @@ Game *LoadGame::loadGame(string filename)
     // Initialize game components
     Board *board = new Board();
     LinkedList *bag = new LinkedList(); // Bag initialized here
-    bag->initialize();                  // Reset the linked list
+    bag->initializeAndShuffleBag();     // Reset the linked list
 
     // Read and store each line of the file
     string plyr1Name, plyr1Score, plyr1Hand, plyr2Name, plyr2Score, plyr2Hand, boardSize, boardState, bagContents, currentPlyr;
@@ -128,6 +128,7 @@ LinkedList *LoadGame::loadTileBag(ifstream &file)
     getline(file, line); // Read a line from the file
     istringstream ss(line);
     LinkedList *bag = new LinkedList();
+    bag->initializeAndShuffleBag();
     char colour;
     int shape;
     while (ss >> colour >> shape)

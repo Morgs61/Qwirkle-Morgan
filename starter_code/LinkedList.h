@@ -7,12 +7,7 @@
 class LinkedList
 {
 public:
-    LinkedList();
-    void initialize()
-    {
-        head = nullptr;
-        tail = nullptr;
-    }
+    LinkedList();    
     ~LinkedList();
     void addTile(Tile *tile);
     bool removeTile(Tile *tile);

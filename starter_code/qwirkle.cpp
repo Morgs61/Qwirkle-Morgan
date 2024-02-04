@@ -27,6 +27,7 @@ void displayStudentInformation();
 void loadGame();
 bool checkSurroundingTilesMatch(const std::vector<std::vector<Tile *>> &board, int row, int col, Tile *tile);
 bool checkSameTypeTiles(const std::vector<Tile *> &tilesToPlace, const std::vector<std::pair<int, int>> &positions);
+Player* findStartingPlayer(Player* player1, Player* player2);
 
 int main(void)
 {
@@ -35,31 +36,31 @@ int main(void)
 
     // std::cout << "TODO: Implement Qwirkle!" << std::endl;
     // 2.1 Launch
-    cout << "Welcome to Qwirkle!" << endl;
+    cout << "\n Welcome to Qwirkle!" << endl;
     cout << "-----------------------" << endl;
 
     int choice = 0;
     bool quit = false;
 
-    while (!quit)
+while (!quit)
+{
+    displayMenu();
+    cout << "> ";
+    cin >> choice;
+
+    // If the extraction fails
+    if (cin.fail())
     {
-        displayMenu();
-        cout << "> ";
-        cin >> choice;
+        // Clear the error state
+        cin.clear();
 
-        // If the extraction fails
-        if (cin.fail())
-        {
-            // Clear the error state
-            cin.clear();
+        // Ignore the rest of the line
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-            // Ignore the rest of the line
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-            cout << "Invalid choice. Please enter a valid option." << endl;
-            continue;
-        }
-
+        cout << "Invalid choice. Please enter a valid option." << endl;
+    }
+    else
+    {
         if (choice == 1)
         {
             cout << "\nStarting a New Game" << endl;
@@ -73,7 +74,6 @@ int main(void)
         }
         else if (choice == 3)
         {
-
             displayStudentInformation();
         }
         else if (choice == 4)
@@ -86,17 +86,18 @@ int main(void)
             cout << "Invalid choice. Please enter a valid option." << endl;
         }
     }
-
-    return EXIT_SUCCESS;
 }
 
+return EXIT_SUCCESS;
+}
 void displayMenu()
 {
     cout << "\nMenu" << endl;
+    cout << "-----" << endl;
     cout << "1. New Game" << endl;
     cout << "2. Load Game" << endl;
     cout << "3. Credits (Show student information)" << endl;
-    cout << "4. Quit" << endl;
+    cout << "4. Quit \n" << endl;
 }
 
 // Function to check if a player name is valid
@@ -120,7 +121,7 @@ void displayStudentInformation()
 
     cout << "--------------------------------------" << endl;
     // Hardcoded information for 4 students
-    cout << "\nName: Michael Moon" << endl;
+    cout << "Name: Michael Moon" << endl;
     cout << "Student ID: s3523025" << endl;
     cout << "Email: s3523025@student.rmit.edu.au" << endl;
 
@@ -136,7 +137,6 @@ void displayStudentInformation()
     cout << "Student ID: s3858530" << endl;
     cout << "Email: s3858530@student.rmit.edu.au" << endl;
     cout << "--------------------------------------" << endl;
-    cout << "\n<Main Menu>" << endl;
 }
 
 void loadGame()
@@ -155,9 +155,24 @@ void loadGame()
     // Check if the game is successfully loaded
     if (loadedGame != nullptr)
     {
-        cout << "\nQwirkle game successfully loaded." << endl;
-        // Proceed with the loaded game, if needed
-        loadedGame->launchGame();
+        // File exists and is open
+
+        // Add validation for the file format (replace with your actual format check logic)
+        // For example, if you have a specific format, check if it matches
+        // Here, we assume a simple check by reading a line from the file
+        string line;
+        if (getline(file, line))
+        {
+            cout << "\nQwirkle game successfully loaded." << endl;
+
+        }
+        else
+        {
+            cout << "\nInvalid file format. Unable to load the game." << endl;
+        }
+
+        // Close the file
+        file.close();
     }
     else
     {
@@ -179,13 +194,15 @@ void startNewGame()
     string playerName1, playerName2;
     do
     {
-        cout << "\nEnter a name for player 1 (uppercase characters only): ";
+        cout << "\nEnter a name for player 1 (uppercase characters only): \n";
+        cout << "> ";
         cin >> playerName1;
     } while (!isValidPlayerName(playerName1));
 
     do
     {
-        cout << "\nEnter a name for player 2 (uppercase characters only): ";
+        cout << "\nEnter a name for player 2 (uppercase characters only): \n";
+        cout << "> ";
         cin >> playerName2;
     } while (!isValidPlayerName(playerName2));
 
@@ -194,14 +211,14 @@ void startNewGame()
     initializePlayerHand(playerHand1, bag); // Pass the address of tileBag
 
     // log the hand
-    std::cout << "Player 1's hand: ";
+    std::cout << playerName1 + "'s hand: ";
     playerHand1->displayHand();
 
     LinkedList *playerHand2 = new LinkedList();
     initializePlayerHand(playerHand2, bag); // Pass the address of tileBag
 
     // log the hand
-    std::cout << "Player 2's hand: ";
+    std::cout << playerName2 + "'s hand: ";
     playerHand2->displayHand();
 
     // Create players
@@ -211,14 +228,18 @@ void startNewGame()
     cin.ignore();
     cout << "\nLet's Play!" << endl;
 
+
     // Initialize the board
     Board *board = new Board(); // Instantiate Board
 
-    // ADD MOTOMICHI'S CODE HERE to determine the starting player
-    // TODO: MIC ADD IT HERE
+
+Player* startingPlayer = findStartingPlayer(player1, player2);
+std::cout << "Starting player is: " << startingPlayer->getName() << std::endl;
+
+    // Determine the starting player
 
     // Instantiate Game with the modified parameters
-    Game *game = new Game(player1, player2, bag, board, player1); // Pass player1, player2, bag, and currentPlayer
+    Game *game = new Game(player1, player2, bag, board, player2); // Pass player1, player2, bag, and currentPlayer
 
     // Call the correct method
     game->launchGame();
@@ -731,3 +752,88 @@ void initializePlayerHand(LinkedList *playerHand, LinkedList *bag)
 //         playerHand->addTile(tileFromBagPtr);
 //     }
 // }
+// Function to find starting player by finding the most matching types of tiles in hand
+Player* findStartingPlayer(Player* player1, Player* player2) {
+    Player* startingPlayer = nullptr;
+    int maxMatchingTiles = 0;
+
+    // Use unordered_map to track counts of color and shape for each player
+    std::unordered_map<char, int> colorCount1, colorCount2;
+    std::unordered_map<int, int> shapeCount1, shapeCount2;
+
+    // Check player 1's hand for matching tiles
+    for (int k = 0; k < player1->getHand()->getSize(); ++k) {
+        Tile* currentTile = player1->getHand()->getTile(k);
+
+        // Update color count
+        if (colorCount1.find(currentTile->getColour()) == colorCount1.end()) {
+            colorCount1[currentTile->getColour()] = 1;
+        } else {
+            colorCount1[currentTile->getColour()]++;
+        }
+
+        // Update shape count
+        if (shapeCount1.find(currentTile->getShape()) == shapeCount1.end()) {
+            shapeCount1[currentTile->getShape()] = 1;
+        } else {
+            shapeCount1[currentTile->getShape()]++;
+        }
+    }
+
+    // Check player 2's hand for matching tiles
+    for (int k = 0; k < player2->getHand()->getSize(); ++k) {
+        Tile* currentTile = player2->getHand()->getTile(k);
+
+        // Update color count
+        if (colorCount2.find(currentTile->getColour()) == colorCount2.end()) {
+            colorCount2[currentTile->getColour()] = 1;
+        } else {
+            colorCount2[currentTile->getColour()]++;
+        }
+
+        // Update shape count
+        if (shapeCount2.find(currentTile->getShape()) == shapeCount2.end()) {
+            shapeCount2[currentTile->getShape()] = 1;
+        } else {
+            shapeCount2[currentTile->getShape()]++;
+        }
+    }
+
+    // Find the maximum count of matching tiles (color or shape) for player 1
+    int matchingTiles1 = 0;
+    for (const auto& pair : colorCount1) {
+        matchingTiles1 = std::max(matchingTiles1, pair.second);
+    }
+
+    for (const auto& pair : shapeCount1) {
+        matchingTiles1 = std::max(matchingTiles1, pair.second);
+    }
+
+    // Find the maximum count of matching tiles (color or shape) for player 2
+    int matchingTiles2 = 0;
+    for (const auto& pair : colorCount2) {
+        matchingTiles2 = std::max(matchingTiles2, pair.second);
+    }
+
+    for (const auto& pair : shapeCount2) {
+        matchingTiles2 = std::max(matchingTiles2, pair.second);
+    }
+
+    // Print the count for each player
+    std::cout << player1->getName() << " has " << matchingTiles1 << " tiles able to be played." << std::endl;
+    std::cout << player2->getName() << " has " << matchingTiles2 << " tiles able to be played." << std::endl;
+
+
+    // Update startingPlayer based on the maximum count
+    if (matchingTiles1 > maxMatchingTiles || (matchingTiles1 == maxMatchingTiles && player1->getName() < player2->getName())) {
+        maxMatchingTiles = matchingTiles1;
+        startingPlayer = player1;
+    }
+
+    if (matchingTiles2 > maxMatchingTiles || (matchingTiles2 == maxMatchingTiles && player2->getName() < player1->getName())) {
+        maxMatchingTiles = matchingTiles2;
+        startingPlayer = player2;
+    }
+
+    return startingPlayer;
+}

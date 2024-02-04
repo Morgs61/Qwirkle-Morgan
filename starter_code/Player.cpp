@@ -45,3 +45,8 @@ LinkedList *Player::getHand()
 {
     return hand;
 }
+
+
+
+
+

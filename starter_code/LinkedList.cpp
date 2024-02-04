@@ -1,6 +1,6 @@
 #include <iostream>
 #include "LinkedList.h"
-
+#include <ctime>
 LinkedList::LinkedList()
 {
     head = nullptr;
@@ -144,7 +144,7 @@ bool LinkedList::removeTile(Tile *tile)
 
 void LinkedList::initializeAndShuffleBag()
 {
-    // Get definitions from TileCodes.h
+// Get definitions from TileCodes.h
     char colours[] = {RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE};
     int shapes[] = {CIRCLE, STAR_4, DIAMOND, SQUARE, STAR_6, CLOVER};
 
@@ -160,9 +160,14 @@ void LinkedList::initializeAndShuffleBag()
             addTile(new Tile(colour, shape));
         }
     }
-
+    // Print the contents of the bag
+    std::cout << "Tile Bag Contents: ";
+    displayHand(); // Display the contents of the tile bag
     // Shuffle the tile bag
     shuffle();
+    // Print the contents of the bag
+    std::cout << " after shuffle Tile Bag Contents: ";
+    displayHand(); // Display the contents of the tile bag
 }
 
 void LinkedList::shuffle()
@@ -181,7 +186,7 @@ void LinkedList::shuffle()
         nodes[i++] = current;
         current = current->next;
     }
-
+    srand(static_cast<unsigned int>(time(nullptr)));
     // Shuffle the array of node pointers using the Fisher-Yates shuffle algorithm
     for (int i = count - 1; i > 0; --i)
     {
@@ -207,6 +212,7 @@ void LinkedList::shuffle()
     // Clean up
     delete[] nodes;
 }
+
 
 Node *LinkedList::begin()
 {

@@ -287,6 +287,17 @@ Board *LoadGame::loadBoardState(string boardState)
 // Load bag contents from string representation and update the bag object
 void LoadGame::loadBagContents(LinkedList *bag, string bagContents)
 {
+    // Check if the bag pointer is null
+    if (bag == nullptr)
+    {
+        cerr << "Error: Bag pointer is null." << endl;
+        return;
+    }
+    else
+    {
+        cout << "Bag pointer is not null." << endl;
+    }
+
     // Parse the bag contents string and update the bag object accordingly
     stringstream ss(bagContents);
     string token;

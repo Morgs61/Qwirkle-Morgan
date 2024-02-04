@@ -52,8 +52,6 @@ int LinkedList::getSize() const
     return size;
 }
 
-// LinkedList.cpp
-
 void LinkedList::addTile(Tile *tile)
 {
     Node *newNode = new Node(tile, nullptr);

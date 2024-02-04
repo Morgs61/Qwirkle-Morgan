@@ -44,9 +44,10 @@ void Game::launchGame()
     while (!emptyHandExists)
     {
         currentPlayer = findStartingPlayer(player1, player2);
-        currentPlayer->getHand()->displayHand();
+        
+        
         std::cout << "\n"
-        // 1.    Display the current player's name and hand
+        // 1.    Display the current player's name
         << currentPlayer->getName() << ", it's your turn" << std::endl;
         // 2.    Display the Score of player A
         std::cout << "Score for " << player1->getName() << ": " << player1->getScore() << std::endl;
@@ -55,7 +56,8 @@ void Game::launchGame()
         // 3.    Display the board
         board->displayBoard();
         // 4.    Display the current player's hand
-        
+        std::cout << currentPlayer->getName() << " Your hand is " << std::endl;
+        currentPlayer->getHand()->displayHand();
 
         // 5.    The user prompt
         bool validActionSelected = false;

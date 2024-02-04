@@ -177,11 +177,8 @@ void loadGame()
 
 void startNewGame()
 {
-    // Number of players
-    // int numPlayers = 2;
-
     // Initialize and shuffle the tile bag
-    cout << "making the bag" << std::endl;
+    //cout << "making the bag" << std::endl;
     LinkedList *bag = new LinkedList(); // Instantiate LinkedList
     bag->initializeAndShuffleBag();     // Populate the bag
 
@@ -205,16 +202,16 @@ void startNewGame()
     LinkedList *playerHand1 = new LinkedList();
     initializePlayerHand(playerHand1, bag); // Pass the address of tileBag
 
-    // log the hand
-    std::cout << playerName1 + "'s hand: ";
-    playerHand1->displayHand();
+    // // log the hand
+    // std::cout << playerName1 + "'s hand: ";
+    // playerHand1->displayHand();
 
     LinkedList *playerHand2 = new LinkedList();
     initializePlayerHand(playerHand2, bag); // Pass the address of tileBag
 
-    // log the hand
-    std::cout << playerName2 + "'s hand: ";
-    playerHand2->displayHand();
+    // // log the hand
+    // std::cout << playerName2 + "'s hand: ";
+    // playerHand2->displayHand();
 
     // Create players
     Player *player1 = new Player(playerName1, 0, playerHand1);
@@ -325,8 +322,8 @@ Player* findStartingPlayer(Player* player1, Player* player2) {
     }
 
     // Print the count for each player
-    std::cout << player1->getName() << " has " << matchingTiles1 << " tiles able to be played." << std::endl;
-    std::cout << player2->getName() << " has " << matchingTiles2 << " tiles able to be played." << std::endl;
+    // std::cout << player1->getName() << " has " << matchingTiles1 << " tiles able to be played." << std::endl;
+    // std::cout << player2->getName() << " has " << matchingTiles2 << " tiles able to be played." << std::endl;
 
 
     // Update startingPlayer based on the maximum count

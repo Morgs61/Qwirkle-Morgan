@@ -5,7 +5,7 @@
 #include "Player.h"
 #include "Tile.h"
 #include "Board.h"
-
+#include "qwirkle.h"
 #include <iostream>
 #include <algorithm>
 #include <random>
@@ -44,8 +44,8 @@ void Game::launchGame()
     while (!emptyHandExists)
     {
         std::cout << "\n"
-                  // 1.    Display the current player's name and hand
-                  << currentPlayer->getName() << ", it's your turn" << std::endl;
+        // 1.    Display the current player's name and hand
+        << currentPlayer->getName() << ", it's your turn" << std::endl;
         // 2.    Display the Score of player A
         std::cout << "Score for " << player1->getName() << ": " << player1->getScore() << std::endl;
         // 2.    Display the Score of player B
@@ -53,6 +53,8 @@ void Game::launchGame()
         // 3.    Display the board
         board->displayBoard();
         // 4.    Display the current player's hand
+        
+        currentPlayer = findStartingPlayer(player1, player2);
         std::cout << currentPlayer->getName() << " Your hand is " << std::endl;
         currentPlayer->getHand()->displayHand();
         // 5.    The user prompt

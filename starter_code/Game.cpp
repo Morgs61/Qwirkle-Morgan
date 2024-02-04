@@ -201,8 +201,10 @@ void Game::launchGame()
                         }
                     }
 
+                    int MAX_HAND_SIZE = 6;
+
                     // Draw new tiles from the tile bag and add them to the player's hand
-                    for (int k = 0; k < numTiles && !bag->isEmpty(); ++k)
+                    for (int k = 0; k < numTiles && !bag->isEmpty() && currentPlayer->getHand()->getSize() < MAX_HAND_SIZE; ++k)
                     {
                         // Get the tile from the back of the bag
                         Tile *tileFromBagPtr = bag->back();

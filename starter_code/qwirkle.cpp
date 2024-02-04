@@ -228,8 +228,8 @@ void startNewGame()
     Board *board = new Board(); // Instantiate Board
 
 
-Player* startingPlayer = findStartingPlayer(player1, player2);
-std::cout << "Starting player is: " << startingPlayer->getName() << std::endl;
+//Player* startingPlayer = findStartingPlayer(player1, player2);
+//std::cout << "Starting player is: " << startingPlayer->getName() << std::endl;
 
     // Determine the starting player
 

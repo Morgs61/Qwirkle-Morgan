@@ -43,6 +43,8 @@ void Game::launchGame()
     // progress the game until at least one player has an empty hand.
     while (!emptyHandExists)
     {
+        currentPlayer = findStartingPlayer(player1, player2);
+        currentPlayer->getHand()->displayHand();
         std::cout << "\n"
         // 1.    Display the current player's name and hand
         << currentPlayer->getName() << ", it's your turn" << std::endl;
@@ -54,9 +56,7 @@ void Game::launchGame()
         board->displayBoard();
         // 4.    Display the current player's hand
         
-        currentPlayer = findStartingPlayer(player1, player2);
-        std::cout << currentPlayer->getName() << " Your hand is " << std::endl;
-        currentPlayer->getHand()->displayHand();
+
         // 5.    The user prompt
         bool validActionSelected = false;
         while (!validActionSelected)
@@ -110,7 +110,7 @@ void Game::launchGame()
         else
         {
             // Check that the command is correctly formatted
-            if (words.size() != 4 || words[0] != "place" || words[3].length() != 2)
+            if (words.size() != 4 || words[0] != "place" || words[3].length() >= 4)
             {
                 cout << "Invalid command. Please try again." << endl;
                 cout << "\n"
@@ -124,14 +124,14 @@ void Game::launchGame()
                 // Parse the tile and location from the command
                 string tile = words[1];
                 string location = words[3];
-
+                const int COLUMN_MAX = 15;
                 // Convert the grid location to row and column
                 char gridLetter = location[0];
                 size_t row = (gridLetter >= 'A' && gridLetter <= 'Z') ? (gridLetter - 'A') : -1;
                 size_t column = std::stoi(location.substr(1)) - 1; // Convert the rest of the string to a number
 
                 // Check if the row and column are valid
-                if (row == static_cast<size_t>(-1) || row >= static_cast<size_t>(board->getSize()) || column == static_cast<size_t>(-1) || column >= static_cast<size_t>(board[0].size()))
+                if (activeTurn && (row == static_cast<size_t>(-1) || row >= static_cast<size_t>(board->getSize()) || column >= COLUMN_MAX))
                 {
                     cout << "Invalid grid location. Please try again." << endl;
                 }
@@ -162,9 +162,10 @@ void Game::launchGame()
                     else
                     {
                         cout << "Tile found in hand. Proceeding with the game." << endl;
+                        
                         tilesToPlace.push_back(tileToCheck);
                         tilePositions.push_back(std::make_pair(row, column));
-
+                        
                         // Check if the tiles being placed have the same color, shape, and share the same column or row
                         if (!board->checkSameTypeTiles(tilesToPlace, tilePositions))
                         {
@@ -175,6 +176,7 @@ void Game::launchGame()
                             ++numTiles;
                             board->setTileAtPosition(row, column, tileToCheck);
                             board->displayBoard();
+                            
                         }
                     }
 
@@ -193,7 +195,7 @@ void Game::launchGame()
             // Get the tile from the back of the bag
             Tile *tileFromBagPtr = bag->back();
             bag->remove_back();
-
+            
             // Add the new tile to the player's hand
             currentPlayer->getHand()->addTile(tileFromBagPtr);
         }

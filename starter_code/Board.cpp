@@ -30,7 +30,7 @@ Board::Board()
 }
 bool checkTilePlacement(const std::vector<std::vector<Tile *>> &board, int row, int col);
 
-// Decalre fixed size of board here
+// Declare fixed size of board here
 int BOARD_SIZE = 15;
 
 Board::~Board()
@@ -86,26 +86,30 @@ void Board::displayBoard()
         cout << endl;
     }
 
-// Print the board content
-for (int i = 0; i < ROWS; i++)
-{
-    cout << labels[i] << " "; // Print row labels
-    for (int j = 0; j < ROWS; ++j)
+    // Print the board content
+    for (int i = 0; i < ROWS; i++)
     {
-        // Check if a tile exists at the current position
-        if (board[i * COLS + j] != nullptr)
+        cout << labels[i] << " "; // Print row labels
+        for (int j = 0; j < COLS; ++j)
         {
-            string tileString = board[i * COLS + j]->toString();
-            cout << "|" << tileString; // Print the tile's string representation
+            // Check if a tile exists at the current position
+            if (board[i * COLS + j] != nullptr)
+            {
+                string tileString = board[i * COLS + j]->toString();
+                cout << tileString + "|"; // Print the tile's string representation
+            }
+            // Print separators or empty spaces if no tile is present
+            else if (j == 0)
+            {
+                cout << "|";
+            }
+            else
+            {
+                cout << "  |";
+            }
         }
-        else
-        {
-            cout << "|  "; // Print empty space for missing tile
-        }
+        cout << endl;
     }
-    cout << "|" << endl; // Close the last cell and end the row
-}
-
 }
 
 void Board::placeTile(Tile *tile, int row, int col)
@@ -463,6 +467,3 @@ int Board::calculateScore(const std::vector<Tile *> &tilesToPlace, const std::ve
     // If the total score is 0, it must be the first move, and the score is 1
     return (totalScore == 0) ? 1 : totalScore;
 }
-
-
-

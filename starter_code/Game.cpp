@@ -70,60 +70,10 @@ void Game::launchGame()
             cout << "4. Quit game\n";
             cout << "> ";
 
-    int choice;
-    // Read an integer or handle non-integer input
-    //DO NOT DELETE THIS AS IT STOPS LOOPING
-    if (cin >> choice)
-    {
-        cin.ignore(); // Clear the input buffer
-        validActionSelected = true;
-    }
-    else
-    {
-        cout << "Invalid input. Please enter a valid option." << endl;
-        cin.clear(); // Clear the error flag
-        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
-    }
-
- if (choice == 1)
-{
-    int numTiles = 0;
-    vector<Tile *> tilesToPlace;
-    vector<std::pair<int, int>> tilePositions;
-    int j = 0;
-    bool activeTurn = false;
-
-    while (!activeTurn && j < 6 && currentPlayer->getHand()->getSize() > 0)
-    {
-        currentPlayer->getHand()->displayHand();
-        cout << "Place tile " << j + 1 << " using the format: place <tile> at <grid location>" << endl;
-        cout << "Enter 'end' to end your turn." << endl;
-        cout << ">";
-
-        string command;
-        getline(cin, command);
-
-        // Split the command into words
-        vector<string> words;
-        size_t pos = 0;
-        while ((pos = command.find(' ')) != string::npos)
-        {
-            words.push_back(command.substr(0, pos));
-            command.erase(0, pos + 1);
-        }
-        words.push_back(command);
-
-        // Check if the player wants to end their turn
-        if (words.size() == 1 && words[0] == "end")
-        {
-            cout << "Ending turn." << endl;
-            activeTurn = true;
-            currentPlayer = (currentPlayer == player1) ? player2 : player1;
-        }
-        else
-        {
-            // Check that the command is correctly formatted
-            if (words.size() != 4 || words[0] != "place" || words[3].length() >= 4)
+            int choice;
+            // Read an integer or handle non-integer input
+            // DO NOT DELETE THIS AS IT STOPS LOOPING
+            if (cin >> choice)
             {
                 cin.ignore(); // Clear the input buffer
                 validActionSelected = true;

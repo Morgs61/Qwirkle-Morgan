@@ -210,6 +210,7 @@ void LinkedList::shuffle()
     delete[] nodes;
 }
 
+
 Node *LinkedList::begin()
 {
     return head;

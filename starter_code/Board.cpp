@@ -5,6 +5,7 @@
 #include <iostream> // Include for std::cout, std::endl
 #include <vector>   // Include for std::vector
 #include "Board.h"
+#include <set>
 
 #define COLUMN_MAX 26
 #define COLUMN_MIN 1
@@ -85,30 +86,26 @@ void Board::displayBoard()
         cout << endl;
     }
 
-    // Print the board content
-    for (int i = 0; i < ROWS; i++)
+// Print the board content
+for (int i = 0; i < ROWS; i++)
+{
+    cout << labels[i] << " "; // Print row labels
+    for (int j = 0; j < ROWS; ++j)
     {
-        cout << labels[i] << " "; // Print row labels
-        for (int j = 0; j < COLS; ++j)
+        // Check if a tile exists at the current position
+        if (board[i * COLS + j] != nullptr)
         {
-            // Check if a tile exists at the current position
-            if (board[i * COLS + j] != nullptr)
-            {
-                string tileString = board[i * COLS + j]->toString();
-                cout << tileString + "|"; // Print the tile's string representation
-            }
-            // Print separators or empty spaces if no tile is present
-            else if (j == 0)
-            {
-                cout << "|";
-            }
-            else
-            {
-                cout << "  |";
-            }
+            string tileString = board[i * COLS + j]->toString();
+            cout << "|" << tileString; // Print the tile's string representation
         }
-        cout << endl;
+        else
+        {
+            cout << "|  "; // Print empty space for missing tile
+        }
     }
+    cout << "|" << endl; // Close the last cell and end the row
+}
+
 }
 
 void Board::placeTile(Tile *tile, int row, int col)
@@ -382,13 +379,25 @@ void Board::setTileAtPosition(int row, int col, Tile *tile)
     }
 }
 
+
+
 int Board::calculateScore(const std::vector<Tile *> &tilesToPlace, const std::vector<std::pair<int, int>> &positions) {
     int totalScore = 0;
+    bool qwirkleDetected = false; // Flag to check for QWIRKLE
+
+    // Keep track of positions of tiles that have already been scored in this move
+    std::set<std::pair<int, int>> scoredPositions;
 
     // Score each tile placement individually
     for (size_t i = 0; i < tilesToPlace.size(); ++i) {
         int row = positions[i].first;
         int col = positions[i].second;
+
+        // If this position has already been scored in this move, skip it
+        if (scoredPositions.count({row, col}) > 0) {
+            std::cout << "Tile at position (" << row << ", " << col << ") has already been scored" << std::endl;
+            continue;
+        }
 
         // Temporarily place tile for scoring
         board[row * COLS + col] = tilesToPlace[i];
@@ -398,31 +407,63 @@ int Board::calculateScore(const std::vector<Tile *> &tilesToPlace, const std::ve
         int scoreVertical = 1;
 
         // Check left
-        for (int j = col - 1; j >= 0 && board[row * COLS + j] != nullptr; --j) scoreHorizontal++;
+        for (int j = col - 1; j >= 0 && board[row * COLS + j] != nullptr; --j) {
+            scoreHorizontal++;
+            scoredPositions.insert({row, j}); // Mark this position as scored
+        }
         // Check right
-        for (int j = col + 1; j < COLS && board[row * COLS + j] != nullptr; ++j) scoreHorizontal++;
+        for (int j = col + 1; j < COLS && board[row * COLS + j] != nullptr; ++j) {
+            scoreHorizontal++;
+            scoredPositions.insert({row, j}); // Mark this position as scored
+        }
         // Check up
-        for (int j = row - 1; j >= 0 && board[j * COLS + col] != nullptr; --j) scoreVertical++;
+        for (int j = row - 1; j >= 0 && board[j * COLS + col] != nullptr; --j) {
+            scoreVertical++;
+            scoredPositions.insert({j, col}); // Mark this position as scored
+        }
         // Check down
-        for (int j = row + 1; j < ROWS && board[j * COLS + col] != nullptr; ++j) scoreVertical++;
+        for (int j = row + 1; j < ROWS && board[j * COLS + col] != nullptr; ++j) {
+            scoreVertical++;
+            scoredPositions.insert({j, col}); // Mark this position as scored
+        }
 
         // If tile doesn't form a new sequence, score for that direction is 0 (excluding the tile itself)
-        if (scoreHorizontal == 1) scoreHorizontal = 0;
-        if (scoreVertical == 1) scoreVertical = 0;
-
-
-        totalScore += scoreHorizontal + scoreVertical;
+        if (scoreHorizontal > 1) {
+            totalScore += scoreHorizontal;
+        }
+        if (scoreVertical > 1) {
+            totalScore += scoreVertical;
+        }
+        // Check for QWIRKLE horizontally
+        if (scoreHorizontal == 6) {
+            qwirkleDetected = true;
+        }
+        // Check for QWIRKLE vertically
+        if (scoreVertical == 6) {
+            qwirkleDetected = true;
+        }
 
         // Remove the tile after scoring
-        //board[row * COLS + col] = nullptr;
+        board[row * COLS + col] = nullptr;
     }
-//    // Restore tiles placed for accurate game state
-//    for (size_t i = 0; i < tilesToPlace.size(); ++i) {
-//        int row = positions[i].first;
-//        int col = positions[i].second;
-//        board[row * COLS + col] = tilesToPlace[i];
-//    }
+
+    // If QWIRKLE is detected, add a 6-point bonus
+    if (qwirkleDetected) {
+        totalScore += 6;
+        std::cout << "QWIRKLE!" << std::endl;
+    }
+
+    // Restore tiles placed for an accurate game state
+    for (size_t i = 0; i < tilesToPlace.size(); ++i) {
+        int row = positions[i].first;
+        int col = positions[i].second;
+        board[row * COLS + col] = tilesToPlace[i];
+    }
+
     std::cout << "Score for this move: " << totalScore << std::endl;
-    // if total score is 0, It must be the first move and the score is 1
-    return totalScore;
+    // If the total score is 0, it must be the first move, and the score is 1
+    return (totalScore == 0) ? 1 : totalScore;
 }
+
+
+

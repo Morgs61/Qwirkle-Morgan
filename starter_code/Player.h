@@ -66,6 +66,8 @@ public:
         hand = newHand;
         return oldHand;
     }
+    //Player* findStartingPlayer(Player* player1, Player* player2);
+
 };
 
 #endif // APT2023_A2_PLAYER_H

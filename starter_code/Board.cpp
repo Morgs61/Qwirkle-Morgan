@@ -86,31 +86,28 @@ void Board::displayBoard()
         cout << endl;
     }
 
-    // Print the board content
-    for (int i = 0; i < ROWS; i++)
+// Print the board content
+for (int i = 0; i < ROWS; i++)
+{
+    cout << labels[i] << " "; // Print row labels
+    for (int j = 0; j < ROWS; ++j)
     {
-        cout << labels[i] << " "; // Print row labels
-        for (int j = 0; j < COLS; ++j)
+        // Check if a tile exists at the current position
+        if (board[i * COLS + j] != nullptr)
         {
-            // Check if a tile exists at the current position
-            if (board[i * COLS + j] != nullptr)
-            {
-                string tileString = board[i * COLS + j]->toString();
-                cout << tileString + "|"; // Print the tile's string representation
-            }
-            // Print separators or empty spaces if no tile is present
-            else if (j == 0)
-            {
-                cout << "|";
-            }
-            else
-            {
-                cout << "  |";
-            }
+            string tileString = board[i * COLS + j]->toString();
+            cout << "|" << tileString; // Print the tile's string representation
         }
-        cout << endl;
+        else
+        {
+            cout << "|  "; // Print empty space for missing tile
+        }
     }
+    cout << "|" << endl; // Close the last cell and end the row
 }
+
+}
+
 
 void Board::placeTile(Tile *tile, int row, int col)
 {
@@ -442,11 +439,8 @@ int Board::calculateScore(const std::vector<Tile *> &tilesToPlace, const std::ve
             if (scoreVertical == 6) {
                 qwirkleDetected = true;
             }
-
             // Remove the tile after scoring
             board[row * COLS + col] = nullptr;
-        } else {
-            std::cout << "Tile at position (" << row << ", " << col << ") has already been scored" << std::endl;
         }
     }
 
@@ -462,8 +456,12 @@ int Board::calculateScore(const std::vector<Tile *> &tilesToPlace, const std::ve
         int col = positions[i].second;
         board[row * COLS + col] = tilesToPlace[i];
     }
-
+    if (totalScore == 0) {
+        std::cout << "Score for this move: " << 1 << std::endl;
+    }
+    else {
     std::cout << "Score for this move: " << totalScore << std::endl;
     // If the total score is 0, it must be the first move, and the score is 1
+    }
     return (totalScore == 0) ? 1 : totalScore;
 }

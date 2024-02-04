@@ -44,7 +44,7 @@ void Game::launchGame()
     // progress the game until at least one player has an empty hand.
     while (!emptyHandExists)
     {
-        currentPlayer = findStartingPlayer(player1, player2);
+        //currentPlayer = findStartingPlayer(player1, player2);
 
         std::cout << "\n"
                   // 1.    Display the current player's name
@@ -118,7 +118,7 @@ void Game::launchGame()
                     {
                         cout << "Ending turn." << endl;
                         activeTurn = true;
-                        currentPlayer = (currentPlayer == player1) ? player2 : player1;
+                        //currentPlayer = (currentPlayer == player1) ? player2 : player1;
                     }
                     else
                     {
@@ -201,6 +201,12 @@ void Game::launchGame()
                         }
                     }
 
+                }
+                // TODO: update scoring methods
+                int score = board->calculateScore(tilesToPlace, tilePositions);
+
+                // add the score to the player's score
+                currentPlayer->addScore(score);
                     int MAX_HAND_SIZE = 6;
 
                     // Draw new tiles from the tile bag and add them to the player's hand
@@ -214,11 +220,7 @@ void Game::launchGame()
                         currentPlayer->getHand()->addTile(tileFromBagPtr);
                     }
 
-                    // TODO: update scoring methods
-                    int score = board->calculateScore(tilesToPlace, tilePositions);
 
-                    // add the score to the player's score
-                    currentPlayer->addScore(score);
 
                     // output the player hand
                     cout << "Player's hand after adding a new tile: ";
@@ -228,7 +230,8 @@ void Game::launchGame()
                     cout << "\n"
                          << currentPlayer->getName() << "'s hand: ";
                     currentPlayer->getHand()->displayHand();
-                }
+                validActionSelected = true;
+
             }
             else if (choice == 2)
             {
@@ -331,9 +334,9 @@ void Game::launchGame()
 
                                 cout << "Tile replaced. Proceeding with the game" << endl;
                                 validInput = true;
-                                currentPlayer = (currentPlayer == player1) ? player2 : player1;
-                                cout << currentPlayer->getName() << "'s turn" << endl;
-                                currentPlayer->getHand()->displayHand();
+                                // currentPlayer = (currentPlayer == player1) ? player2 : player1;
+                                // cout << currentPlayer->getName() << "'s turn" << endl;
+                                // currentPlayer->getHand()->displayHand();
                             }
                         }
                         catch (const std::invalid_argument &e)

@@ -225,13 +225,13 @@ void startNewGame()
     Board *board = new Board(); // Instantiate Board
 
 
-//Player* startingPlayer = findStartingPlayer(player1, player2);
-//std::cout << "Starting player is: " << startingPlayer->getName() << std::endl;
+Player* startingPlayer = findStartingPlayer(player1, player2);
+std::cout << "Starting player is: " << startingPlayer->getName() << std::endl;
 
     // Determine the starting player
 
     // Instantiate Game with the modified parameters
-    Game *game = new Game(player1, player2, bag, board, player2); // Pass player1, player2, bag, and currentPlayer
+    Game *game = new Game(player1, player2, bag, board, startingPlayer); // Pass player1, player2, bag, and currentPlayer
 
     // Call the correct method
     game->launchGame();
@@ -322,8 +322,8 @@ Player* findStartingPlayer(Player* player1, Player* player2) {
     }
 
     // Print the count for each player
-    // std::cout << player1->getName() << " has " << matchingTiles1 << " tiles able to be played." << std::endl;
-    // std::cout << player2->getName() << " has " << matchingTiles2 << " tiles able to be played." << std::endl;
+     std::cout << player1->getName() << " has " << matchingTiles1 << " tiles able to be played." << std::endl;
+     std::cout << player2->getName() << " has " << matchingTiles2 << " tiles able to be played." << std::endl;
 
 
     // Update startingPlayer based on the maximum count

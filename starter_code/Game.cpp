@@ -276,7 +276,7 @@ void Game::launchGame()
 
                         string color = string(1, tile[0]);
                         string shape = tile.substr(1);
-
+            //cout << "Parsed color: " << color << ", Parsed shape: " << shape << endl;
                         try
                         {
                             // Attempt to create a tile with the provided color and shape
@@ -301,6 +301,7 @@ void Game::launchGame()
                                 currentPlayer->getHand()->removeTile(tileToReplace);
 
                                 // Add the replaced tile back to the tile bag
+                                cout << "Tile added back to the tile bag: [" << tileToReplace->getColour() << ", " << tileToReplace->getShape() << "]" << endl;
                                 bag->push_back(tileToReplace);
 
                                 // Print the tile bag before shuffling

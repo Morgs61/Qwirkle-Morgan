@@ -276,7 +276,7 @@ void Game::launchGame()
 
                         string color = string(1, tile[0]);
                         string shape = tile.substr(1);
-            //cout << "Parsed color: " << color << ", Parsed shape: " << shape << endl;
+                        //cout << "Parsed color: " << color << ", Parsed shape: " << shape << endl;
                         try
                         {
                             // Attempt to create a tile with the provided color and shape
@@ -299,11 +299,11 @@ void Game::launchGame()
                             {
                                 // Remove the tile from the player's hand
                                 currentPlayer->getHand()->removeTile(tileToReplace);
-
+                                cout << "1.The size of the tile bag is now: " << bag->getSize() << endl;
                                 // Add the replaced tile back to the tile bag
                                 cout << "Tile added back to the tile bag: [" << tileToReplace->getColour() << ", " << tileToReplace->getShape() << "]" << endl;
                                 bag->push_back(tileToReplace);
-
+                                cout << "2.The size of the tile bag is now: " << bag->getSize() << endl;
                                 // Print the tile bag before shuffling
                                 cout << "Tile bag before shuffling: ";
                                 for (Node *current = bag->begin(); current != bag->end(); current = current->nextNodePtr)
@@ -321,23 +321,37 @@ void Game::launchGame()
                                     cout << "[" << current->tile->getColour() << ", " << current->tile->getShape() << "] ";
                                 }
                                 cout << endl;
-
+                                 
                                 // Draw a new tile from the tile bag and add it to the player's hand
                                 Tile *tileFromBag = bag->back();
-                                // bag->pop_back();
+                                bag->remove_back();
 
                                 currentPlayer->getHand()->addTile(tileFromBag); // Pass the Tile* directly
+
+                                // Print the tile added to the player's hand
+                                cout << "Tile added to " << currentPlayer->getName() << "'s hand: [" << tileFromBag->getColour() << ", " << tileFromBag->getShape() << "]" << endl;
+
+                                // Print the player's hand after adding the tile
+                                cout << currentPlayer->getName() << "'s hand after adding a tile: ";
+                                currentPlayer->getHand()->displayHand();
+                                cout << endl;
 
                                 // Print the player's hand after a new tile is added
                                 cout << "Player's hand after adding a new tile: ";
                                 currentPlayer->getHand()->displayHand();
                                 cout << endl;
-
-                                cout << "Tile replaced. Proceeding with the game" << endl;
+                                                                cout << "Tile bag after shuffling: ";
+                                for (Node *current = bag->begin(); current != bag->end(); current = current->nextNodePtr)
+                                {
+                                    cout << "[" << current->tile->getColour() << ", " << current->tile->getShape() << "] ";
+                                }
+                                cout << endl;
+                                                                cout << "Tile replaced. Proceeding with the game" << endl;
                                 validInput = true;
                                 // currentPlayer = (currentPlayer == player1) ? player2 : player1;
                                 // cout << currentPlayer->getName() << "'s turn" << endl;
                                 // currentPlayer->getHand()->displayHand();
+                                cout << "The size of the tile bag is now: " << bag->getSize() << endl;
                             }
                         }
                         catch (const std::invalid_argument &e)

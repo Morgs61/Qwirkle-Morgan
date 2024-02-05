@@ -26,6 +26,7 @@ public:
     void replaceTile();
     void saveGame();
     bool isGameComplete();
+	void declareWinner();
 
 private:
     Player *player1;

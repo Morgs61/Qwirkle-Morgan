@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <random>
 #include <limits>
+#include <iomanip>
 using std::cin;
 using std::cout;
 using std::endl;
@@ -73,6 +74,7 @@ void Game::launchGame() {
         // Check if the game is complete
         gameComplete = isGameComplete();
     }
+	declareWinner();
 }
 
 // Check if any player has an empty hand
@@ -314,5 +316,25 @@ void Game::saveGame() {
     SaveGame::saveGameState(filename, player1, player2, board, bag, currentPlayer);
     cout << "Game successfully saved" << endl;
 }
+
+void Game::declareWinner() {
+    std::cout << "Game over" << endl;
+    std::cout << "\nScore for " << player1->getName() << ": " << player1->getScore() << std::endl;
+    std::cout << "Score for " << player2->getName() << ": " << player2->getScore() << std::endl;
+	std::cout << "Player ";
+
+    if (player1->getScore() > player2->getScore()) {
+        std::cout << player1->getName() << " won!" << std::endl;
+    }
+    else if (player1->getScore() < player2->getScore()) {
+        std::cout << player2->getName() << " won!" << std::endl;
+    }
+    else {
+        std::cout << "It's a draw!" << std::endl;
+    }
+    std::cout << "\nGoodbye" << std::endl;
+	exit(0);
+}
+
 
 

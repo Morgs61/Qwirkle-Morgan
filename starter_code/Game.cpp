@@ -60,11 +60,11 @@ void Game::launchGame() {
                 saveGame();
             }
             else if (menuChoice == 4) {
+                cout << "Quitting game..." << endl;
                 return;
             }
             else {
-                cout << "Quitting game..." << endl;
-                return;
+                cout << "Invalid choice. Please enter a valid option." << endl;
             }
         }
         // Switch players

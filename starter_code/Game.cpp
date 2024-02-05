@@ -137,7 +137,7 @@ bool Game::validateTilePlacement(vector<string>& words, vector<Tile*>& tilesToPl
     // Parse the tile and location from the command
     string tile = words[1];
     string location = words[3];
-    const int COLUMN_MAX = 15;
+    const int COLUMN_MAX = 26;
     // Convert the grid location to row and column
     char gridLetter = location[0];
     size_t row = (gridLetter >= 'A' && gridLetter <= 'Z') ? (gridLetter - 'A') : -1;
@@ -209,8 +209,15 @@ void Game::placeTiles() {
 
         // Check if the player wants to end their turn
         if (words.size() == 1 && words[0] == "end") {
-            cout << "Ending turn." << endl;
-            activeTurn = true;
+            if (numTiles == 0) {
+                cout << "You must place at least one tile." << endl;
+                activeTurn = false;
+            }
+            else
+            {
+                cout << "Ending turn." << endl;
+                activeTurn = true;
+            }
         }
         else {
             // Check that the command is correctly formatted

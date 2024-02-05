@@ -35,6 +35,7 @@ public:
    bool checkSurroundingTilesMatch(int row, int col, Tile *tile);
    int calculateScore(const std::vector<Tile *> &tilesToPlace, const std::vector<std::pair<int, int>> &positions);
 
+
    // Method to get the tile at the specified row and column
    Tile *getTileAt(int row, int col);
 

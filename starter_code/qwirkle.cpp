@@ -5,6 +5,8 @@
 #include "Board.h"
 #include "TileCodes.h"
 #include "Player.h"
+#include "Game.h"
+#include "LoadGame.h"
 #include <iostream>
 #include <vector>
 #include <fstream>
@@ -25,7 +27,7 @@ void displayStudentInformation();
 void loadGame();
 bool checkSurroundingTilesMatch(const std::vector<std::vector<Tile *>> &board, int row, int col, Tile *tile);
 bool checkSameTypeTiles(const std::vector<Tile *> &tilesToPlace, const std::vector<std::pair<int, int>> &positions);
-Player* findStartingPlayer(Player* player1, Player* player2);
+Player *findStartingPlayer(Player *player1, Player *player2);
 
 
 int main(void)
@@ -143,35 +145,50 @@ void loadGame()
     cout << "\nEnter the filename from which to load a game:" << endl;
     string filename;
     cout << "> ";
+    
+
     cin >> filename;
 
-    // Attempt to open the file4
-    std::ifstream file(filename);
+    // Create an instance of LoadGame
+    LoadGame loader;
 
-    if (file.good() && file.is_open())
+    // Call the loadGame method with the filename
+    Game *loadedGame = loader.loadGame(filename);
+
+    // Check if the game is successfully loaded
+    if (loadedGame != nullptr)
     {
         // File exists and is open
 
         // Add validation for the file format (replace with your actual format check logic)
         // For example, if you have a specific format, check if it matches
         // Here, we assume a simple check by reading a line from the file
-        string line;
-        if (getline(file, line))
-        {
-            cout << "\nQwirkle game successfully loaded." << endl;
+        // Open the file for reading
+        ifstream file(filename);
 
+        // Check if the file is open
+        if (file.is_open())
+        {
+            // File is open, proceed with reading
+            string line;
+            if (getline(file, line))
+            {
+                cout << "\nQwirkle game successfully loaded." << endl;
+                // Continue reading or processing the file content here
+                loadedGame->launchGame();
+            }
+            else
+            {
+                cout << "\nInvalid file format. Unable to load the game." << endl;
+            }
+
+            // Close the file when done
+            file.close();
         }
         else
         {
-            cout << "\nInvalid file format. Unable to load the game." << endl;
+            cout << "\nError: Unable to open the file." << endl;
         }
-
-        // Close the file
-        file.close();
-    }
-    else
-    {
-        cout << "\nFile does not exist or could not be opened. Unable to load the game." << endl;
     }
 }
 

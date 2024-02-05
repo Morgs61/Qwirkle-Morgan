@@ -8,6 +8,11 @@ class LinkedList
 {
 public:
     LinkedList();
+    void initialize()
+    {
+        head = nullptr;
+        tail = nullptr;
+    }
     ~LinkedList();
     void addTile(Tile *tile);
     bool removeTile(Tile *tile);
@@ -27,7 +32,7 @@ public:
     void push_back(Tile *tile);
     Tile *getTile(int index);
     std::string toString();
-
+    Node *getHead(); // Declaration of the getHead() method
 private:
     Node *head;
     Node *tail;

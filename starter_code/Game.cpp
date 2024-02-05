@@ -141,7 +141,7 @@ void Game::launchGame()
                             // Convert the grid location to row and column
                             char gridLetter = location[0];
                             size_t row = (gridLetter >= 'A' && gridLetter <= 'Z') ? (gridLetter - 'A') : -1;
-                            size_t column = std::stoi(location.substr(1)) - 1; // Convert the rest of the string to a number
+                            size_t column = std::stoi(location.substr(1)); // Convert the rest of the string to a number
 
                             // Check if the row and column are valid
                             if (activeTurn && (row == static_cast<size_t>(-1) || row >= static_cast<size_t>(board->getSize()) || column >= COLUMN_MAX))

@@ -22,8 +22,8 @@ public:
     void displayGameStatus();
     int getPlayerMenuSelection();
     bool processPlayerAction(int menuChoice);
-    void placeTiles();
-    void replaceTile();
+    bool placeTiles();
+    bool replaceTile();
     void saveGame();
     bool isGameComplete();
 	void declareWinner();

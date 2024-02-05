@@ -50,12 +50,11 @@ void Game::launchGame() {
             int menuChoice = getPlayerMenuSelection();
 
             if (menuChoice == 1) { // Place tiles
-                placeTiles();
-                playerTurnComplete = true;
+               // placeTiles();
+                playerTurnComplete = placeTiles();
             }
             else if (menuChoice == 2) {
-                replaceTile();
-                playerTurnComplete = true;
+                playerTurnComplete = replaceTile(); // Use the return value to determine if the turn is complete
             }
             else if (menuChoice == 3) {
                 saveGame();
@@ -193,7 +192,7 @@ void Game::updateGameAfterTilePlacement(vector<Tile*>& tilesToPlace, vector<std:
     }
 }
 
-void Game::placeTiles() {
+bool Game::placeTiles() {
     int numTiles = 0;
     vector<Tile *> tilesToPlace;
     vector<std::pair<int, int>> tilePositions;
@@ -202,7 +201,7 @@ void Game::placeTiles() {
     while (!activeTurn && currentPlayer->getHand()->getSize() > 0) {
         currentPlayer->getHand()->displayHand();
         cout << "Place tile " << numTiles + 1 << " using the format: place <tile> at <grid location>" << endl;
-        cout << "Enter 'end' to end your turn." << endl;
+        cout << "Enter 'end' to end your turn or 'back' to return to previous menu" << endl;
         cout << ">";
 
         vector<string> words = parsePlayerInput();
@@ -219,8 +218,13 @@ void Game::placeTiles() {
                 activeTurn = true;
             }
         }
+        // Check for the 'back' command first
+        if (words.size() == 1 && words[0] == "back") {
+            cout << "Returning to the previous menu." << endl;
+            return false; // Directly exit the function, thereby exiting the loop and not ending the player's turn
+
+        }
         else {
-            // Check that the command is correctly formatted
             if (words.size() != 4 || words[0] != "place" || words[3].length() >= 4) {
                 cout << "Invalid command. Please try again." << endl;
             }
@@ -256,6 +260,7 @@ void Game::placeTiles() {
     cout << "\n"
          << currentPlayer->getName() << "'s hand: ";
     currentPlayer->getHand()->displayHand();
+    return true;
 }
 
 
@@ -282,37 +287,48 @@ void Game::replaceTileAndUpdateHand(Tile* tileToReplace) {
     currentPlayer->getHand()->addTile(tileFromBag);
 }
 
-void Game::replaceTile() {
+bool Game::replaceTile() {
     cout << "Replace a tile using the format: replace <tile>" << endl;
-    cout << ">";
+    cout << "Enter 'back' to return to previous menu" << endl;
+
 
     bool validInput = false;
     while (!validInput) {
+        cout << "> ";
         string command;
         getline(cin, command);
+     // Check for the 'back' command first
+        if (command == "back") {
+            cout << "Returning to the previous menu." << endl;
+            return false; // Directly exit the function, thereby exiting the loop and not ending the player's turn
+
+        }
+        else{
 
         vector<string> words;
         size_t pos = 0;
+        // Split the command into words based on spaces
         while ((pos = command.find(' ')) != string::npos) {
             words.push_back(command.substr(0, pos));
             command.erase(0, pos + 1);
         }
-        words.push_back(command);
+        words.push_back(command); // Add the last (or only) word
 
-        if (words.size() != 2 || words[0] != "replace") {
+        // Check the command format
+        if (words.size() == 2 && words[0] == "replace") {
+            Tile* tileToReplace = createAndValidateTile(words[1]);
+            if (tileToReplace != nullptr) {
+                // If the tile is valid, proceed with replacement and update the hand
+                replaceTileAndUpdateHand(tileToReplace);
+                cout << "Tile replaced. Proceeding with the game." << endl;
+                validInput = true; // Exit the loop
+            }
+        } else {
+            // If the command format is incorrect, inform the user and the loop will repeat
             cout << "Invalid command. Please try again." << endl;
-            continue;
         }
-
-        Tile* tileToReplace = createAndValidateTile(words[1]);
-        if (tileToReplace == nullptr) {
-            continue;
         }
-
-        replaceTileAndUpdateHand(tileToReplace);
-        validInput = true;
-        cout << "Tile replaced. Proceeding with the game" << endl;
-    }
+    } return true;
 }
 
 void Game::saveGame() {

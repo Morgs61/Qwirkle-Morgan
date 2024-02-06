@@ -207,7 +207,7 @@ bool Game::placeTiles() {
         currentPlayer->getHand()->displayHand();
         cout << "Place tile " << numTiles + 1 << " using the format: place <tile> at <grid location>" << endl;
         cout << "Enter 'end' to end your turn or 'back' to return to previous menu" << endl;
-        cout << ">";
+        cout << "> ";
 
         vector<string> words = parsePlayerInput();
 

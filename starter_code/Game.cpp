@@ -54,7 +54,12 @@ void Game::launchGame() {
                 playerTurnComplete = placeTiles();
             }
             else if (menuChoice == 2) {
+                if (currentPlayer->getHand()->getSize() < 6) {
+                    cout << "You have already placed a tile. You can not now replace a tile" << endl;
+                    //return;
+                }else {
                 playerTurnComplete = replaceTile(); // Use the return value to determine if the turn is complete
+}
             }
             else if (menuChoice == 3) {
                 saveGame();
@@ -220,8 +225,15 @@ bool Game::placeTiles() {
         }
         // Check for the 'back' command first
         if (words.size() == 1 && words[0] == "back") {
+            if (numTiles > 0) {
+                cout << "You have already placed a tile. You must continue your move." << endl;
+                //activeTurn = false;
+            }
+            else
+            {
             cout << "Returning to the previous menu." << endl;
-            return false; // Directly exit the function, thereby exiting the loop and not ending the player's turn
+            return false; // Directly exit the function, thereby exiting the loop and not ending the player's
+        }
 
         }
         else {

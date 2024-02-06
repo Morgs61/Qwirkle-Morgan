@@ -70,7 +70,7 @@ Game *LoadGame::loadGame(string filename)
     loadBagContents(bag, bagContents);
 
     // Debugging output
-    cout << "Bag Contents: " << bagContents << endl;
+    // cout << "Bag Contents: " << bagContents << endl;
 
     vector<Player *> players;
 
@@ -84,7 +84,7 @@ Game *LoadGame::loadGame(string filename)
     board = loadBoardState(boardState);
 
     // Debugging output
-    cout << "Board State: " << boardState << endl;
+    // cout << "Board State: " << boardState << endl;
 
     // Load current player
     Player *currentPlayer = nullptr;

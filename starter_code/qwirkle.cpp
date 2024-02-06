@@ -49,8 +49,11 @@ while (!quit)
     cout << "> ";
     cin >> choice;
 
-    // If the extraction fails
-    if (cin.fail())
+    if (std::cin.eof()) {
+        cout << "\n\nGoodbye" << endl;
+        exit(EXIT_SUCCESS);
+    }
+    else if (cin.fail())
     {
         // Clear the error state
         cin.clear();
@@ -145,9 +148,14 @@ void loadGame()
     cout << "\nEnter the filename from which to load a game:" << endl;
     string filename;
     cout << "> ";
-    
+
 
     cin >> filename;
+
+    if (std::cin.eof()) {
+        cout << "\n\nGoodbye" << endl;
+        exit(EXIT_SUCCESS);
+    }
 
     // Create an instance of LoadGame
     LoadGame loader;
@@ -203,16 +211,27 @@ void startNewGame()
     string playerName1, playerName2;
     do
     {
+
         cout << "\nEnter a name for player 1 (uppercase characters only): \n";
         cout << "> ";
         cin >> playerName1;
+
+        if (std::cin.eof()) {
+            cout << "\n\nGoodbye" << endl;
+            exit(EXIT_SUCCESS);
+        }
     } while (!isValidPlayerName(playerName1));
 
     do
     {
+
         cout << "\nEnter a name for player 2 (uppercase characters only): \n";
         cout << "> ";
         cin >> playerName2;
+        if (std::cin.eof()) {
+            cout << "\n\nGoodbye" << endl;
+            exit(EXIT_SUCCESS);
+        }
     } while (!isValidPlayerName(playerName2));
 
     // Create player hands
@@ -356,3 +375,4 @@ Player* findStartingPlayer(Player* player1, Player* player2) {
 
     return startingPlayer;
 }
+

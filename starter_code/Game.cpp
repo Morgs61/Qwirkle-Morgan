@@ -110,9 +110,17 @@ int Game::getPlayerMenuSelection() {
         // Read an integer or handle non-integer input
         // DO NOT DELETE THIS AS IT STOPS LOOPING
         if (cin >> choice) {
+            if (std::cin.eof()) {
+                 cout << "\n\nGoodbye" << endl;
+                exit(EXIT_SUCCESS);
+            }
             cin.ignore(); // Clear the input buffer
             validActionSelected = true;
         } else {
+            if (std::cin.eof()) {
+                cout << "\n\nGoodbye" << endl;
+                exit(EXIT_SUCCESS);
+            }
             cout << "Invalid input. Please enter a valid option." << endl;
             cin.clear();                                                   // Clear the error flag
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
@@ -124,6 +132,10 @@ int Game::getPlayerMenuSelection() {
 vector<string> Game::parsePlayerInput() {
     string command;
     getline(cin, command);
+    if (std::cin.eof()) {
+        cout << "\n\nGoodbye" << endl;
+        exit(EXIT_SUCCESS);
+    }
 
     // Split the command into words
     vector<string> words;
@@ -309,7 +321,11 @@ bool Game::replaceTile() {
         cout << "> ";
         string command;
         getline(cin, command);
-     // Check for the 'back' command first
+        // Check for the 'back' command first
+        if (std::cin.eof()) {
+            cout << "\n\nGoodbye" << endl;
+            exit(EXIT_SUCCESS);
+        }
         if (command == "back") {
             cout << "Returning to the previous menu." << endl;
             return false; // Directly exit the function, thereby exiting the loop and not ending the player's turn
@@ -348,6 +364,10 @@ void Game::saveGame() {
     string filename;
     cout << "Enter the filename to save the game: ";
     getline(cin, filename);
+    if (std::cin.eof()) {
+          cout << "\n\nGoodbye" << endl;
+        exit(EXIT_SUCCESS);
+    }
     SaveGame::saveGameState(filename, player1, player2, board, bag, currentPlayer);
     cout << "Game successfully saved" << endl;
 }
@@ -367,7 +387,7 @@ void Game::declareWinner() {
     else {
         std::cout << "It's a draw!" << std::endl;
     }
-    std::cout << "\nGoodbye" << std::endl;
+    std::cout << "\n\nGoodbye" << std::endl;
 	exit(0);
 }
 

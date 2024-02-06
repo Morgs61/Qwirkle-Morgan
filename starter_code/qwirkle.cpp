@@ -339,8 +339,8 @@ Player* findStartingPlayer(Player* player1, Player* player2) {
     }
 
     // Print the count for each player
-     std::cout << player1->getName() << " has " << matchingTiles1 << " tiles able to be played." << std::endl;
-     std::cout << player2->getName() << " has " << matchingTiles2 << " tiles able to be played." << std::endl;
+    //  std::cout << player1->getName() << " has " << matchingTiles1 << " tiles able to be played." << std::endl;
+    //  std::cout << player2->getName() << " has " << matchingTiles2 << " tiles able to be played." << std::endl;
 
 
     // Update startingPlayer based on the maximum count

@@ -29,7 +29,6 @@ bool checkSurroundingTilesMatch(const std::vector<std::vector<Tile *>> &board, i
 bool checkSameTypeTiles(const std::vector<Tile *> &tilesToPlace, const std::vector<std::pair<int, int>> &positions);
 Player *findStartingPlayer(Player *player1, Player *player2);
 
-
 int main(void)
 {
     LinkedList *list = new LinkedList();
@@ -43,56 +42,56 @@ int main(void)
     int choice = 0;
     bool quit = false;
 
-while (!quit)
-{
-    displayMenu();
-    cout << "> ";
-    cin >> choice;
-
-    if (std::cin.eof()) {
-        cout << "\n\nGoodbye" << endl;
-        exit(EXIT_SUCCESS);
-    }
-    else if (cin.fail())
+    while (!quit)
     {
-        // Clear the error state
-        cin.clear();
+        displayMenu();
+        cout << "> ";
+        cin >> choice;
 
-        // Ignore the rest of the line
-        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        if (std::cin.eof())
+        {
+            cout << "\n\nGoodbye" << endl;
+            exit(EXIT_SUCCESS);
+        }
+        else if (cin.fail())
+        {
+            // Clear the error state
+            cin.clear();
 
-        cout << "Invalid choice. Please enter a valid option." << endl;
-    }
-    else
-    {
-        if (choice == 1)
-        {
-            cout << "\nStarting a New Game" << endl;
-            startNewGame();
-        }
-        else if (choice == 2)
-        {
-            cout << "Loading Game..." << endl;
-            loadGame();
-            // Add code for loading a game
-        }
-        else if (choice == 3)
-        {
-            displayStudentInformation();
-        }
-        else if (choice == 4)
-        {
-            cout << "Quitting the game. Goodbye!" << endl;
-            quit = true;
+            // Ignore the rest of the line
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+            cout << "Invalid choice. Please enter a valid option." << endl;
         }
         else
         {
-            cout << "Invalid choice. Please enter a valid option." << endl;
+            if (choice == 1)
+            {
+                cout << "\nStarting a New Game" << endl;
+                startNewGame();
+            }
+            else if (choice == 2)
+            {
+                loadGame();
+                // Add code for loading a game
+            }
+            else if (choice == 3)
+            {
+                displayStudentInformation();
+            }
+            else if (choice == 4)
+            {
+                cout << "Quitting the game. Goodbye!" << endl;
+                quit = true;
+            }
+            else
+            {
+                cout << "Invalid choice. Please enter a valid option." << endl;
+            }
         }
     }
-}
 
-return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }
 void displayMenu()
 {
@@ -101,7 +100,8 @@ void displayMenu()
     cout << "1. New Game" << endl;
     cout << "2. Load Game" << endl;
     cout << "3. Credits (Show student information)" << endl;
-    cout << "4. Quit \n" << endl;
+    cout << "4. Quit \n"
+         << endl;
 }
 
 // Function to check if a player name is valid
@@ -149,10 +149,10 @@ void loadGame()
     string filename;
     cout << "> ";
 
-
     cin >> filename;
 
-    if (std::cin.eof()) {
+    if (std::cin.eof())
+    {
         cout << "\n\nGoodbye" << endl;
         exit(EXIT_SUCCESS);
     }
@@ -203,7 +203,7 @@ void loadGame()
 void startNewGame()
 {
     // Initialize and shuffle the tile bag
-    //cout << "making the bag" << std::endl;
+    // cout << "making the bag" << std::endl;
     LinkedList *bag = new LinkedList(); // Instantiate LinkedList
     bag->initializeAndShuffleBag();     // Populate the bag
 
@@ -216,7 +216,8 @@ void startNewGame()
         cout << "> ";
         cin >> playerName1;
 
-        if (std::cin.eof()) {
+        if (std::cin.eof())
+        {
             cout << "\n\nGoodbye" << endl;
             exit(EXIT_SUCCESS);
         }
@@ -228,7 +229,8 @@ void startNewGame()
         cout << "\nEnter a name for player 2 (uppercase characters only): \n";
         cout << "> ";
         cin >> playerName2;
-        if (std::cin.eof()) {
+        if (std::cin.eof())
+        {
             cout << "\n\nGoodbye" << endl;
             exit(EXIT_SUCCESS);
         }
@@ -256,13 +258,11 @@ void startNewGame()
     cin.ignore();
     cout << "\nLet's Play!" << endl;
 
-
     // Initialize the board
     Board *board = new Board(); // Instantiate Board
 
-
-Player* startingPlayer = findStartingPlayer(player1, player2);
-std::cout << "Starting player is: " << startingPlayer->getName() << std::endl;
+    Player *startingPlayer = findStartingPlayer(player1, player2);
+    std::cout << "Starting player is: " << startingPlayer->getName() << std::endl;
 
     // Determine the starting player
 
@@ -279,7 +279,7 @@ void initializePlayerHand(LinkedList *playerHand, LinkedList *bag)
     while (playerHand->getSize() < 6 && !bag->isEmpty())
     {
         // Get the tile pointer from the back of the bag
-        Tile* tileFromBagPtr = bag->back();
+        Tile *tileFromBagPtr = bag->back();
 
         // bag->pop_back();
         // Replaced pop_back with function that preserves the tile at the pointer, instead of deleting it.
@@ -291,8 +291,9 @@ void initializePlayerHand(LinkedList *playerHand, LinkedList *bag)
 }
 
 // Function to find starting player by finding the most matching types of tiles in hand
-Player* findStartingPlayer(Player* player1, Player* player2) {
-    Player* startingPlayer = nullptr;
+Player *findStartingPlayer(Player *player1, Player *player2)
+{
+    Player *startingPlayer = nullptr;
     int maxMatchingTiles = 0;
 
     // Use unordered_map to track counts of color and shape for each player
@@ -300,60 +301,78 @@ Player* findStartingPlayer(Player* player1, Player* player2) {
     std::unordered_map<int, int> shapeCount1, shapeCount2;
 
     // Check player 1's hand for matching tiles
-    for (int k = 0; k < player1->getHand()->getSize(); ++k) {
-        Tile* currentTile = player1->getHand()->getTile(k);
+    for (int k = 0; k < player1->getHand()->getSize(); ++k)
+    {
+        Tile *currentTile = player1->getHand()->getTile(k);
 
         // Update color count
-        if (colorCount1.find(currentTile->getColour()) == colorCount1.end()) {
+        if (colorCount1.find(currentTile->getColour()) == colorCount1.end())
+        {
             colorCount1[currentTile->getColour()] = 1;
-        } else {
+        }
+        else
+        {
             colorCount1[currentTile->getColour()]++;
         }
 
         // Update shape count
-        if (shapeCount1.find(currentTile->getShape()) == shapeCount1.end()) {
+        if (shapeCount1.find(currentTile->getShape()) == shapeCount1.end())
+        {
             shapeCount1[currentTile->getShape()] = 1;
-        } else {
+        }
+        else
+        {
             shapeCount1[currentTile->getShape()]++;
         }
     }
 
     // Check player 2's hand for matching tiles
-    for (int k = 0; k < player2->getHand()->getSize(); ++k) {
-        Tile* currentTile = player2->getHand()->getTile(k);
+    for (int k = 0; k < player2->getHand()->getSize(); ++k)
+    {
+        Tile *currentTile = player2->getHand()->getTile(k);
 
         // Update color count
-        if (colorCount2.find(currentTile->getColour()) == colorCount2.end()) {
+        if (colorCount2.find(currentTile->getColour()) == colorCount2.end())
+        {
             colorCount2[currentTile->getColour()] = 1;
-        } else {
+        }
+        else
+        {
             colorCount2[currentTile->getColour()]++;
         }
 
         // Update shape count
-        if (shapeCount2.find(currentTile->getShape()) == shapeCount2.end()) {
+        if (shapeCount2.find(currentTile->getShape()) == shapeCount2.end())
+        {
             shapeCount2[currentTile->getShape()] = 1;
-        } else {
+        }
+        else
+        {
             shapeCount2[currentTile->getShape()]++;
         }
     }
 
     // Find the maximum count of matching tiles (color or shape) for player 1
     int matchingTiles1 = 0;
-    for (const auto& pair : colorCount1) {
+    for (const auto &pair : colorCount1)
+    {
         matchingTiles1 = std::max(matchingTiles1, pair.second);
     }
 
-    for (const auto& pair : shapeCount1) {
+    for (const auto &pair : shapeCount1)
+    {
         matchingTiles1 = std::max(matchingTiles1, pair.second);
     }
 
     // Find the maximum count of matching tiles (color or shape) for player 2
     int matchingTiles2 = 0;
-    for (const auto& pair : colorCount2) {
+    for (const auto &pair : colorCount2)
+    {
         matchingTiles2 = std::max(matchingTiles2, pair.second);
     }
 
-    for (const auto& pair : shapeCount2) {
+    for (const auto &pair : shapeCount2)
+    {
         matchingTiles2 = std::max(matchingTiles2, pair.second);
     }
 
@@ -361,18 +380,18 @@ Player* findStartingPlayer(Player* player1, Player* player2) {
     //  std::cout << player1->getName() << " has " << matchingTiles1 << " tiles able to be played." << std::endl;
     //  std::cout << player2->getName() << " has " << matchingTiles2 << " tiles able to be played." << std::endl;
 
-
     // Update startingPlayer based on the maximum count
-    if (matchingTiles1 > maxMatchingTiles || (matchingTiles1 == maxMatchingTiles && player1->getName() < player2->getName())) {
+    if (matchingTiles1 > maxMatchingTiles || (matchingTiles1 == maxMatchingTiles && player1->getName() < player2->getName()))
+    {
         maxMatchingTiles = matchingTiles1;
         startingPlayer = player1;
     }
 
-    if (matchingTiles2 > maxMatchingTiles || (matchingTiles2 == maxMatchingTiles && player2->getName() < player1->getName())) {
+    if (matchingTiles2 > maxMatchingTiles || (matchingTiles2 == maxMatchingTiles && player2->getName() < player1->getName()))
+    {
         maxMatchingTiles = matchingTiles2;
         startingPlayer = player2;
     }
 
     return startingPlayer;
 }
-

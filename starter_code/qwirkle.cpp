@@ -124,8 +124,6 @@ void loadGame() {
   std::string filename;
   std::cout << "> ";
 
-  cin >> filename;
-
   std::cin >> filename;
   // Prepend the test folder path.
   filename = "tests/" + filename;

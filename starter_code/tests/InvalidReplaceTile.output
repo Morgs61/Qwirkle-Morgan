@@ -55,7 +55,10 @@ Select your action:
 2. Replace a tile
 3. Save game
 4. Quit game
-> Enter the filename to save the game: Game successfully saved
+> Replace a tile using the format: replace <tile>
+Enter 'back' to return to previous menu
+> Invalid command. Please try again.
+> Returning to the previous menu.
 
 Select your action:
 1. Place tiles

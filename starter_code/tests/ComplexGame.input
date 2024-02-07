@@ -68,3 +68,121 @@ end
 1
 place O5 at R16
 end
+1
+place Y1 at V21
+end
+1
+place Y2 at U21
+place Y3 at T21
+end
+1
+place O3 at T22
+end
+1
+place R3 at T23
+end
+1
+place R6 at S23
+end
+1
+place R4 at R23
+place R1 ar Q23
+end
+1
+place B1 at Q22
+place P1 at Q21
+end
+1
+place O4 at M13
+end
+1
+place P3 at R21
+end
+1
+place P4 at P21
+end
+1
+place B3 at X18
+end
+1
+place P6 at O21
+place P2 at N21
+end
+1
+place R2 at N20
+place B2 at N22
+end
+1
+place P5 at N11
+end
+1
+place P6 at N10
+end
+1
+place G6 at O18
+end
+1
+place G4 at O19
+end
+1
+place R6 at M20
+end
+1
+place R2 at U23
+end
+1
+place R3 at L20
+end
+1
+place Y6 at R19
+end
+1
+place B4 at X19
+end
+1
+place O3 at M14
+place O1 at M16
+place O6 at M15
+end
+1
+place B3 at L21
+end
+1
+place B5 at K21
+place B6 at J21
+end
+1
+place G6 at L15
+place G5 at L16
+end
+1
+place G2 at L17
+place G3 at L18
+end
+1
+place P1 at N10
+end
+1
+place Y6 at X21
+end
+1
+place Y5 at Y21
+end
+1
+place O2 at M22
+place O4 at M23
+place O1 at M24
+end
+1
+place Y3 at Y21
+place Y4 at Y22
+end
+1
+place Y2 at Y23
+end
+1
+place Y3 at Y24
+end
+1
+place G1 at K17
+end

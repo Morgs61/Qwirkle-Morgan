@@ -1,12 +1,13 @@
 #ifndef QWIRKLE_H
 #define QWIRKLE_H
 
-#include <vector>
 #include <string>
+#include <vector>
+
+#include "Game.h"
 #include "LinkedList.h"
 #include "Player.h"
 #include "Tile.h"
-#include "Game.h"
 
 struct Tile;
 
@@ -17,10 +18,9 @@ void startNewGame();
 void loadGame();
 void initializeBoard(std::vector<std::vector<Tile *>> &board);
 void displayBoard(const std::vector<std::vector<Tile *>> &board);
-//int findStartingPlayer(Player** players, int numPlayers);
+// int findStartingPlayer(Player** players, int numPlayers);
 bool checkForEmptyPlayerHands(Player **players, int numPlayers);
 void startGame();
 Player *findStartingPlayer(Player *player1, Player *player2);
 
-
-#endif // QWIRKLE_H
+#endif  // QWIRKLE_H

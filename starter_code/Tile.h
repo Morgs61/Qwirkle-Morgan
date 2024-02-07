@@ -1,10 +1,12 @@
 #ifndef ASSIGN2_TILE_H
 #define ASSIGN2_TILE_H
 
-#include "TileCodes.h"
 #include <string>
 
-// Color and Unicode escape sequences for printing colored text and Unicode symbols in the console
+#include "TileCodes.h"
+
+// Color and Unicode escape sequences for printing colored text and Unicode
+// symbols in the console
 
 // #define RESET_COLOR "\033[0m"           // Reset color to default
 // #define RED_COLOR "\033[31m"            // Red color
@@ -27,23 +29,22 @@ typedef char Colour;
 // Define a Shape type
 typedef int Shape;
 
-class Tile
-{
-public:
-    Tile(Colour colour, Shape shape);
-    ~Tile();
+class Tile {
+ public:
+  Tile(Colour colour, Shape shape);
+  ~Tile();
 
-    Colour getColour() const;
-    Shape getShape() const;
+  Colour getColour() const;
+  Shape getShape() const;
 
-    // Add toString function declaration
-    std::string toString();
+  // Add toString function declaration
+  std::string toString();
 
-    bool isValidTile(Colour colour, Shape shape);
+  bool isValidTile(Colour colour, Shape shape);
 
-private:
-    Colour colour;
-    Shape shape;
+ private:
+  Colour colour;
+  Shape shape;
 };
 
-#endif // ASSIGN2_TILE_H
+#endif  // ASSIGN2_TILE_H

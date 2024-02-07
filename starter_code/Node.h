@@ -4,23 +4,22 @@
 
 #include "Tile.h"
 
-class Node
-{
-public:
-   Node(Tile *tile, Node *nextNodePtr);
-   Node(Tile *tile);
-   Node(Node &other);
-   ~Node();
+class Node {
+ public:
+  Node(Tile *tile, Node *nextNodePtr);
+  Node(Tile *tile);
+  Node(Node &other);
+  ~Node();
 
-   void clearNodeList();
+  void clearNodeList();
 
-   Tile *getTile();
-   Node *getNext();
-   void setNext(Node *nextNodePtr);
-   void setNextNullptr();
+  Tile *getTile();
+  Node *getNext();
+  void setNext(Node *nextNodePtr);
+  void setNextNullptr();
 
-   Tile *tile;
-   Node *nextNodePtr;
+  Tile *tile;
+  Node *nextNodePtr;
 };
 
-#endif // ASSIGN2_NODE_H
+#endif  // ASSIGN2_NODE_H

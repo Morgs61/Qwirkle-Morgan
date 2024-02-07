@@ -151,6 +151,8 @@ void loadGame()
     cout << "> ";
 
     cin >> filename;
+    // Prepend the test folder path.
+    filename = "tests/" + filename;
 
     if (std::cin.eof())
     {

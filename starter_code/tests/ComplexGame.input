@@ -1,0 +1,70 @@
+2
+TestFileFullGame
+1
+place P2 at N12
+place P4 at N13
+place P3 at N14
+end
+1
+place G3 at O14
+end
+2
+replace Y4
+1
+place G1 at O15
+place G5 at O16
+end
+1
+place R5 at P16
+place Y5 at Q16
+end
+1
+place R6 at P18
+end
+1
+place R1 at P15
+end
+1
+place O5 at Q17
+place O2 at R17
+end
+1
+place G2 at O17
+end
+1
+place O1 at S17
+end
+1
+place R5 at Q18
+end
+2
+replace Y4
+1
+place B1 at S18
+place B5 at T18
+end
+1
+place B2 at U18
+end
+1
+place B6 at V18
+place B4 at W18
+end
+2
+replace Y4
+1
+place G4 at W19
+place R4 at W20
+end
+1
+place Y4 at W21
+end
+1
+place Y1 at S19
+end
+1
+place Y1 at X21
+end
+1
+place O5 at R16
+end

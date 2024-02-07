@@ -304,7 +304,7 @@ Tile* Game::createAndValidateTile(const string& tileStr) {
 void Game::replaceTileAndUpdateHand(Tile* tileToReplace) {
     currentPlayer->getHand()->removeTile(tileToReplace);
     bag->push_back(tileToReplace);
-    bag->shuffle();
+    // bag->shuffle();
 
     Tile *tileFromBag = bag->back();
     bag->remove_back();

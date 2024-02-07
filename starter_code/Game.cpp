@@ -289,17 +289,24 @@ bool Game::placeTiles() {
 
 
 Tile* Game::createAndValidateTile(const string& tileStr) {
-    string color = string(1, tileStr[0]);
-    string shape = tileStr.substr(1);
-    Tile *tileToReplace = new Tile(color[0], stoi(shape));
+    try {
+        string color = string(1, tileStr[0]);
+        string shape = tileStr.substr(1);
+        Tile *tileToReplace = new Tile(color[0], stoi(shape));
 
-    if (!currentPlayer->getHand()->containsTile(tileToReplace)) {
-        cout << "Tile not found in hand. Please try again." << endl;
-        delete tileToReplace;
+        if (!currentPlayer->getHand()->containsTile(tileToReplace)) {
+            cout << "Tile not found in hand. Please try again." << endl;
+            delete tileToReplace;
+            return nullptr;
+        }
+        return tileToReplace;
+    } catch(const std::invalid_argument&) {
+        // Catch the exception if stoi fails (e.g., when the input is not a valid integer)
+        cout << "Invalid tile format. Please enter a valid tile." << endl;
         return nullptr;
     }
-    return tileToReplace;
 }
+
 
 void Game::replaceTileAndUpdateHand(Tile* tileToReplace) {
     currentPlayer->getHand()->removeTile(tileToReplace);
@@ -315,7 +322,6 @@ bool Game::replaceTile() {
     cout << "Replace a tile using the format: replace <tile>" << endl;
     cout << "Enter 'back' to return to previous menu" << endl;
 
-
     bool validInput = false;
     while (!validInput) {
         cout << "> ";
@@ -329,34 +335,35 @@ bool Game::replaceTile() {
         if (command == "back") {
             cout << "Returning to the previous menu." << endl;
             return false; // Directly exit the function, thereby exiting the loop and not ending the player's turn
-
         }
-        else{
-
-        vector<string> words;
-        size_t pos = 0;
-        // Split the command into words based on spaces
-        while ((pos = command.find(' ')) != string::npos) {
-            words.push_back(command.substr(0, pos));
-            command.erase(0, pos + 1);
-        }
-        words.push_back(command); // Add the last (or only) word
-
-        // Check the command format
-        if (words.size() == 2 && words[0] == "replace") {
-            Tile* tileToReplace = createAndValidateTile(words[1]);
-            if (tileToReplace != nullptr) {
-                // If the tile is valid, proceed with replacement and update the hand
-                replaceTileAndUpdateHand(tileToReplace);
-                cout << "Tile replaced. Proceeding with the game." << endl;
-                validInput = true; // Exit the loop
+        else {
+            vector<string> words;
+            size_t pos = 0;
+            // Split the command into words based on spaces
+            while ((pos = command.find(' ')) != string::npos) {
+                words.push_back(command.substr(0, pos));
+                command.erase(0, pos + 1);
             }
-        } else {
-            // If the command format is incorrect, inform the user and the loop will repeat
-            cout << "Invalid command. Please try again." << endl;
+            words.push_back(command); // Add the last (or only) word
+
+            // Check the command format
+            if (words.size() == 2 && words[0] == "replace") {
+                Tile* tileToReplace = createAndValidateTile(words[1]);
+                if (tileToReplace != nullptr) {
+                    // If the tile is valid, proceed with replacement and update the hand
+                    replaceTileAndUpdateHand(tileToReplace);
+                    cout << "Tile replaced. Proceeding with the game." << endl;
+                    validInput = true; // Exit the loop
+                } else {
+                    cout << "Invalid tile. Please try again." << endl;
+                }
+            } else {
+                // If the command format is incorrect, inform the user and the loop will repeat
+                cout << "Invalid command. Please try again." << endl;
+            }
         }
-        }
-    } return true;
+    }
+    return true;
 }
 
 void Game::saveGame() {

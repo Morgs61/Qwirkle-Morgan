@@ -1,4 +1,3 @@
-
 #include <algorithm>
 #include <iomanip>
 #include <iostream>
@@ -12,6 +11,7 @@
 #include "SaveGame.h"
 #include "Tile.h"
 #include "qwirkle.h"
+
 using std::cin;
 using std::cout;
 using std::endl;

@@ -5,8 +5,6 @@
 LinkedList::LinkedList() {
   head = nullptr;
   tail = nullptr;
-
-  // TODO
 }
 
 LinkedList::~LinkedList() {
@@ -131,9 +129,6 @@ void LinkedList::initializeLoadedBag() {
   // Create all combinations of colours and shapes
   for (char colour : colours) {
     for (int shape : shapes) {
-      // log the tile being added
-      // std::cout << "Adding tile: [" << colour << ", " << shape << "]" <<
-      // std::endl; Add two pointers to each type of tile to the tile bag
       addTile(new Tile(colour, shape));
       addTile(new Tile(colour, shape));
     }
@@ -148,21 +143,11 @@ void LinkedList::initializeAndShuffleBag() {
   // Create all combinations of colours and shapes
   for (char colour : colours) {
     for (int shape : shapes) {
-      // log the tile being added
-      // std::cout << "Adding tile: [" << colour << ", " << shape << "]" <<
-      // std::endl; Add two pointers to each type of tile to the tile bag
       addTile(new Tile(colour, shape));
       addTile(new Tile(colour, shape));
     }
   }
-  // // Print the contents of the bag
-  // std::cout << "Tile Bag Contents: ";
-  // displayHand(); // Display the contents of the tile bag
-  // // Shuffle the tile bag
   shuffle();
-  // // Print the contents of the bag
-  // std::cout << " after shuffle Tile Bag Contents: ";
-  // displayHand(); // Display the contents of the tile bag
 }
 
 void LinkedList::shuffle() {

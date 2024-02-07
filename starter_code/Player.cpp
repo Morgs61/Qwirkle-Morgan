@@ -1,7 +1,6 @@
 //
 // Created by alex on 28/01/24.
 //
-
 #include "Player.h"
 
 Player::Player(std::string &name, int score, LinkedList *hand) {

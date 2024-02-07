@@ -1,5 +1,3 @@
-// Board.cpp
-
 #include <algorithm>
 #include <iostream>
 #include <iostream>  // Include for std::cout, std::endl
@@ -294,8 +292,6 @@ bool checkSameTypeTiles(const std::vector<Tile *> &tilesToPlace,
     if ((tilesToPlace[i]->getColour() != baseColor &&
          tilesToPlace[i]->getShape() != baseShape) ||
         (positions[i].first != baseRow && positions[i].second != baseColumn)) {
-      // std::cout << "Tiles in the move have different color, shape, or
-      // they don't share the same column/row" << std::endl;
       return false;  // Tiles in the move have different color, shape, or
                      // they don't share the same column/row
     }
@@ -321,8 +317,6 @@ bool Board::checkSameTypeTiles(
     if ((tilesToPlace[i]->getColour() != baseColor &&
          tilesToPlace[i]->getShape() != baseShape) ||
         (positions[i].first != baseRow && positions[i].second != baseColumn)) {
-      // std::cout << "Tiles in the move have different color, shape, or
-      // they don't share the same column/row" << std::endl;
       return false;  // Tiles in the move have different color, shape, or
                      // they don't share the same column/row
     }

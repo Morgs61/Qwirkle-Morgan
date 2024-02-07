@@ -15,11 +15,13 @@
 #include "Tile.h"
 #include "TileCodes.h"
 #include "qwirkle.h"
+
 using std::cin;
 using std::cout;
 using std::endl;
 using std::string;
 using std::vector;
+
 #define EXIT_SUCCESS 0
 
 void displayMenu();
@@ -36,7 +38,6 @@ int main(void) {
   LinkedList *list = new LinkedList();
   delete list;
 
-  // std::cout << "TODO: Implement Qwirkle!" << std::endl;
   // 2.1 Launch
   cout << "\nWelcome to Qwirkle!" << endl;
   cout << "-----------------------" << endl;
@@ -101,7 +102,7 @@ bool isValidPlayerName(const string &name) {
   return true;
 }
 
-// 2.2.3 Credits - Need members to add their details
+// 2.2.3 Credits 
 void displayStudentInformation() {
   cout << "\n--------------------------------------" << endl;
   // Hardcoded information for 4 students
@@ -129,7 +130,7 @@ void loadGame() {
   cout << "> ";
 
   cin >> filename;
-  // Prepend the test folder path.
+
   filename = "tests/" + filename;
 
   if (std::cin.eof()) {
@@ -147,9 +148,6 @@ void loadGame() {
   if (loadedGame != nullptr) {
     // File exists and is open
 
-    // Add validation for the file format (replace with your actual format check
-    // logic) For example, if you have a specific format, check if it matches
-    // Here, we assume a simple check by reading a line from the file
     // Open the file for reading
     ifstream file(filename);
 
@@ -206,16 +204,8 @@ void startNewGame() {
   LinkedList *playerHand1 = new LinkedList();
   initializePlayerHand(playerHand1, bag);  // Pass the address of tileBag
 
-  // // log the hand
-  // std::cout << playerName1 + "'s hand: ";
-  // playerHand1->displayHand();
-
   LinkedList *playerHand2 = new LinkedList();
   initializePlayerHand(playerHand2, bag);  // Pass the address of tileBag
-
-  // // log the hand
-  // std::cout << playerName2 + "'s hand: ";
-  // playerHand2->displayHand();
 
   // Create players
   Player *player1 = new Player(playerName1, 0, playerHand1);
@@ -250,9 +240,6 @@ void initializePlayerHand(LinkedList *playerHand, LinkedList *bag) {
     // Get the tile pointer from the back of the bag
     Tile *tileFromBagPtr = bag->back();
 
-    // bag->pop_back();
-    // Replaced pop_back with function that preserves the tile at the pointer,
-    // instead of deleting it.
     bag->remove_back();
 
     // Add the tile pointer directly to the player's hand
@@ -327,11 +314,6 @@ Player *findStartingPlayer(Player *player1, Player *player2) {
   for (const auto &pair : shapeCount2) {
     matchingTiles2 = std::max(matchingTiles2, pair.second);
   }
-
-  // Print the count for each player
-  //  std::cout << player1->getName() << " has " << matchingTiles1 << " tiles
-  //  able to be played." << std::endl; std::cout << player2->getName() << " has
-  //  " << matchingTiles2 << " tiles able to be played." << std::endl;
 
   // Update startingPlayer based on the maximum count
   if (matchingTiles1 > maxMatchingTiles ||

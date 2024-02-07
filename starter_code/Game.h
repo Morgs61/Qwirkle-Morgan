@@ -1,8 +1,6 @@
 //
 // Created by alex on 30/01/24.
 //
-
-// Game.h
 #ifndef APT2023_A2_GAME_H
 #define APT2023_A2_GAME_H
 

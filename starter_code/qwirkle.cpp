@@ -29,6 +29,7 @@ bool checkSurroundingTilesMatch(const std::vector<std::vector<Tile *>> &board, i
 bool checkSameTypeTiles(const std::vector<Tile *> &tilesToPlace, const std::vector<std::pair<int, int>> &positions);
 Player *findStartingPlayer(Player *player1, Player *player2);
 
+
 int main(void)
 {
     LinkedList *list = new LinkedList();
@@ -36,7 +37,7 @@ int main(void)
 
     // std::cout << "TODO: Implement Qwirkle!" << std::endl;
     // 2.1 Launch
-    cout << "\n Welcome to Qwirkle!" << endl;
+    cout << "\nWelcome to Qwirkle!" << endl;
     cout << "-----------------------" << endl;
 
     int choice = 0;
@@ -81,7 +82,7 @@ int main(void)
             }
             else if (choice == 4)
             {
-                cout << "Quitting the game. Goodbye!" << endl;
+                cout << "\nQuitting the game. Goodbye!" << endl;
                 quit = true;
             }
             else
@@ -123,7 +124,7 @@ bool isValidPlayerName(const string &name)
 void displayStudentInformation()
 {
 
-    cout << "--------------------------------------" << endl;
+    cout << "\n--------------------------------------" << endl;
     // Hardcoded information for 4 students
     cout << "Name: Michael Moon" << endl;
     cout << "Student ID: s3523025" << endl;
@@ -261,13 +262,14 @@ void startNewGame()
     // Initialize the board
     Board *board = new Board(); // Instantiate Board
 
-    Player *startingPlayer = findStartingPlayer(player1, player2);
-    std::cout << "Starting player is: " << startingPlayer->getName() << std::endl;
+	//This will find starting player by Qwirkle Rules
+    //Player *startingPlayer = findStartingPlayer(player1, player2);
+    //std::cout << "Starting player is: " << startingPlayer->getName() << std::endl;
 
     // Determine the starting player
 
     // Instantiate Game with the modified parameters
-    Game *game = new Game(player1, player2, bag, board, startingPlayer); // Pass player1, player2, bag, and currentPlayer
+    Game *game = new Game(player1, player2, bag, board, player1); // Pass player1, player2, bag, and currentPlayer
 
     // Call the correct method
     game->launchGame();

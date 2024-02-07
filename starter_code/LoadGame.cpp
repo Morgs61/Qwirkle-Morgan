@@ -56,6 +56,7 @@ Game *LoadGame::loadGame(string filename)
 
     // Load tile bag contents
     loadBagContents(bag, bagContents);
+    //bag = loadTileBag(bagContents);
 
     // Initialize vector to store players
     vector<Player *> players;
@@ -68,6 +69,7 @@ Game *LoadGame::loadGame(string filename)
 
     // Load board state
     board = loadBoardState(boardState);
+    bag = loadTileBag(bagContents);
 
     // Load current player
     Player *currentPlayer = nullptr;
@@ -101,22 +103,32 @@ void LoadGame::loadPlayer(LinkedList *bag, string playerName, int playerScore, s
     players.push_back(new Player(playerName, playerScore, playerHand));
 }
 
-LinkedList *LoadGame::loadTileBag(ifstream &file)
+LinkedList *LoadGame::loadTileBag(string bagContents)
 {
-    // Load tile bag from file and return LinkedList object
-    string line;
-    getline(file, line);
-    istringstream ss(line);
+    // Load tile bag from string representation and return LinkedList object
     LinkedList *bag = new LinkedList();
-    bag->initializeAndShuffleBag();
-    char colour;
-    int shape;
-    while (ss >> colour >> shape)
+    istringstream ss(bagContents);
+
+    char delimiter = ','; // Define the delimiter as a comma
+    string token;
+    while (getline(ss, token, delimiter)) // Use getline with the comma delimiter
     {
-        bag->push_back(new Tile(colour, shape));
+        char colour;
+        int shape;
+
+        // Extract color and shape information from the token
+        istringstream tokenStream(token);
+        tokenStream >> colour >> shape;
+
+        // Create a new tile object
+        Tile *tile = new Tile(colour, shape);
+
+        // Add the tile to the bag
+        bag->push_back(tile);
     }
     return bag;
 }
+
 
 LinkedList *LoadGame::loadHand(string handString, LinkedList *bag)
 {

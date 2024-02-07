@@ -65,7 +65,7 @@ void Game::launchGame() {
                 saveGame();
             }
             else if (menuChoice == 4) {
-                cout << "Quitting game..." << endl;
+                cout << "\nQuitting game..." << endl;
                 return;
             }
             else {

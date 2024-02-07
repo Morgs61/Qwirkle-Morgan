@@ -146,6 +146,27 @@ bool LinkedList::removeTile(Tile *tile)
     return false; // Tile not found
 }
 
+void LinkedList::initializeLoadedBag()
+{
+    // Get definitions from TileCodes.h
+    char colours[] = {RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE};
+    int shapes[] = {CIRCLE, STAR_4, DIAMOND, SQUARE, STAR_6, CLOVER};
+
+    // Create all combinations of colours and shapes
+    for (char colour : colours)
+    {
+        for (int shape : shapes)
+        {
+            // log the tile being added
+            // std::cout << "Adding tile: [" << colour << ", " << shape << "]" << std::endl;
+            // Add two pointers to each type of tile to the tile bag
+            addTile(new Tile(colour, shape));
+            addTile(new Tile(colour, shape));
+        }
+    }
+}
+
+
 void LinkedList::initializeAndShuffleBag()
 {
     // Get definitions from TileCodes.h

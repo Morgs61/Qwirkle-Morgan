@@ -23,6 +23,7 @@ public:
 
     // Add missing function declarations
     void initializeAndShuffleBag();
+    void initializeLoadedBag();
     void shuffle();
     Node *begin();
     Node *end();

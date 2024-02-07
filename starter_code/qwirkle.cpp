@@ -16,16 +16,10 @@
 #include "TileCodes.h"
 #include "qwirkle.h"
 
-using std::cin;
-using std::cout;
-using std::endl;
-using std::string;
-using std::vector;
-
 #define EXIT_SUCCESS 0
 
 void displayMenu();
-bool isValidPlayerName(const string &name);
+bool isValidPlayerName(const std::string &name);
 void displayStudentInformation();
 void loadGame();
 bool checkSurroundingTilesMatch(const std::vector<std::vector<Tile *>> &board,
@@ -38,32 +32,33 @@ int main(void) {
   LinkedList *list = new LinkedList();
   delete list;
 
+  // std::cout << "TODO: Implement Qwirkle!" << std::endl;
   // 2.1 Launch
-  cout << "\nWelcome to Qwirkle!" << endl;
-  cout << "-----------------------" << endl;
+  std::cout << "\nWelcome to Qwirkle!" << std::endl;
+  std::cout << "-----------------------" << std::endl;
 
   int choice = 0;
   bool quit = false;
 
   while (!quit) {
     displayMenu();
-    cout << "> ";
-    cin >> choice;
+    std::cout << "> ";
+    std::cin >> choice;
 
     if (std::cin.eof()) {
-      cout << "\n\nGoodbye" << endl;
+      std::cout << "\n\nGoodbye" << std::endl;
       exit(EXIT_SUCCESS);
-    } else if (cin.fail()) {
+    } else if (std::cin.fail()) {
       // Clear the error state
-      cin.clear();
+      std::cin.clear();
 
       // Ignore the rest of the line
-      cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-      cout << "Invalid choice. Please enter a valid option." << endl;
+      std::cout << "Invalid choice. Please enter a valid option." << std::endl;
     } else {
       if (choice == 1) {
-        cout << "\nStarting a New Game" << endl;
+        std::cout << "\nStarting a New Game" << std::endl;
         startNewGame();
       } else if (choice == 2) {
         loadGame();
@@ -71,10 +66,10 @@ int main(void) {
       } else if (choice == 3) {
         displayStudentInformation();
       } else if (choice == 4) {
-        cout << "\nQuitting the game. Goodbye!" << endl;
+        std::cout << "\nQuitting the game. Goodbye!" << std::endl;
         quit = true;
       } else {
-        cout << "Invalid choice. Please enter a valid option." << endl;
+        std::cout << "Invalid choice. Please enter a valid option." << std::endl;
       }
     }
   }
@@ -82,59 +77,61 @@ int main(void) {
   return EXIT_SUCCESS;
 }
 void displayMenu() {
-  cout << "\nMenu" << endl;
-  cout << "-----" << endl;
-  cout << "1. New Game" << endl;
-  cout << "2. Load Game" << endl;
-  cout << "3. Credits (Show student information)" << endl;
-  cout << "4. Quit \n" << endl;
+  std::cout << "\nMenu" << std::endl;
+  std::cout << "-----" << std::endl;
+  std::cout << "1. New Game" << std::endl;
+  std::cout << "2. Load Game" << std::endl;
+  std::cout << "3. Credits (Show student information)" << std::endl;
+  std::cout << "4. Quit \n" << std::endl;
 }
 
 // Function to check if a player name is valid
-bool isValidPlayerName(const string &name) {
+bool isValidPlayerName(const std::string &name) {
   for (char c : name) {
     // check if we can use this
     if (!isupper(c) || !isalpha(c)) {
-      cout << "Invalid name. Please enter uppercase letters only." << endl;
+      std::cout << "Invalid name. Please enter uppercase letters only." << std::endl;
       return false;
     }
   }
   return true;
 }
 
-// 2.2.3 Credits 
+// 2.2.3 Credits
 void displayStudentInformation() {
-  cout << "\n--------------------------------------" << endl;
+  std::cout << "\n--------------------------------------" << std::endl;
   // Hardcoded information for 4 students
-  cout << "Name: Michael Moon" << endl;
-  cout << "Student ID: s3523025" << endl;
-  cout << "Email: s3523025@student.rmit.edu.au" << endl;
+  std::cout << "Name: Michael Moon" << std::endl;
+  std::cout << "Student ID: s3523025" << std::endl;
+  std::cout << "Email: s3523025@student.rmit.edu.au" << std::endl;
 
-  cout << "\nName: Alexander Cowan" << endl;
-  cout << "Student ID: s3863084" << endl;
-  cout << "Email: s3863084@student.rmit.edu.au" << endl;
+  std::cout << "\nName: Alexander Cowan" << std::endl;
+  std::cout << "Student ID: s3863084" << std::endl;
+  std::cout << "Email: s3863084@student.rmit.edu.au" << std::endl;
 
-  cout << "\nName: Michael Whyte" << endl;
-  cout << "Student ID: s3851481" << endl;
-  cout << "Email: S3851481@student.rmit.edu.au" << endl;
+  std::cout << "\nName: Michael Whyte" << std::endl;
+  std::cout << "Student ID: s3851481" << std::endl;
+  std::cout << "Email: S3851481@student.rmit.edu.au" << std::endl;
 
-  cout << "\nName: Morgan Cassar" << endl;
-  cout << "Student ID: s3858530" << endl;
-  cout << "Email: s3858530@student.rmit.edu.au" << endl;
-  cout << "--------------------------------------" << endl;
+  std::cout << "\nName: Morgan Cassar" << std::endl;
+  std::cout << "Student ID: s3858530" << std::endl;
+  std::cout << "Email: s3858530@student.rmit.edu.au" << std::endl;
+  std::cout << "--------------------------------------" << std::endl;
 }
 
 void loadGame() {
-  cout << "\nEnter the filename from which to load a game:" << endl;
-  string filename;
-  cout << "> ";
+  std::cout << "\nEnter the filename from which to load a game:" << std::endl;
+  std::string filename;
+  std::cout << "> ";
 
   cin >> filename;
 
+  std::cin >> filename;
+  // Prepend the test folder path.
   filename = "tests/" + filename;
 
   if (std::cin.eof()) {
-    cout << "\n\nGoodbye" << endl;
+    std::cout << "\n\nGoodbye" << std::endl;
     exit(EXIT_SUCCESS);
   }
 
@@ -154,19 +151,19 @@ void loadGame() {
     // Check if the file is open
     if (file.is_open()) {
       // File is open, proceed with reading
-      string line;
+      std::string line;
       if (getline(file, line)) {
-        cout << "\nQwirkle game successfully loaded." << endl;
+        std::cout << "\nQwirkle game successfully loaded." << std::endl;
         // Continue reading or processing the file content here
         loadedGame->launchGame();
       } else {
-        cout << "\nInvalid file format. Unable to load the game." << endl;
+        std::cout << "\nInvalid file format. Unable to load the game." << std::endl;
       }
 
       // Close the file when done
       file.close();
     } else {
-      cout << "\nError: Unable to open the file." << endl;
+      cout << "\nError: Unable to open the file." << std::endl;
     }
   }
 }
@@ -178,14 +175,14 @@ void startNewGame() {
   bag->initializeAndShuffleBag();      // Populate the bag
 
   // Create player names
-  string playerName1, playerName2;
+  std::string playerName1, playerName2;
   do {
     cout << "\nEnter a name for player 1 (uppercase characters only): \n";
     cout << "> ";
-    cin >> playerName1;
+    std::cin >> playerName1;
 
     if (std::cin.eof()) {
-      cout << "\n\nGoodbye" << endl;
+      cout << "\n\nGoodbye" << std::endl;
       exit(EXIT_SUCCESS);
     }
   } while (!isValidPlayerName(playerName1));
@@ -193,9 +190,9 @@ void startNewGame() {
   do {
     cout << "\nEnter a name for player 2 (uppercase characters only): \n";
     cout << "> ";
-    cin >> playerName2;
+    std::cin >> playerName2;
     if (std::cin.eof()) {
-      cout << "\n\nGoodbye" << endl;
+      cout << "\n\nGoodbye" << std::endl;
       exit(EXIT_SUCCESS);
     }
   } while (!isValidPlayerName(playerName2));
@@ -211,8 +208,8 @@ void startNewGame() {
   Player *player1 = new Player(playerName1, 0, playerHand1);
   Player *player2 = new Player(playerName2, 0, playerHand2);
 
-  cin.ignore();
-  cout << "\nLet's Play!" << endl;
+  std::cin.ignore();
+  cout << "\nLet's Play!" << std::endl;
 
   // Initialize the board
   Board *board = new Board();  // Instantiate Board

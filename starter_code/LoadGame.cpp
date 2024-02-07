@@ -9,29 +9,23 @@
 #include "LoadGame.h"
 #include "Tile.h"
 
-using std::getline;
-using std::ifstream;
-using std::istringstream;
-using std::stoi;
-using std::string;
-using std::vector;
 
-Game *LoadGame::loadGame(string filename) {
+Game *LoadGame::loadGame(std::string filename) {
   ifstream file(filename);
   if (!file.is_open()) {
-    cout << "Error: File '" << filename << "' not found." << endl;
+    std::cout << "Error: File '" << filename << "' not found." << std::endl;
     return nullptr;
   }
 
   // Check if the file is empty
   if (file.peek() == ifstream::traits_type::eof()) {
-    cout << "Error: File '" << filename << "' is empty." << endl;
+    std::cout << "Error: File '" << filename << "' is empty." << std::endl;
     return nullptr;
   }
 
-  cout << "\nLoading Game..." << endl;
+  std::cout << "\nLoading Game..." << std::endl;
 
-  string line;
+  std::string line;
 
   // Initialize game components
   Board *board = new Board();
@@ -39,7 +33,7 @@ Game *LoadGame::loadGame(string filename) {
   bag->initializeAndShuffleBag();      // Reset the linked list
 
   // Read and store each line of the file
-  string plyr1Name, plyr1Score, plyr1Hand, plyr2Name, plyr2Score, plyr2Hand,
+  std::string plyr1Name, plyr1Score, plyr1Hand, plyr2Name, plyr2Score, plyr2Hand,
       boardSize, boardState, bagContents, currentPlyr;
   getline(file, plyr1Name);
   getline(file, plyr1Score);
@@ -57,7 +51,7 @@ Game *LoadGame::loadGame(string filename) {
   // bag = loadTileBag(bagContents);
 
   // Initialize vector to store players
-  vector<Player *> players;
+  std::vector<Player *> players;
 
   // Load player 1
   loadPlayer(bag, plyr1Name, stoi(plyr1Score), plyr1Hand, players);
@@ -78,7 +72,7 @@ Game *LoadGame::loadGame(string filename) {
     }
   }
   if (currentPlayer == nullptr) {
-    cout << "Error: Current player not found." << endl;
+    std::cout << "Error: Current player not found." << std::endl;
     return nullptr;
   }
 
@@ -89,8 +83,8 @@ Game *LoadGame::loadGame(string filename) {
   return new Game(players[0], players[1], bag, board, currentPlayer);
 }
 
-void LoadGame::loadPlayer(LinkedList *bag, string playerName, int playerScore,
-                          string playerHandStr, vector<Player *> &players) {
+void LoadGame::loadPlayer(LinkedList *bag, std::string playerName, int playerScore,
+                          std::string playerHandStr, std::vector<Player *> &players) {
   // Load player's hand
   LinkedList *playerHand = loadHand(playerHandStr, bag);
 
@@ -98,7 +92,7 @@ void LoadGame::loadPlayer(LinkedList *bag, string playerName, int playerScore,
   players.push_back(new Player(playerName, playerScore, playerHand));
 }
 
-LinkedList *LoadGame::loadTileBag(string bagContents) {
+LinkedList *LoadGame::loadTileBag(std::string bagContents) {
   // Load tile bag from string representation and return LinkedList object
   LinkedList *bag = new LinkedList();
   istringstream ss(bagContents);
@@ -147,7 +141,7 @@ LinkedList *LoadGame::loadHand(string handString, LinkedList *bag) {
     } else {
       // If the tile couldn't be added to the hand, delete it to avoid memory
       // leaks
-      cout << "Error: Invalid tile in player hand." << endl;
+      std::cout << "Error: Invalid tile in player hand." << std::endl;
       delete tile;
     }
   }
@@ -169,7 +163,7 @@ Board *LoadGame::loadBoardState(string boardState) {
     size_t atPos = token.find('@');
     if (atPos != string::npos && atPos + 1 < token.size()) {
       // Extract color, shape, row, and column information
-      string colorShape = token.substr(0, atPos);
+      std::string colorShape = token.substr(0, atPos);
       char colour = ' ';  // Initialize colour with a default value
 
       bool colorFound = false;
@@ -185,11 +179,11 @@ Board *LoadGame::loadBoardState(string boardState) {
       if (!colorFound)  // Check if the colour is still the default value
       {
         // Handle error case where no color is found
-        cerr << "Error: No color found in token: " << token << endl;
+        cerr << "Error: No color found in token: " << token << std::endl;
       }
 
       // Extract the shape part from the colorShape string
-      string shapeStr = "";
+      std::string shapeStr = "";
       bool foundAtSymbol = false;  // Flag to track if '@' symbol is found
 
       for (char c : colorShape) {
@@ -214,7 +208,7 @@ Board *LoadGame::loadBoardState(string boardState) {
         shape = stoi(shapeStr);
         shapeFound = true;
       } catch (const std::invalid_argument &ia) {
-        cerr << "Error: Invalid shape value in token: " << token << endl;
+        cerr << "Error: Invalid shape value in token: " << token << std::endl;
       }
 
       // Extract row and column indices
@@ -228,11 +222,11 @@ Board *LoadGame::loadBoardState(string boardState) {
         // Place the tile on the board
         board->placeTile(tile, row, col);
       } else {
-        cerr << "Error: Invalid shape" << endl;
+        cerr << "Error: Invalid shape" << std::endl;
       }
     } else {
       // Handle error case where '@' is not found
-      cerr << "Error: Invalid token format" << endl;
+      cerr << "Error: Invalid token format" << std::endl;
     }
   }
 
@@ -244,7 +238,7 @@ Board *LoadGame::loadBoardState(string boardState) {
 void LoadGame::loadBagContents(LinkedList *bag, string bagContents) {
   // Check if the bag pointer is null
   if (bag == nullptr) {
-    cerr << "Error: Bag pointer is null." << endl;
+    cerr << "Error: Bag pointer is null." << std::endl;
     return;
   }
 

@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <iostream>
-#include <iostream>  // Include for std::cout, std::endl
+#include <iostream>  // Include for std::std::cout, std::endl
 #include <set>
 #include <vector>  // Include for std::vector
 
@@ -11,13 +11,9 @@
 #define ROW_MAX 25
 #define ROW_MIN 0
 
-using std::cin;
-using std::cout;
-using std::endl;
-using std::string;
-using std::to_string;
+
 // contains uppercase letters A to Z
-string labels[COLUMN_MAX];
+std::string labels[COLUMN_MAX];
 
 Board::Board() {
   for (int ch = 'A'; ch <= 'Z'; ch++) {
@@ -47,36 +43,36 @@ void Board::displayBoard() {
     for (int j = 0; j < COLUMN_MAX; j++) {
       // Print column indices and separators
       if (i == 0 && j == 0) {
-        cout << "   " << j << "  ";
+        std::cout << "   " << j << "  ";
       } else if (i == 0 && j < 10) {
-        cout << j << "  ";
+        std::cout << j << "  ";
       } else if (i == 0 && j > 9) {
-        cout << j << " ";
+        std::cout << j << " ";
       } else if (i == 1 && j == 0) {
-        cout << "  -"
+        std::cout << "  -"
              << "--";
       } else if (i == 1 && j == COLUMN_MAX - 1) {
-        cout << "----";
+        std::cout << "----";
       } else if (i == 1) {
-        cout << "---";
+        std::cout << "---";
       }
     }
-    cout << endl;
+    std::cout << std::endl;
   }
 
   // Print the board content
   for (int i = 0; i < ROWS; i++) {
-    cout << labels[i] << " ";  // Print row labels
+    std::cout << labels[i] << " ";  // Print row labels
     for (int j = 0; j < ROWS; ++j) {
       // Check if a tile exists at the current position
       if (board[i * COLS + j] != nullptr) {
-        string tileString = board[i * COLS + j]->toString();
-        cout << "|" << tileString;  // Print the tile's string representation
+        std::string tileString = board[i * COLS + j]->toString();
+        std::cout << "|" << tileString;  // Print the tile's string representation
       } else {
-        cout << "|  ";  // Print empty space for missing tile
+        std::cout << "|  ";  // Print empty space for missing tile
       }
     }
-    cout << "|" << endl;  // Close the last cell and end the row
+    std::cout << "|" << std::endl;  // Close the last cell and end the row
   }
 }
 
@@ -94,12 +90,12 @@ Tile *Board::getTileAt(int row, int col) {
 }
 
 std::string Board::getBoardState() {
-  string stateString = "";
+  std::string stateString = "";
   for (int i = 0; i < ROWS; i++) {
     for (int j = 0; j < COLS; ++j) {
       if (board[i * COLS + j] != nullptr) {
         stateString += board[i * COLS + j]->toString() + "@" + labels[i] +
-                       to_string(j) + ", ";
+                       std::to_string(j) + ", ";
       }
     }
   }

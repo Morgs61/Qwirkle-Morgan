@@ -17,11 +17,12 @@ using std::string;
 using std::vector;
 
 Game *LoadGame::loadGame(string filename)
-{
-    ifstream file(filename);
-    if (!file.is_open())
-    {
-        cout << "Error: File '" << filename << "' not found." << endl;
+{   
+    string fullFilename = "tests/" + filename;
+
+    ifstream file(fullFilename);
+    if (!file.is_open()) {
+        cout << "Error: File '" << fullFilename << "' not found." << endl;
         return nullptr;
     }
 

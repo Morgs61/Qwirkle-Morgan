@@ -365,10 +365,14 @@ void Game::saveGame() {
     cout << "Enter the filename to save the game: ";
     getline(cin, filename);
     if (std::cin.eof()) {
-          cout << "\n\nGoodbye" << endl;
+        cout << "\n\nGoodbye" << endl;
         exit(EXIT_SUCCESS);
     }
-    SaveGame::saveGameState(filename, player1, player2, board, bag, currentPlayer);
+
+    // Prepend the "tests/" folder to the filename
+    string fullFilename = "tests/" + filename;
+
+    SaveGame::saveGameState(fullFilename, player1, player2, board, bag, currentPlayer);
     cout << "Game successfully saved" << endl;
 }
 

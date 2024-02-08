@@ -15,8 +15,10 @@
 #include "Tile.h"
 #include "TileCodes.h"
 #include "qwirkle.h"
+#include "Help.h"
 
 #define EXIT_SUCCESS 0
+
 
 void displayMenu();
 bool isValidPlayerName(const std::string &name);
@@ -40,41 +42,40 @@ int main(void) {
   int choice = 0;
   bool quit = false;
 
-  while (!quit) {
-    displayMenu();
-    std::cout << "> ";
-    std::cin >> choice;
+    while (!quit) {
+        displayMenu();
+        std::cout << "If you need help with this menu type, help" << std::endl;
+        std::cout << "> ";
+        std::string userInput;
+        std::cin >> userInput;
 
-    if (std::cin.eof()) {
-      std::cout << "\n\nGoodbye" << std::endl;
-      exit(EXIT_SUCCESS);
-    } else if (std::cin.fail()) {
-      // Clear the error state
-      std::cin.clear();
+        if (userInput == "help") {
+            Help::displayMainMenuHelp();
+        } else {
+            // Convert userInput to integer if it's not "help"
+            try {
+                choice = std::stoi(userInput);
 
-      // Ignore the rest of the line
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-      std::cout << "Invalid choice. Please enter a valid option." << std::endl;
-    } else {
-      if (choice == 1) {
-        std::cout << "\nStarting a New Game" << std::endl;
-        startNewGame();
-      } else if (choice == 2) {
-        loadGame();
-        // Add code for loading a game
-      } else if (choice == 3) {
-        displayStudentInformation();
-      } else if (choice == 4) {
-        std::cout << "\nQuitting the game. Goodbye!" << std::endl;
-        quit = true;
-      } else {
-        std::cout << "Invalid choice. Please enter a valid option." << std::endl;
-      }
+                if (choice == 1) {
+                    std::cout << "\nStarting a New Game" << std::endl;
+                    startNewGame();
+                } else if (choice == 2) {
+                    loadGame();
+                } else if (choice == 3) {
+                    displayStudentInformation();
+                } else if (choice == 4) {
+                    std::cout << "\nQuitting the game. Goodbye!" << std::endl;
+                    quit = true;
+                } else {
+                    std::cout << "Invalid choice. Please enter a valid option." << std::endl;
+                }
+            } catch (...) {
+                std::cout << "Invalid choice. Please enter a valid option." << std::endl;
+            }
+        }
     }
-  }
 
-  return EXIT_SUCCESS;
+    return 0;
 }
 void displayMenu() {
   std::cout << "\nMenu" << std::endl;
@@ -167,67 +168,78 @@ void loadGame() {
 }
 
 void startNewGame() {
-  // Initialize and shuffle the tile bag
-  // cout << "making the bag" << std::endl;
-  LinkedList *bag = new LinkedList();  // Instantiate LinkedList
-  bag->initializeAndShuffleBag();      // Populate the bag
+    // Initialize and shuffle the tile bag
+    // cout << "making the bag" << std::endl;
 
-  // Create player names
-  std::string playerName1, playerName2;
-  do {
-    cout << "\nEnter a name for player 1 (uppercase characters only): \n";
-    cout << "> ";
-    std::cin >> playerName1;
+    LinkedList *bag = new LinkedList();  // Instantiate LinkedList
+    bag->initializeAndShuffleBag();      // Populate the bag
 
-    if (std::cin.eof()) {
-      cout << "\n\nGoodbye" << std::endl;
-      exit(EXIT_SUCCESS);
+    // Create player names
+    std::string playerName1, playerName2;
+    bool invalidName = true;
+    while (invalidName) {
+
+
+        // ...
+
+            cout << "\nEnter a name for player 1 (uppercase characters only): \n";
+            cout << "> ";
+            std::cin >> playerName1;
+
+            if (std::cin.eof()) {
+              cout << "\n\nGoodbye" << std::endl;
+              exit(EXIT_SUCCESS);
+            } else if (playerName1 == "help") {
+              Help::displayNewGameMenuHelp();
+            } else if (isValidPlayerName(playerName1)) {
+              invalidName = false;
+            } else {
+              std::cout << "Invalid player name. Please enter uppercase characters only." << std::endl;
+            }
     }
-  } while (!isValidPlayerName(playerName1));
 
-  do {
-    cout << "\nEnter a name for player 2 (uppercase characters only): \n";
-    cout << "> ";
-    std::cin >> playerName2;
-    if (std::cin.eof()) {
-      cout << "\n\nGoodbye" << std::endl;
-      exit(EXIT_SUCCESS);
+    invalidName = true;
+    while (invalidName) {
+        cout << "\nEnter a name for player 2 (uppercase characters only): \n";
+        cout << "> ";
+        std::cin >> playerName2;
+        if (std::cin.eof()) {
+            cout << "\n\nGoodbye" << std::endl;
+            exit(EXIT_SUCCESS);
+        } else if (playerName2 == "help") {
+            Help::displayNewGameMenuHelp();
+        } else if (isValidPlayerName(playerName2)) {
+            invalidName = false;
+        } else {
+            std::cout << "Invalid player name. Please enter uppercase characters only." << std::endl;
+        }
     }
-  } while (!isValidPlayerName(playerName2));
 
-  // Create player hands
-  LinkedList *playerHand1 = new LinkedList();
-  initializePlayerHand(playerHand1, bag);  // Pass the address of tileBag
+    // Create player hands
+    LinkedList *playerHand1 = new LinkedList();
+    initializePlayerHand(playerHand1, bag);  // Pass the address of tileBag
 
-  LinkedList *playerHand2 = new LinkedList();
-  initializePlayerHand(playerHand2, bag);  // Pass the address of tileBag
+    LinkedList *playerHand2 = new LinkedList();
+    initializePlayerHand(playerHand2, bag);  // Pass the address of tileBag
 
-  // Create players
-  Player *player1 = new Player(playerName1, 0, playerHand1);
-  Player *player2 = new Player(playerName2, 0, playerHand2);
+    // Create players
+    Player *player1 = new Player(playerName1, 0, playerHand1);
+    Player *player2 = new Player(playerName2, 0, playerHand2);
 
-  std::cin.ignore();
-  cout << "\nLet's Play!" << std::endl;
+    std::cin.ignore();
+    cout << "\nLet's Play!" << std::endl;
 
-  // Initialize the board
-  Board *board = new Board();  // Instantiate Board
+    // Initialize the board
+    Board *board = new Board();  // Instantiate Board
 
-  // This will find starting player by Qwirkle Rules
-  // Player *startingPlayer = findStartingPlayer(player1, player2);
-  // std::cout << "Starting player is: " << startingPlayer->getName() <<
-  // std::endl;
+    // Instantiate Game with the modified parameters
+    Game *game =
+        new Game(player1, player2, bag, board,
+                 player1);  // Pass player1, player2, bag, and currentPlayer
 
-  // Determine the starting player
-
-  // Instantiate Game with the modified parameters
-  Game *game =
-      new Game(player1, player2, bag, board,
-               player1);  // Pass player1, player2, bag, and currentPlayer
-
-  // Call the correct method
-  game->launchGame();
+    // Call the correct method
+    game->launchGame();
 }
-
 void initializePlayerHand(LinkedList *playerHand, LinkedList *bag) {
   // Draw tiles from the tile bag and add them to the player's hand until there
   // are 6 tiles
@@ -327,3 +339,5 @@ Player *findStartingPlayer(Player *player1, Player *player2) {
 
   return startingPlayer;
 }
+
+

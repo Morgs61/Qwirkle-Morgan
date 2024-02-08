@@ -4,6 +4,7 @@
 #include <iostream>
 #include <limits>
 #include <random>
+#include <fstream>
 
 #include "Board.h"
 #include "Game.h"
@@ -84,6 +85,7 @@ bool Game::isGameComplete() {
 }
 
 void Game::displayGameStatus() {
+  std::cout << "\n " << bag->getSize() << std::endl;
   std::cout << "\n"
             << currentPlayer->getName() << ", it's your turn" << std::endl;
   std::cout << "Score for " << player1->getName() << ": " << player1->getScore()
@@ -392,20 +394,82 @@ void Game::saveGame() {
 }
 
 void Game::declareWinner() {
-  std::cout << "Game over" << std::endl;
-  std::cout << "\nScore for " << player1->getName() << ": "
-            << player1->getScore() << std::endl;
-  std::cout << "Score for " << player2->getName() << ": " << player2->getScore()
-            << std::endl;
-  std::cout << "Player ";
+    std::cout << "Game over" << std::endl;
+    std::cout << "\nScore for " << player1->getName() << ": "
+              << player1->getScore() << std::endl;
+    std::cout << "Score for " << player2->getName() << ": " << player2->getScore()
+              << std::endl;
+    std::cout << "Player ";
 
-  if (player1->getScore() > player2->getScore()) {
-    std::cout << player1->getName() << " won!" << std::endl;
-  } else if (player1->getScore() < player2->getScore()) {
-    std::cout << player2->getName() << " won!" << std::endl;
-  } else {
-    std::cout << "It's a draw!" << std::endl;
+    if (player1->getScore() > player2->getScore()) {
+        std::cout << player1->getName() << " won!" << std::endl;
+    } else if (player1->getScore() < player2->getScore()) {
+        std::cout << player2->getName() << " won!" << std::endl;
+    } else {
+        std::cout << "It's a draw!" << std::endl;
+    }
+
+    // Open the high score text file for appending
+    std::ofstream outputFile("highscores.txt", std::ios_base::app);
+    if (outputFile.is_open()) {
+        outputFile << "High scores for this game:\n";
+        outputFile << player1->getName() << ": " << player1->getScore() << std::endl;
+        outputFile << player2->getName() << ": " << player2->getScore() << std::endl;
+        outputFile.close();
+        std::cout << "High scores saved to highscores.txt" << std::endl;
+    } else {
+        std::cout << "Error: Unable to open highscores.txt for writing" << std::endl;
+    }
+
+    std::vector<std::pair<std::string, int>> highScorePairs; // Declare a vector to store player names and their corresponding high scores
+
+    // Update the high score calculation
+    highScorePairs.push_back(std::make_pair(player1->getName(), player1->getScore()));
+    highScorePairs.push_back(std::make_pair(player2->getName(), player2->getScore()));
+
+    // Sort the high score pairs in descending order based on scores
+    std::sort(highScorePairs.begin(), highScorePairs.end(), [](const std::pair<std::string, int>& a, const std::pair<std::string, int>& b) {
+        return a.second > b.second;
+    });
+
+    // Display the highest scores along with player names
+    std::cout << "The highest scores are: " << std::endl;
+    for (int i = 0; i < std::min(10, static_cast<int>(highScorePairs.size())); ++i) {
+        std::cout << highScorePairs[i].first << ": " << highScorePairs[i].second << std::endl;
+    }
+    exit(0);
+}
+
+// Function to load high scores from a file
+std::vector<std::pair<std::string, int>> highScorePairs; // Declare a vector to store player names and their corresponding high scores
+
+void loadHighScoresFromFile(const std::string& filename) {
+  std::ifstream file(filename);
+  if (file.is_open()) {
+    std::string name;
+    int score;
+    while (file >> name >> score) {
+      highScorePairs.push_back(std::make_pair(name, score));
+    }
+    file.close();
   }
-  std::cout << "\n\nGoodbye" << std::endl;
-  exit(0);
+}
+
+// Function to save high scores to a file
+void saveHighScoresToFile(const std::string& filename) {
+    std::ofstream file(filename);
+    if (file.is_open()) {
+        for (const auto& pair : highScorePairs) {
+            file << pair.first << " " << pair.second << std::endl;
+        }
+        file.close();
+    }
+}
+
+// Function to display the highest scores
+void displayHighScores() {
+    std::cout << "The highest scores are: " << std::endl;
+    for (int i = 0; i < std::min(10, static_cast<int>(highScorePairs.size())); ++i) {
+        std::cout << highScorePairs[i].first << ": " << highScorePairs[i].second << std::endl;
+    }
 }

@@ -1,6 +1,2 @@
-High scores for this game:
-A: 2
-B: 4
-High scores for this game:
-MIKE: 2
-LAURA: 4
+BA 11
+AB 7

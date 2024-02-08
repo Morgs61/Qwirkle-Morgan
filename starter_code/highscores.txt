@@ -1,2 +1,4 @@
 BA 11
+MIK 10
+LAU 10
 AB 7

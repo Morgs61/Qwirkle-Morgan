@@ -9,10 +9,14 @@ void HighScoreManager::loadHighScoresFromFile(const std::string& filename) {
     if (file.is_open()) {
         std::string name;
         int score;
+        std::cout << "Reading high scores from file: " << filename << std::endl;
         while (file >> name >> score) {
+            std::cout << "Loaded high score: " << name << " - " << score << std::endl;
             highScores.push_back(std::make_pair(name, score));
         }
         file.close();
+    } else {
+        std::cout << "Error: Unable to open file: " << filename << std::endl;
     }
 }
 

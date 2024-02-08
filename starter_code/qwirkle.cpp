@@ -16,6 +16,7 @@
 #include "TileCodes.h"
 #include "qwirkle.h"
 #include "Help.h"
+#include "HighScoreManager.h"
 
 #define EXIT_SUCCESS 0
 
@@ -41,7 +42,7 @@ int main(void) {
 
   int choice = 0;
   bool quit = false;
-
+  HighScoreManager highScoreManager("highscores.txt");
     while (!quit) {
         displayMenu();
         std::cout << "If you need help with this menu type, help" << std::endl;
@@ -66,6 +67,10 @@ int main(void) {
                 } else if (choice == 4) {
                     std::cout << "\nQuitting the game. Goodbye!" << std::endl;
                     quit = true;
+                }  else if (choice == 5)
+                  {
+                    std::cout << "\nHigh Scores!" << std::endl;
+                      highScoreManager.loadHighScoresFromFile("highscores.txt"); // Provide the filename
                 } else {
                     std::cout << "Invalid choice. Please enter a valid option." << std::endl;
                 }
@@ -83,7 +88,8 @@ void displayMenu() {
   std::cout << "1. New Game" << std::endl;
   std::cout << "2. Load Game" << std::endl;
   std::cout << "3. Credits (Show student information)" << std::endl;
-  std::cout << "4. Quit \n" << std::endl;
+  std::cout << "4. Quit" << std::endl;
+  std::cout << "5. Display High Scores \n" << std::endl;
 }
 
 // Function to check if a player name is valid

@@ -30,67 +30,104 @@ bool checkSurroundingTilesMatch(const std::vector<std::vector<Tile *>> &board,
 bool checkSameTypeTiles(const std::vector<Tile *> &tilesToPlace,
                         const std::vector<std::pair<int, int>> &positions);
 Player *findStartingPlayer(Player *player1, Player *player2);
-
+void displayMenuSelection();
+void displayMenuBasic();
+void displayMenuEnhanced();
 int main(void) {
   LinkedList *list = new LinkedList();
   delete list;
 
-  // std::cout << "TODO: Implement Qwirkle!" << std::endl;
   // 2.1 Launch
   std::cout << "\nWelcome to Qwirkle!" << std::endl;
   std::cout << "-----------------------" << std::endl;
 
-  int choice = 0;
+  
   bool quit = false;
-  HighScoreManager highScoreManager("highscores.txt");
-    while (!quit) {
-        displayMenu();
-        std::cout << "If you need help with this menu type, help" << std::endl;
-        std::cout << "> ";
-        std::string userInput;
-        std::cin >> userInput;
+bool isEnhancedMenu = false; // Initially, assume basic menu
 
-        if (userInput == "help") {
-            Help::displayMainMenuHelp();
-        } else {
-            // Convert userInput to integer if it's not "help"
-            try {
-                choice = std::stoi(userInput);
+while (!quit) {    
+    if (isEnhancedMenu) {
+        displayMenuEnhanced();
+    } else {
+        displayMenuBasic(); // Assuming this is the function for the basic menu
+    }
+    std::cout << "If you need help with this menu type, help" << std::endl;
+    std::cout << "> ";
+    std::string userInput;
+    std::cin >> userInput;
 
-                if (choice == 1) {
-                    std::cout << "\nStarting a New Game" << std::endl;
-                    startNewGame();
-                } else if (choice == 2) {
-                    loadGame();
-                } else if (choice == 3) {
-                    displayStudentInformation();
-                } else if (choice == 4) {
-                    std::cout << "\nQuitting the game. Goodbye!" << std::endl;
-                    quit = true;
-                }  else if (choice == 5)
-                  {
-                    std::cout << "\nHigh Scores!" << std::endl;
-                      highScoreManager.loadHighScoresFromFile("highscores.txt"); // Provide the filename
-                } else {
-                    std::cout << "Invalid choice. Please enter a valid option." << std::endl;
-                }
-            } catch (...) {
+    if (userInput == "help") {
+        Help::displayMainMenuHelp();
+    } else {
+        // Convert userInput to integer if it's not "help"
+        try {
+            int choice = std::stoi(userInput);
+
+            if (choice == 1) {
+                std::cout << "\nStarting a New Game" << std::endl;
+                startNewGame();
+            } else if (choice == 2) {
+                loadGame();
+            } else if (choice == 3) {
+                displayStudentInformation();
+            } else if (choice == 4) {
+                std::cout << "\nQuitting the game. Goodbye!" << std::endl;
+                quit = true;
+            } else if (isEnhancedMenu && choice == 5) {
+                std::cout << "\nHigh Scores!" << std::endl;
+                HighScoreManager highScoreManager("highscores.txt");
+            } else if (choice == 5) {
+                std::cout << "Toggling to " << (isEnhancedMenu ? "basic" : "enhanced") << " menu." << std::endl;
+                isEnhancedMenu = !isEnhancedMenu; // Toggle menu mode 
+            } else {
                 std::cout << "Invalid choice. Please enter a valid option." << std::endl;
             }
+        } catch (...) {
+            std::cout << "Invalid choice. Please enter a valid option." << std::endl;
         }
     }
-
-    return 0;
 }
-void displayMenu() {
+
+return 0;
+}
+void displayMenuBasic() {
   std::cout << "\nMenu" << std::endl;
   std::cout << "-----" << std::endl;
   std::cout << "1. New Game" << std::endl;
   std::cout << "2. Load Game" << std::endl;
   std::cout << "3. Credits (Show student information)" << std::endl;
   std::cout << "4. Quit" << std::endl;
-  std::cout << "5. Display High Scores \n" << std::endl;
+  std::cout << "5. Toggle Enhanced Menu" << std::endl;
+
 }
+
+void displayMenuEnhanced() {
+  std::cout << "\nMenu" << std::endl;
+  std::cout << "-----" << std::endl;
+  std::cout << "1. New Game" << std::endl;
+  std::cout << "2. Load Game" << std::endl;
+  std::cout << "3. Credits (Show student information)" << std::endl;
+  std::cout << "4. Quit" << std::endl;
+  std::cout << "5. High Scores \n" << std::endl;
+
+
+}
+
+void displayMenuSelection() {
+    std::cout << "Which menu would you like to use? (Enter 'basic' or 'enhanced'): ";
+    std::string menuChoice;
+    std::cin >> menuChoice;
+    
+    if (menuChoice == "basic") {
+        displayMenuBasic();
+    } else if (menuChoice == "enhanced") {
+        displayMenuEnhanced();
+    } else {
+        std::cout << "Invalid choice. Please enter 'basic' or 'enhanced'." << std::endl;
+        displayMenuSelection();
+    }
+}
+
 
 // Function to check if a player name is valid
 bool isValidPlayerName(const std::string &name) {

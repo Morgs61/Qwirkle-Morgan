@@ -8,10 +8,13 @@
 #include "Game.h"
 #include "LoadGame.h"
 #include "Tile.h"
-
+#include "Help.h"
 
 Game *LoadGame::loadGame(std::string filename) {
-  ifstream file(filename);
+
+
+
+  std::ifstream file(filename);
   if (!file.is_open()) {
     std::cout << "Error: File '" << filename << "' not found." << std::endl;
     return nullptr;

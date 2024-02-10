@@ -14,6 +14,7 @@
 #include "Tile.h"
 #include "qwirkle.h"
 #include "HighScoreManager.h"
+#include "Help.h"
 
 
 Game::Game(Player* player1, Player* player2, LinkedList* bag, Board* board,
@@ -230,7 +231,7 @@ bool Game::placeTiles() {
     currentPlayer->getHand()->displayHand();
     std::cout << "Place tile " << numTiles + 1
          << " using the format: place <tile> at <grid location>" << std::endl;
-    std::cout << "Enter 'end' to end your turn or 'back' to return to previous menu"
+    std::cout << "Enter 'end' to end your turn or 'back' to return to previous menu or 'help' for help"
          << std::endl;
     std::cout << "> ";
 
@@ -247,7 +248,7 @@ bool Game::placeTiles() {
       }
     }
     // Check for the 'back' command first
-    if (words.size() == 1 && words[0] == "back") {
+    else if (words.size() == 1 && words[0] == "back") {
       if (numTiles > 0) {
         std::cout << "You have already placed a tile. You must continue your move."
              << std::endl;
@@ -257,8 +258,12 @@ bool Game::placeTiles() {
         return false;  // Directly exit the function, thereby exiting the loop
                        // and not ending the player's
       }
-
-    } else {
+    }
+    else if (words.size() == 1 && words[0] == "help") {
+      Help help;
+      help.displayPlaceTileHelp();
+    }
+    else {
       if (words.size() != 4 || words[0] != "place" || words[3].length() >= 4) {
         std::cout << "Invalid command. Please try again." << std::endl;
       } else {
@@ -329,7 +334,7 @@ void Game::replaceTileAndUpdateHand(Tile* tileToReplace) {
 
 bool Game::replaceTile() {
   std::cout << "Replace a tile using the format: replace <tile>" << std::endl;
-  std::cout << "Enter 'back' to return to previous menu" << std::endl;
+  std::cout << "Enter 'back' to return to previous menu or 'help' to see further instructions" << std::endl;
 
   bool validInput = false;
   while (!validInput) {
@@ -345,7 +350,13 @@ bool Game::replaceTile() {
       std::cout << "Returning to the previous menu." << std::endl;
       return false;  // Directly exit the function, thereby exiting the loop and
                      // not ending the player's turn
-    } else {
+    } 
+    else if (command == "help") {
+      Help help;
+      help.displayReplaceTileHelp();
+    }
+    
+    else {
       std::vector<std::string> words;
       size_t pos = 0;
       // Split the command into words based on spaces
@@ -379,11 +390,23 @@ bool Game::replaceTile() {
 void Game::saveGame() {
   // Save game
   std::string filename;
-  std::cout << "Enter the filename to save the game: ";
+  std::cout << "Input the name of the file you want to save the game to or 'back' \n"
+            << "to return to the previous menu or 'help' for additional help \n" 
+            << std::endl;
+            std::cout << "> "; 
   getline(std::cin, filename);
   if (std::cin.eof()) {
     std::cout << "\n\nGoodbye" << std::endl;
     exit(EXIT_SUCCESS);
+  }
+  else if (filename == "back") {
+    std::cout << "Returning to the previous menu." << std::endl;
+    return;
+  }
+  else if (filename == "help") {
+    Help help;
+    help.displaySaveGameHelp();
+    return;
   }
 
   // Prepend the "tests/" folder to the filename

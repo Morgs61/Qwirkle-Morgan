@@ -8,7 +8,8 @@ public:
     static void displayReplaceTileHelp();
     static void displayPlaceTileHelp();
     static void displayMainMenuHelp();
-    static void displayNewGameMenuHelp();
+    static void displayNamingHelp();
+    static void displayLoadGameHelp();
 };
 
 #endif /* HELP_H */

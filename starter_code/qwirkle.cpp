@@ -97,7 +97,7 @@ void displayMenuBasic() {
   std::cout << "3. Credits (Show student information)" << std::endl;
   std::cout << "4. Quit" << std::endl;
   std::cout << "5. Toggle Enhanced Menu" << std::endl;
-  
+  std::cout << "> ";
 
 
 }
@@ -168,10 +168,20 @@ void displayStudentInformation() {
 
 void loadGame() {
   std::cout << "\nEnter the filename from which to load a game:" << std::endl;
+
   std::string filename;
   std::cout << "> ";
 
   std::cin >> filename;
+  if (filename == "help") {
+    Help::displayLoadGameHelp();
+    loadGame();
+  }
+  else if (filename == "back") {
+    std::cout << "\n\return" << std::endl;
+    return;
+  }
+  else {
   // Prepend the test folder path.
   filename = "tests/" + filename;
 
@@ -212,7 +222,7 @@ void loadGame() {
     }
   }
 }
-
+}
 void startNewGame() {
     // Initialize and shuffle the tile bag
     // cout << "making the bag" << std::endl;
@@ -236,7 +246,7 @@ void startNewGame() {
               cout << "\n\nGoodbye" << std::endl;
               exit(EXIT_SUCCESS);
             } else if (playerName1 == "help") {
-              Help::displayNewGameMenuHelp();
+              Help::displayNamingHelp();
             } else if (isValidPlayerName(playerName1)) {
               invalidName = false;
             } else {
@@ -253,7 +263,7 @@ void startNewGame() {
             cout << "\n\nGoodbye" << std::endl;
             exit(EXIT_SUCCESS);
         } else if (playerName2 == "help") {
-            Help::displayNewGameMenuHelp();
+            Help::displayNamingHelp();
         } else if (isValidPlayerName(playerName2)) {
             invalidName = false;
         } else {

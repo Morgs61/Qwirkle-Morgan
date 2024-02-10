@@ -51,12 +51,11 @@ while (!quit) {
     } else {
         displayMenuBasic(); // Assuming this is the function for the basic menu
     }
-    std::cout << "If you need help with this menu type, help" << std::endl;
-    std::cout << "> ";
+    
     std::string userInput;
     std::cin >> userInput;
 
-    if (userInput == "help") {
+    if (userInput == "help" && isEnhancedMenu) {
         Help::displayMainMenuHelp();
     } else {
         // Convert userInput to integer if it's not "help"
@@ -98,6 +97,8 @@ void displayMenuBasic() {
   std::cout << "3. Credits (Show student information)" << std::endl;
   std::cout << "4. Quit" << std::endl;
   std::cout << "5. Toggle Enhanced Menu" << std::endl;
+  
+
 
 }
 
@@ -109,6 +110,8 @@ void displayMenuEnhanced() {
   std::cout << "3. Credits (Show student information)" << std::endl;
   std::cout << "4. Quit" << std::endl;
   std::cout << "5. High Scores \n" << std::endl;
+  std::cout << "If you need help with this menu type, help" << std::endl;
+  std::cout << "> ";
 
 
 }

@@ -197,7 +197,7 @@ void loadGame() {
   }
   else {
   // Prepend the test folder path.
-  filename = filename;
+  filename = "tests/" + filename;
 
   if (std::cin.eof()) {
     std::cout << "\n\nGoodbye" << std::endl;

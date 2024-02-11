@@ -23,7 +23,7 @@ class Game {
   bool processPlayerAction(int menuChoice);
   bool placeTiles();
   bool replaceTile();
-  void saveGame();
+  //void saveGame();
   bool isGameComplete();
   void declareWinner();
 

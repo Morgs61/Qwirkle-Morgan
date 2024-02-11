@@ -9,7 +9,7 @@
 #include "Board.h"
 #include "Game.h"
 #include "LinkedList.h"
-//#include "LoadGame.h"
+#include "LoadGame.h"
 #include "Node.h"
 #include "Player.h"
 #include "Tile.h"
@@ -17,6 +17,7 @@
 #include "qwirkle.h"
 #include "Help.h"
 #include "HighScoreManager.h"
+
 using std::cout;
 
 
@@ -26,7 +27,7 @@ using std::cout;
 void displayMenu();
 bool isValidPlayerName(const std::string &name);
 void displayStudentInformation();
-//void loadGame();
+void loadGame();
 bool checkSurroundingTilesMatch(const std::vector<std::vector<Tile *>> &board,
                                 int row, int col, Tile *tile);
 bool checkSameTypeTiles(const std::vector<Tile *> &tilesToPlace,
@@ -35,7 +36,12 @@ Player *findStartingPlayer(Player *player1, Player *player2);
 void displayMenuSelection();
 void displayMenuBasic();
 void displayMenuEnhanced();
+
 int main(void) {
+
+
+
+
   LinkedList *list = new LinkedList();
   delete list;
 
@@ -43,9 +49,9 @@ int main(void) {
   std::cout << "\nWelcome to Qwirkle!" << std::endl;
   std::cout << "-----------------------" << std::endl;
 
-  
+
   bool quit = false;
-bool isEnhancedMenu = false; // Initially, assume basic menu
+  bool isEnhancedMenu = false; // Initially, assume basic menu
 
 while (!quit) {    
     if (isEnhancedMenu) {
@@ -71,9 +77,9 @@ while (!quit) {
                  // Assuming playerCount is an integer variable
                 startNewGame(playerCount);
             } 
-            // else if (choice == 2) {
-            //     loadGame();
-            // } 
+            else if (choice == 2) {
+                loadGame();
+            } 
             else if (choice == 3) {
                 displayStudentInformation();
             } else if (choice == 4) {
@@ -174,63 +180,63 @@ void displayStudentInformation() {
   std::cout << "--------------------------------------" << std::endl;
 }
 
-// void loadGame() {
-//   std::cout << "\nEnter the filename from which to load a game:" << std::endl;
+void loadGame() {
+  std::cout << "\nEnter the filename from which to load a game:" << std::endl;
 
-//   std::string filename;
-//   std::cout << "> ";
+  std::string filename;
+  std::cout << "> ";
 
-//   std::cin >> filename;
-//   if (filename == "help") {
-//     Help::displayLoadGameHelp();
-//     loadGame();
-//   }
-//   else if (filename == "back") {
-//     std::cout << "\n\return" << std::endl;
-//     return;
-//   }
-//   else {
-//   // Prepend the test folder path.
-//   filename = "tests/" + filename;
+  std::cin >> filename;
+  if (filename == "help") {
+    Help::displayLoadGameHelp();
+    loadGame();
+  }
+  else if (filename == "back") {
+    std::cout << "\n\return" << std::endl;
+    return;
+  }
+  else {
+  // Prepend the test folder path.
+  filename = filename;
 
-//   if (std::cin.eof()) {
-//     std::cout << "\n\nGoodbye" << std::endl;
-//     exit(EXIT_SUCCESS);
-//   }
+  if (std::cin.eof()) {
+    std::cout << "\n\nGoodbye" << std::endl;
+    exit(EXIT_SUCCESS);
+  }
 
-  // Create an instance of LoadGame
-  //LoadGame loader;
+  //Create an instance of LoadGame
+  LoadGame loader;
 
-  // Call the loadGame method with the filename
-//   Game *loadedGame = loader.loadGame(filename);
+  //Call the loadGame method with the filename
+  Game *loadedGame = loader.loadGame(filename);
 
-//   // Check if the game is successfully loaded
-//   if (loadedGame != nullptr) {
-//     // File exists and is open
+  // Check if the game is successfully loaded
+  if (loadedGame != nullptr) {
+    // File exists and is open
 
-//     // Open the file for reading
-//     ifstream file(filename);
+    // Open the file for reading
+    ifstream file(filename);
 
-//     // Check if the file is open
-//     if (file.is_open()) {
-//       // File is open, proceed with reading
-//       std::string line;
-//       if (getline(file, line)) {
-//         std::cout << "\nQwirkle game successfully loaded." << std::endl;
-//         // Continue reading or processing the file content here
-//         loadedGame->launchGame();
-//       } else {
-//         std::cout << "\nInvalid file format. Unable to load the game." << std::endl;
-//       }
+    // Check if the file is open
+    if (file.is_open()) {
+      // File is open, proceed with reading
+      std::string line;
+      if (getline(file, line)) {
+        std::cout << "\nQwirkle game successfully loaded." << std::endl;
+        // Continue reading or processing the file content here
+        loadedGame->launchGame();
+      } else {
+        std::cout << "\nInvalid file format. Unable to load the game." << std::endl;
+      }
 
-//       // Close the file when done
-//       file.close();
-//     } else {
-//       cout << "\nError: Unable to open the file." << std::endl;
-//     }
-//   }
-// }
-// }
+      // Close the file when done
+      file.close();
+    } else {
+      cout << "\nError: Unable to open the file." << std::endl;
+    }
+  }
+}
+}
 void startNewGame(int playerCount) {
     // Initialize and shuffle the tile bag
     LinkedList* bag = new LinkedList();

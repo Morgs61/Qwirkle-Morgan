@@ -10,7 +10,7 @@
 #include "Game.h"
 #include "LinkedList.h"
 #include "Player.h"
-//#include "SaveGame.h"
+#include "SaveGame.h"
 #include "Tile.h"
 #include "qwirkle.h"
 #include "HighScoreManager.h"
@@ -59,6 +59,8 @@ void Game::launchGame() {
                 } else {
                     playerTurnComplete = replaceTile();
                 }
+            } else if (menuChoice == 3) {
+                saveGame();
             } else if (menuChoice == 4) {
                 std::cout << "\nQuitting game..." << std::endl;
                 return;
@@ -403,36 +405,32 @@ bool Game::replaceTile() {
   return true;
 }
 
-// void Game::saveGame() {
-//   // Save game
-//   std::string filename;
-//   std::cout << "Input the name of the file you want to save the game to or 'back' \n"
-//             << "to return to the previous menu or 'help' for additional help \n" 
-//             << std::endl;
-//             std::cout << "> "; 
-//   getline(std::cin, filename);
-//   if (std::cin.eof()) {
-//     std::cout << "\n\nGoodbye" << std::endl;
-//     exit(EXIT_SUCCESS);
-//   }
-//   else if (filename == "back") {
-//     std::cout << "Returning to the previous menu." << std::endl;
-//     return;
-//   }
-//   else if (filename == "help") {
-//     Help help;
-//     help.displaySaveGameHelp();
-//     return;
-//   }
+void Game::saveGame() {
+    // Save game
+    std::string filename;
+    std::cout << "Input the name of the file you want to save the game to or 'back' \n"
+              << "to return to the previous menu or 'help' for additional help \n" 
+              << std::endl;
+    std::cout << "> "; 
+    getline(std::cin, filename);
+    if (std::cin.eof()) {
+        std::cout << "\n\nGoodbye" << std::endl;
+        exit(EXIT_SUCCESS);
+    } else if (filename == "back") {
+        std::cout << "Returning to the previous menu." << std::endl;
+        return;
+    } else if (filename == "help") {
+        Help help;
+        help.displaySaveGameHelp();
+        return;
+    }
 
-//   // Prepend the "tests/" folder to the filename
-//   std::string fullFilename = "tests/" + filename;
+    // Prepend the "tests/" folder to the filename
+    std::string fullFilename = "tests/" + filename;
 
-//   SaveGame::saveGameState(fullFilename, player1, player2, board, bag,
-//                           currentPlayer);
-//   std::cout << "Game successfully saved" << std::endl;
-// }
-
+    SaveGame::saveGameState(fullFilename, players, playerCount, board, bag, currentPlayer);
+    std::cout << "Game successfully saved" << std::endl;
+}
 void Game::declareWinner() {
     std::cout << "Game over" << std::endl;
 

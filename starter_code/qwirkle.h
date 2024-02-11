@@ -14,7 +14,7 @@ struct Tile;
 void initializeTileBag(std::vector<Tile> &tileBag);
 void shuffleTileBag(std::vector<Tile> &tileBag);
 void initializePlayerHand(LinkedList *playerHand, LinkedList *bag);
-void startNewGame();
+void startNewGame(int playerCount);
 void loadGame();
 void initializeBoard(std::vector<std::vector<Tile *>> &board);
 void displayBoard(const std::vector<std::vector<Tile *>> &board);

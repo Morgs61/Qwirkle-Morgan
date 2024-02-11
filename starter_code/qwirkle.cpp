@@ -65,8 +65,11 @@ while (!quit) {
             int choice = std::stoi(userInput);
 
             if (choice == 1) {
-                std::cout << "\nStarting a New Game" << std::endl;
-                startNewGame();
+                std::cout << "How many players?" << std::endl;
+                int playerCount; 
+                std::cin >> playerCount;
+                 // Assuming playerCount is an integer variable
+                startNewGame(playerCount);
             } 
             // else if (choice == 2) {
             //     loadGame();
@@ -79,6 +82,7 @@ while (!quit) {
             } else if (isEnhancedMenu && choice == 5) {
                 std::cout << "\nHigh Scores!" << std::endl;
                 HighScoreManager highScoreManager("highscores.txt");
+                highScoreManager.displayHighScores(); // Assuming you have a function to display high scores
             } else if (choice == 5) {
                 std::cout << "Toggling to " << (isEnhancedMenu ? "basic" : "enhanced") << " menu." << std::endl;
                 isEnhancedMenu = !isEnhancedMenu; // Toggle menu mode 
@@ -227,75 +231,51 @@ void displayStudentInformation() {
 //   }
 // }
 // }
-void startNewGame() {
+void startNewGame(int playerCount) {
     // Initialize and shuffle the tile bag
-    // cout << "making the bag" << std::endl;
-
-    LinkedList *bag = new LinkedList();  // Instantiate LinkedList
-    bag->initializeAndShuffleBag();      // Populate the bag
+    LinkedList* bag = new LinkedList();
+    bag->initializeAndShuffleBag();
 
     // Create player names
-    std::string playerName1, playerName2;
-    bool invalidName = true;
-    while (invalidName) {
-
-
-        // ...
-
-            std::cout << "\nEnter a name for player 1 (uppercase characters only): \n";
-            std::cout << "> ";
-            std::cin >> playerName1;
-
+    Player** players = new Player*[playerCount];
+    for (int i = 0; i < playerCount; ++i) {
+        std::string playerName;
+        bool invalidName = true;
+        while (invalidName) {
+            // Prompt user for player name
+            std::cout << "\nEnter a name for player " << i + 1 << " (uppercase characters only):\n> ";
+            std::cin >> playerName;
             if (std::cin.eof()) {
-              std::cout << "\n\nGoodbye" << std::endl;
-              exit(EXIT_SUCCESS);
-            } else if (playerName1 == "help") {
-              Help::displayNamingHelp();
-            } else if (isValidPlayerName(playerName1)) {
-              invalidName = false;
+                std::cout << "\n\nGoodbye" << std::endl;
+                exit(EXIT_SUCCESS);
+            } else if (playerName == "help") {
+                Help::displayNamingHelp();
+            } else if (isValidPlayerName(playerName)) {
+                invalidName = false;
             } else {
-              std::cout << "Invalid player name. Please enter uppercase characters only." << std::endl;
+                std::cout << "Invalid player name. Please enter uppercase characters only." << std::endl;
             }
-    }
-
-    invalidName = true;
-    while (invalidName) {
-        cout << "\nEnter a name for player 2 (uppercase characters only): \n";
-        cout << "> ";
-        std::cin >> playerName2;
-        if (std::cin.eof()) {
-            cout << "\n\nGoodbye" << std::endl;
-            exit(EXIT_SUCCESS);
-        } else if (playerName2 == "help") {
-            Help::displayNamingHelp();
-        } else if (isValidPlayerName(playerName2)) {
-            invalidName = false;
-        } else {
-            std::cout << "Invalid player name. Please enter uppercase characters only." << std::endl;
         }
+        // Create player hands
+        LinkedList* playerHand = new LinkedList();
+        initializePlayerHand(playerHand, bag);
+
+        // Create players
+        players[i] = new Player(playerName, 0, playerHand);
+
+        // Print player's hand
+        std::cout << "Player " << playerName << "'s hand:" << std::endl;
+        playerHand->displayHand(); // Assuming there's a function to display a player's hand
     }
-
-    // Create player hands
-    LinkedList *playerHand1 = new LinkedList();
-    initializePlayerHand(playerHand1, bag);  // Pass the address of tileBag
-
-    LinkedList *playerHand2 = new LinkedList();
-    initializePlayerHand(playerHand2, bag);  // Pass the address of tileBag
-
-    // Create players
-    Player *player1 = new Player(playerName1, 0, playerHand1);
-    Player *player2 = new Player(playerName2, 0, playerHand2);
 
     std::cin.ignore();
-    cout << "\nLet's Play!" << std::endl;
+    std::cout << "\nLet's Play!" << std::endl;
 
     // Initialize the board
-    Board *board = new Board();  // Instantiate Board
+    Board* board = new Board();
 
     // Instantiate Game with the modified parameters
-    Game *game =
-        new Game(player1, player2, bag, board,
-                 player1);  // Pass player1, player2, bag, and currentPlayer
+    Game* game = new Game(players, playerCount, bag, board, players[0]);
 
     // Call the correct method
     game->launchGame();

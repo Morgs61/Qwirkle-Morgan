@@ -15,90 +15,104 @@
 #include "qwirkle.h"
 #include "HighScoreManager.h"
 #include "Help.h"
+#include <climits>
 
-
-Game::Game(Player* player1, Player* player2, LinkedList* bag, Board* board,
-           Player* currentPlayer) {
-  this->player1 = player1;
-  this->player2 = player2;
-  this->bag = bag;
-  this->board = board;
-  this->currentPlayer = currentPlayer;
-  playerCount = 2;
+Game::Game(Player** players, int playerCount, LinkedList* bag, Board* board, Player* currentPlayer) {
+    this->players = new Player*[playerCount];
+    for (int i = 0; i < playerCount; ++i) {
+        this->players[i] = players[i];
+    }
+    this->playerCount = playerCount;
+    this->bag = bag;
+    this->board = board;
+    this->currentPlayer = currentPlayer;
 }
 
 Game::~Game() {
-  delete bag;
-  delete player1;
-  delete player2;
-  delete board;
+    delete bag;
+    for (int i = 0; i < playerCount; ++i) {
+        delete players[i];
+    }
+    delete[] players;
+    delete board;
 }
 
 void Game::launchGame() {
-  // get the current status of the game once its launched
-  bool gameComplete = isGameComplete();
+    // get the current status of the game once it's launched
+    bool gameComplete = isGameComplete();
 
-  // run until the game is complete.
-  while (!gameComplete) {
-    // Show the current Game status at the start of the players turn
-    displayGameStatus();
+    // run until the game is complete
+    while (!gameComplete) {
+        // Show the current game status at the start of the player's turn
+        displayGameStatus();
 
-    // Start the current players turn.
-    bool playerTurnComplete = false;
-    while (!playerTurnComplete) {
-      int menuChoice = getPlayerMenuSelection();
+        // Start the current player's turn
+        bool playerTurnComplete = false;
+        while (!playerTurnComplete) {
+            int menuChoice = getPlayerMenuSelection();
 
-      if (menuChoice == 1) {  // Place tiles
-                              // placeTiles();
-        playerTurnComplete = placeTiles();
-      } else if (menuChoice == 2) {
-        if (currentPlayer->getHand()->getSize() < 6) {
-          std::cout << "You have already placed a tile. You can not now replace a "
-                  "tile"
-               << std::endl;
-          // return;
-        } else {
-          playerTurnComplete =
-              replaceTile();  // Use the return value to determine if the turn
-                              // is complete
+            if (menuChoice == 1) { // Place tiles
+                playerTurnComplete = placeTiles();
+            } else if (menuChoice == 2) {
+                if (currentPlayer->getHand()->getSize() < 6) {
+                    std::cout << "You have already placed a tile. You cannot now replace a tile." << std::endl;
+                } else {
+                    playerTurnComplete = replaceTile();
+                }
+            } else if (menuChoice == 4) {
+                std::cout << "\nQuitting game..." << std::endl;
+                return;
+            } else {
+                std::cout << "Invalid choice. Please enter a valid option." << std::endl;
+            }
         }
-      } 
-      // else if (menuChoice == 3) {
-      //   saveGame();
-      // }
-       else if (menuChoice == 4) {
-        std::cout << "\nQuitting game..." << std::endl;
-        return;
-      } else {
-        std::cout << "Invalid choice. Please enter a valid option." << std::endl;
-      }
-    }
-    // Switch players
-    currentPlayer = (currentPlayer == player1) ? player2 : player1;
 
-    // Check if the game is complete
-    gameComplete = isGameComplete();
-  }
-  declareWinner();
+        // Switch players
+        int currentPlayerIndex = -1;
+        for (int i = 0; i < playerCount; ++i) {
+            if (players[i] == currentPlayer) {
+                currentPlayerIndex = i;
+                break;
+            }
+        }
+        if (currentPlayerIndex != -1) {
+            currentPlayerIndex = (currentPlayerIndex + 1) % playerCount;
+            currentPlayer = players[currentPlayerIndex];
+        } else {
+            std::cerr << "Error: Current player not found in player list!" << std::endl;
+        }
+
+        // Check if the game is complete
+        gameComplete = isGameComplete();
+    }
+    declareWinner();
 }
 
 // Check if any player has an empty hand
 bool Game::isGameComplete() {
-  // if either player has an empty hand, the game is complete.
-  return player1->getHand()->isEmpty() || player2->getHand()->isEmpty();
+    // Iterate through all players
+    for (int i = 0; i < playerCount; ++i) {
+        // If any player has an empty hand, the game is complete
+        if (players[i]->getHand()->isEmpty()) {
+            return true;
+        }
+    }
+    // If none of the players have an empty hand, the game is not complete
+    return false;
 }
-
 void Game::displayGameStatus() {
-  std::cout << "\n " << bag->getSize() << std::endl;
-  std::cout << "\n"
-            << currentPlayer->getName() << ", it's your turn" << std::endl;
-  std::cout << "Score for " << player1->getName() << ": " << player1->getScore()
-            << std::endl;
-  std::cout << "Score for " << player2->getName() << ": " << player2->getScore()
-            << std::endl;
-  board->displayBoard();
-  std::cout << currentPlayer->getName() << " Your hand is " << std::endl;
-  currentPlayer->getHand()->displayHand();
+    std::cout << "\n " << bag->getSize() << std::endl;
+    std::cout << "\n" << currentPlayer->getName() << ", it's your turn" << std::endl;
+
+    // Display scores for all players
+    for (int i = 0; i < playerCount; ++i) {
+        std::cout << "Score for " << players[i]->getName() << ": " << players[i]->getScore() << std::endl;
+    }
+
+    board->displayBoard();
+
+    std::cout << currentPlayer->getName() << ", your hand is:" << std::endl;
+    currentPlayer->getHand()->displayHand();
 }
 
 int Game::getPlayerMenuSelection() {
@@ -421,31 +435,52 @@ bool Game::replaceTile() {
 
 void Game::declareWinner() {
     std::cout << "Game over" << std::endl;
-    std::cout << "\nScore for " << player1->getName() << ": "
-              << player1->getScore() << std::endl;
-    std::cout << "Score for " << player2->getName() << ": " << player2->getScore()
-              << std::endl;
-    std::cout << "Player ";
 
-    if (player1->getScore() > player2->getScore()) {
-        std::cout << player1->getName() << " won!" << std::endl;
-    } else if (player1->getScore() < player2->getScore()) {
-        std::cout << player2->getName() << " won!" << std::endl;
-    } else {
-        std::cout << "It's a draw!" << std::endl;
+    // Display scores for all players
+    for (int i = 0; i < playerCount; ++i) {
+        std::cout << "Score for " << players[i]->getName() << ": " << players[i]->getScore() << std::endl;
     }
 
-    HighScoreManager highScoreManager("highscores.txt"); // Create an instance of HighScoreManager with the filename
 
-    // Add high scores for both players
-    highScoreManager.addHighScore(player1->getName(), player1->getScore());
-    highScoreManager.addHighScore(player2->getName(), player2->getScore());
 
-    // Display the highest scores
-    highScoreManager.displayHighScores();
+    std::vector<Player*> winners;
+    int maxScore = INT_MIN;
 
-    // Save high scores to the file
-    highScoreManager.saveHighScoresToFile("highscores.txt");
+    // Find the player(s) with the highest score
+    for (int i = 0; i < playerCount; ++i) {
+      int score = players[i]->getScore();
+      if (score > maxScore) {
+        maxScore = score;
+        winners.clear();
+        winners.push_back(players[i]);
+      } else if (score == maxScore) {
+        winners.push_back(players[i]);
+      }
+    }
 
-    std::cout << "High scores saved to highscores.txt" << std::endl;
+    // Display the winner(s)
+    if (winners.size() == 1) {
+        std::cout << "Player " << winners[0]->getName() << " won!" << std::endl;
+    } else {
+        std::cout << "It's a draw between:";
+        for (Player* winner : winners) {
+            std::cout << " " << winner->getName();
+        }
+        std::cout << std::endl;
+    }
+
+    // HighScoreManager highScoreManager("highscores.txt"); // Create an instance of HighScoreManager with the filename
+
+    // // Add high scores for all players
+    // for (Player* player : players) {
+    //     highScoreManager.addHighScore(player->getName(), player->getScore());
+    // }
+
+    // // Display the highest scores
+    // highScoreManager.displayHighScores();
+
+    // // Save high scores to the file
+    // highScoreManager.saveHighScoresToFile("highscores.txt");
+
+    // std::cout << "High scores saved to highscores.txt" << std::endl;
 }

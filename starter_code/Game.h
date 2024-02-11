@@ -13,9 +13,8 @@
 
 class Game {
  public:
-  Game(Player *player1, Player *player2, LinkedList *bag, Board *board,
-       Player *currentPlayer);
-  ~Game();
+    Game(Player** players, int playerCount, LinkedList* bag, Board* board, Player* currentPlayer);
+    ~Game();
   void launchGame();
   bool checkForEmptyPlayerHands(Player **players, int playerCount);
   void displayGameStatus();
@@ -28,12 +27,11 @@ class Game {
   void declareWinner();
 
  private:
-  Player *player1;
-  Player *player2;
+  Player** players;
   LinkedList *bag;
   Board *board;
-  Player *currentPlayer;
   int playerCount;
+  Player *currentPlayer;
   std::vector<std::string> parsePlayerInput();
   bool validateTilePlacement(std::vector<std::string> &words,
                              std::vector<Tile *> &tilesToPlace,

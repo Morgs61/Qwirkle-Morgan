@@ -31,7 +31,7 @@ Game *LoadGame::loadGame(std::string filename) {
   Board *board = new Board();
   LinkedList *bag = new LinkedList();  // Bag initialized here
   bag->initializeAndShuffleBag();      // Reset the linked list
-
+  int numPlayers = 2;
   // Read and store each line of the file
   std::string plyr1Name, plyr1Score, plyr1Hand, plyr2Name, plyr2Score, plyr2Hand,
       boardSize, boardState, bagContents, currentPlyr;
@@ -51,7 +51,7 @@ Game *LoadGame::loadGame(std::string filename) {
   // bag = loadTileBag(bagContents);
 
   // Initialize vector to store players
-  std::vector<Player *> players;
+  std::vector<Player*> players;
 
   // Load player 1
   loadPlayer(bag, plyr1Name, stoi(plyr1Score), plyr1Hand, players);
@@ -79,8 +79,14 @@ Game *LoadGame::loadGame(std::string filename) {
   // Close the file
   file.close();
 
+  // Convert std::vector<Player*> to Player**
+  Player** playersArray = new Player*[players.size()];
+  for (size_t i = 0; i < players.size(); ++i) {
+    playersArray[i] = players[i];
+  }
+
   // Create and return game object
-  return new Game(players[0], players[1], bag, board, currentPlayer);
+  return new Game(playersArray, numPlayers, bag, board, currentPlayer);
 }
 
 void LoadGame::loadPlayer(LinkedList *bag, std::string playerName, int playerScore,

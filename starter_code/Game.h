@@ -13,8 +13,7 @@
 
 class Game {
  public:
-  Game(Player *player1, Player *player2, LinkedList *bag, Board *board,
-       Player *currentPlayer);
+  Game(Player** players, int numPlayers, LinkedList* bag, Board* board, Player* currentPlayer);
   ~Game();
   void launchGame();
   bool checkForEmptyPlayerHands(Player **players, int playerCount);
@@ -26,6 +25,8 @@ class Game {
   void saveGame();
   bool isGameComplete();
   void declareWinner();
+  void switchPlayer();
+  Player* switchPlayer(int currentPlayerIndex);
 
  private:
   Player *player1;
@@ -44,6 +45,9 @@ class Game {
   Tile *createAndValidateTile(
       const std::string &tileStr);                     // New method declaration
   void replaceTileAndUpdateHand(Tile *tileToReplace);  // New method declaration
+    Player** players; // Array of player pointers
+    int numPlayers;
+  int currentPlayerIndex;
 };
 
 #endif  // APT2023_A2_GAME_H

@@ -21,6 +21,6 @@ void displayBoard(const std::vector<std::vector<Tile *>> &board);
 // int findStartingPlayer(Player** players, int numPlayers);
 bool checkForEmptyPlayerHands(Player **players, int numPlayers);
 void startGame();
-Player *findStartingPlayer(Player *player1, Player *player2);
+int findStartingPlayer(Player **players, int numPlayers);
 
 #endif  // QWIRKLE_H

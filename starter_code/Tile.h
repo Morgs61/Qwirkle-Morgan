@@ -41,10 +41,10 @@ class Tile {
   std::string toString();
 
   bool isValidTile(Colour colour, Shape shape);
-
+ Colour colour;
+ Shape shape;
  private:
-  Colour colour;
-  Shape shape;
+
 };
 
 #endif  // ASSIGN2_TILE_H

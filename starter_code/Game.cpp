@@ -14,27 +14,31 @@
 #include "qwirkle.h"
 
 
-Game::Game(Player* player1, Player* player2, LinkedList* bag, Board* board,
-           Player* currentPlayer) {
-  this->player1 = player1;
-  this->player2 = player2;
+Game::Game(Player** players, int numPlayers, LinkedList* bag, Board* board, Player* currentPlayer) {
+  this->players = players;
+  this->numPlayers = numPlayers;
   this->bag = bag;
   this->board = board;
   this->currentPlayer = currentPlayer;
-  playerCount = 2;
+
 }
 
+
 Game::~Game() {
-  delete bag;
-  delete player1;
-  delete player2;
   delete board;
+  delete bag;
+  for (int i = 0; i < numPlayers; ++i) {
+    delete players[i];
+  }
+  delete[] players;
+  delete currentPlayer;
 }
 
 void Game::launchGame() {
   // get the current status of the game once its launched
+  std::cout << "DEBUG0" << std::endl;
   bool gameComplete = isGameComplete();
-
+  std::cout << "DEBUG1" << std::endl;
   // run until the game is complete.
   while (!gameComplete) {
     // Show the current Game status at the start of the players turn
@@ -68,8 +72,19 @@ void Game::launchGame() {
         std::cout << "Invalid choice. Please enter a valid option." << std::endl;
       }
     }
-    // Switch players
-    currentPlayer = (currentPlayer == player1) ? player2 : player1;
+
+    int currentPlayerIndex = 0;
+    // find current player in array
+    for (int i = 0; i < numPlayers; ++i) {
+      if (players[i]->getName() == currentPlayer->getName()) {
+        currentPlayerIndex = i;
+      }
+    }
+
+    // switch to the next player
+    currentPlayer = switchPlayer(currentPlayerIndex);
+
+    //currentPlayer = switchPlayer();
 
     // Check if the game is complete
     gameComplete = isGameComplete();
@@ -77,20 +92,36 @@ void Game::launchGame() {
   declareWinner();
 }
 
+Player* Game::switchPlayer(int currentPlayerIndex) {
+  // Increment the current player index
+  currentPlayerIndex = (currentPlayerIndex + 1) % numPlayers;
+  // Return the next player
+  return players[currentPlayerIndex];
+}
+
+
 // Check if any player has an empty hand
 bool Game::isGameComplete() {
-  // if either player has an empty hand, the game is complete.
-  return player1->getHand()->isEmpty() || player2->getHand()->isEmpty();
+  for (int i = 0; i < numPlayers; ++i) {
+    if (players[i]->getHand()->isEmpty()) {
+      return true; // The game is complete if any player has an empty hand
+    }
+  }
+  return false; // If no player has an empty hand, the game is not complete
 }
 
 void Game::displayGameStatus() {
-  std::cout << "\n"
-            << currentPlayer->getName() << ", it's your turn" << std::endl;
-  std::cout << "Score for " << player1->getName() << ": " << player1->getScore()
-            << std::endl;
-  std::cout << "Score for " << player2->getName() << ": " << player2->getScore()
-            << std::endl;
+  std::cout << "\n" << currentPlayer->getName() << ", it's your turn" << std::endl;
+
+  // Iterate through all players to display their scores
+  for (int i = 0; i < numPlayers; ++i) {
+    std::cout << "Score for " << players[i]->getName() << ": " << players[i]->getScore() << std::endl;
+  }
+
+  // Display the board
   board->displayBoard();
+
+  // Display the current player's hand
   std::cout << currentPlayer->getName() << " Your hand is " << std::endl;
   currentPlayer->getHand()->displayHand();
 }

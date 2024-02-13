@@ -172,6 +172,13 @@ std::vector<std::string> Game::parsePlayerInput()
 {
   std::string command;
   getline(std::cin, command);
+
+  // Remove the newline character if it exists
+  if (!command.empty() && command[command.size() - 1] == '\n')
+  {
+    command.erase(command.size() - 1);
+  }
+
   if (std::cin.eof())
   {
     std::cout << "\n\nGoodbye" << std::endl;
@@ -286,6 +293,7 @@ bool Game::placeTiles()
               << " using the format: place <tile> at <grid location>" << std::endl;
     std::cout << "Enter 'end' to end your turn or 'back' to return to previous menu"
               << std::endl;
+    std::cout << "Type 'help' for help on placing tiles" << std::endl; // Added help message
     std::cout << "> ";
 
     std::vector<std::string> words = parsePlayerInput();
@@ -322,7 +330,11 @@ bool Game::placeTiles()
     }
     else
     {
-      if (words.size() != 4 || words[0] != "place" || words[3].length() >= 4)
+      if (words[0] == "help")
+      {
+        placeTileHelp();
+      }
+      else if (words.size() != 4 || words[0] != "place" || words[3].length() >= 4)
       {
         std::cout << "Invalid command. Please try again." << std::endl;
       }
@@ -516,6 +528,25 @@ void Game::displayHelpMessageGameMenu()
   std::cout << "2. Replace a tile: Allows you to replace a tile in your hand.\n";
   std::cout << "3. Save game: Saves the current game state.\n";
   std::cout << "4. Quit game: Quits the game.\n";
+}
+
+void Game::placeTileHelp()
+{
+  std::cout << "\n=== Place Tiles Help ===\n";
+  std::cout << "To place tiles on the board, follow these steps:\n";
+  std::cout << "1. Enter the command in the format: place <tile> <position>\n";
+  std::cout << "   - <tile>: The tile you want to place on the board.\n";
+  std::cout << "   - <position>: The position on the board where you want to place the tile.\n";
+  std::cout << "2. The <tile> should be a valid tile from your hand.\n";
+  std::cout << "3. The <position> are the coordinates on the board.\n";
+  std::cout << "   Example - place A6 at B6\n";
+  std::cout << "4. After placing the tile, the game will proceed.\n";
+  std::cout << "   - If the placement is valid, your hand will be updated.\n";
+  std::cout << "   - If the placement is invalid, an error message will be displayed.\n";
+  std::cout << "5. Repeat the steps to place more tiles or choose another action.\n";
+  std::cout << "   - back: return to previous menu.\n";
+  std::cout << "   - end : end your turn, after placing a tile.\n";
+  std::cout << "\n";
 }
 
 // Function to convert a string to lowercase

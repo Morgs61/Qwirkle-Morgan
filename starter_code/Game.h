@@ -25,6 +25,7 @@ public:
     int getPlayerMenuSelection();
     bool processPlayerAction(int menuChoice);
     bool placeTiles();
+    void placeTileHelp();
     bool replaceTile();
     void saveGame();
     bool isGameComplete();

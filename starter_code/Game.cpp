@@ -485,19 +485,26 @@ void Game::saveGame()
 {
   // Save game
   std::string filename;
-  std::cout << "Enter the filename to save the game: ";
-  getline(std::cin, filename);
+  std::cout << "\ntype 'help' for assistance";
+  std::cout << "\nEnter the filename to save the game: ";
+  std::getline(std::cin, filename);
+
   if (std::cin.eof())
   {
     std::cout << "\n\nGoodbye" << std::endl;
     exit(EXIT_SUCCESS);
   }
 
+  if (filename == "help")
+  {
+    saveGameHelp();
+    return;
+  }
+
   // Prepend the "tests/" folder to the filename
   std::string fullFilename = "tests/" + filename;
 
-  SaveGame::saveGameState(fullFilename, player1, player2, board, bag,
-                          currentPlayer);
+  SaveGame::saveGameState(fullFilename, player1, player2, board, bag, currentPlayer);
   std::cout << "Game successfully saved" << std::endl;
 }
 
@@ -565,6 +572,16 @@ void Game::replaceTileHelp()
   std::cout << "4. Repeat the steps to replace more tiles or choose another action.\n";
   std::cout << "   - back: return to previous menu.\n";
   std::cout << "\n";
+}
+
+void Game::saveGameHelp()
+{
+  std::cout << "\n=== Save Game Help ===" << std::endl;
+  std::cout << "To save the current game state, follow these steps:" << std::endl;
+  std::cout << "1. Enter the filename you want to save the game with." << std::endl;
+  std::cout << "2. The game state will be saved with the specified filename." << std::endl;
+  std::cout << "3. You can load the saved game later using the 'Load Game' option from the main menu." << std::endl;
+  std::cout << std::endl;
 }
 
 // Function to convert a string to lowercase

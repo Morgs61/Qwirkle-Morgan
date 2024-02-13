@@ -18,16 +18,6 @@
 
 #define EXIT_SUCCESS 0
 
-void displayMenu();
-bool isValidPlayerName(const std::string &name);
-void displayStudentInformation();
-void loadGame();
-bool checkSurroundingTilesMatch(const std::vector<std::vector<Tile *>> &board,
-                                int row, int col, Tile *tile);
-bool checkSameTypeTiles(const std::vector<Tile *> &tilesToPlace,
-                        const std::vector<std::pair<int, int>> &positions);
-Player *findStartingPlayer(Player *player1, Player *player2);
-
 int main(void)
 {
   LinkedList *list = new LinkedList();
@@ -79,7 +69,6 @@ int main(void)
       else if (choice == 2)
       {
         loadGame();
-        // Add code for loading a game
       }
       else if (choice == 3)
       {
@@ -150,56 +139,71 @@ void displayStudentInformation()
 
 void loadGame()
 {
-  std::cout << "\nEnter the filename from which to load a game:" << std::endl;
-  std::string filename;
-  std::cout << "> ";
-
-  std::cin >> filename;
-  // Prepend the test folder path.
-  filename = "tests/" + filename;
-
-  if (std::cin.eof())
+  bool loaded = false;
+  while (!loaded)
   {
-    std::cout << "\n\nGoodbye" << std::endl;
-    exit(EXIT_SUCCESS);
-  }
+    std::cout << "\nType 'help' for assistance or 'exit' to return to the main menu." << std::endl;
+    std::cout << "Enter the filename from which to load a game:" << std::endl;
+    std::string filename;
+    std::cout << "> ";
 
-  // Create an instance of LoadGame
-  LoadGame loader;
+    std::getline(std::cin, filename);
 
-  // Call the loadGame method with the filename
-  Game *loadedGame = loader.loadGame(filename);
-
-  // Check if the game is successfully loaded
-  if (loadedGame != nullptr)
-  {
-    // File exists and is open
-
-    // Open the file for reading
-    ifstream file(filename);
-
-    // Check if the file is open
-    if (file.is_open())
+    if (filename == "help")
     {
-      // File is open, proceed with reading
-      std::string line;
-      if (getline(file, line))
-      {
-        std::cout << "\nQwirkle game successfully loaded." << std::endl;
-        // Continue reading or processing the file content here
-        loadedGame->launchGame();
-      }
-      else
-      {
-        std::cout << "\nInvalid file format. Unable to load the game." << std::endl;
-      }
-
-      // Close the file when done
-      file.close();
+      loadGameHelp();
+    }
+    else if (filename == "exit")
+    {
+      std::cout << "\nReturning to the main menu." << std::endl;
+      return; // Return to the main menu
     }
     else
     {
-      cout << "\nError: Unable to open the file." << std::endl;
+      // Create an instance of LoadGame
+      LoadGame loader;
+
+      // Call the loadGame method with the filename
+      Game *loadedGame = loader.loadGame(filename);
+
+      // Check if the game is successfully loaded
+      if (loadedGame != nullptr)
+      {
+        // File exists and is open
+
+        // Open the file for reading
+        std::ifstream file(filename);
+
+        // Check if the file is open
+        if (file.is_open())
+        {
+          // File is open, proceed with reading
+          std::string line;
+          if (std::getline(file, line))
+          {
+            std::cout << "\nQwirkle game successfully loaded." << std::endl;
+            // Continue reading or processing the file content here
+            // loadedGame->launchGame();
+          }
+          else
+          {
+            std::cout << "\nInvalid file format. Unable to load the game." << std::endl;
+          }
+
+          // Close the file when done
+          file.close();
+        }
+        else
+        {
+          std::cout << "\nError: Unable to open the file." << std::endl;
+        }
+
+        loaded = true; // Set loaded to true to exit the loop
+      }
+      else
+      {
+        std::cout << "\nInvalid filename. Please try again or enter 'help' for assistance." << std::endl;
+      }
     }
   }
 }
@@ -404,4 +408,14 @@ void mainMenuHelp()
   std::cout << "   - Load Game: Load a previously saved game." << std::endl;
   std::cout << "   - Credits: Display information about the developers." << std::endl;
   std::cout << "   - Quit: Exit the game." << std::endl;
+}
+
+void loadGameHelp()
+{
+  std::cout << "=== Load Game Help ===" << std::endl;
+  std::cout << "To load a game, follow these steps:" << std::endl;
+  std::cout << "1. Enter the filename of the game you want to load." << std::endl;
+  std::cout << "2. The game will be loaded and you can continue playing." << std::endl;
+  std::cout << "3. If the file does not exist or is invalid, an error message will be displayed." << std::endl;
+  std::cout << "4. Type 'exit' to exit the game." << std::endl;
 }

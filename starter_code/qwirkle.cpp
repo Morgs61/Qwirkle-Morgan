@@ -148,12 +148,14 @@ void loadGame()
     std::cout << "> ";
 
     std::getline(std::cin, filename);
+    // Prepend the test folder path.
+    filename = "tests/" + filename;
 
-    if (filename == "help")
+    if (filename == "tests/help")
     {
       loadGameHelp();
     }
-    else if (filename == "exit")
+    else if (filename == "tests/exit")
     {
       std::cout << "\nReturning to the main menu." << std::endl;
       return; // Return to the main menu

@@ -27,6 +27,7 @@ public:
     bool placeTiles();
     void placeTileHelp();
     bool replaceTile();
+    void replaceTileHelp();
     void saveGame();
     bool isGameComplete();
     void declareWinner();

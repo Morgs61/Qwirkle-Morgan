@@ -417,7 +417,8 @@ void Game::replaceTileAndUpdateHand(Tile *tileToReplace)
 bool Game::replaceTile()
 {
   std::cout << "Replace a tile using the format: replace <tile>" << std::endl;
-  std::cout << "Enter 'back' to return to previous menu" << std::endl;
+  std::cout << "Enter 'back' to return to the previous menu" << std::endl;
+  std::cout << "Type 'help' for help on replacing a tile" << std::endl;
 
   bool validInput = false;
   while (!validInput)
@@ -436,6 +437,10 @@ bool Game::replaceTile()
       std::cout << "Returning to the previous menu." << std::endl;
       return false; // Directly exit the function, thereby exiting the loop and
                     // not ending the player's turn
+    }
+    else if (command == "help")
+    {
+      replaceTileHelp();
     }
     else
     {
@@ -546,6 +551,19 @@ void Game::placeTileHelp()
   std::cout << "5. Repeat the steps to place more tiles or choose another action.\n";
   std::cout << "   - back: return to previous menu.\n";
   std::cout << "   - end : end your turn, after placing a tile.\n";
+  std::cout << "\n";
+}
+
+void Game::replaceTileHelp()
+{
+  std::cout << "\n=== Replace Tile Help ===\n";
+  std::cout << "To replace a tile in your hand, follow these steps:\n";
+  std::cout << "1. Enter the command in the format: replace <tile>\n";
+  std::cout << "   - <tile>: The tile you want to replace in your hand.\n";
+  std::cout << "2. The <tile> should be a valid tile from your hand.\n";
+  std::cout << "3. After replacing the tile, a new tile will be drawn from the bag.\n";
+  std::cout << "4. Repeat the steps to replace more tiles or choose another action.\n";
+  std::cout << "   - back: return to previous menu.\n";
   std::cout << "\n";
 }
 

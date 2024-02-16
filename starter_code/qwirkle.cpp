@@ -221,25 +221,25 @@ void startNewGame()
   std::string playerName1, playerName2;
   do
   {
-    cout << "\nEnter a name for player 1 (uppercase characters only): \n";
-    cout << "> ";
+    std::cout << "\nEnter a name for player 1 (uppercase characters only): \n";
+    std::cout << "> ";
     std::cin >> playerName1;
 
     if (std::cin.eof())
     {
-      cout << "\n\nGoodbye" << std::endl;
+      std::cout << "\n\nGoodbye" << std::endl;
       exit(EXIT_SUCCESS);
     }
   } while (!isValidPlayerName(playerName1));
 
   do
   {
-    cout << "\nEnter a name for player 2 (uppercase characters only): \n";
-    cout << "> ";
+    std::cout << "\nEnter a name for player 2 (uppercase characters only): \n";
+    std::cout << "> ";
     std::cin >> playerName2;
     if (std::cin.eof())
     {
-      cout << "\n\nGoodbye" << std::endl;
+      std::cout << "\n\nGoodbye" << std::endl;
       exit(EXIT_SUCCESS);
     }
   } while (!isValidPlayerName(playerName2));
@@ -256,7 +256,7 @@ void startNewGame()
   Player *player2 = new Player(playerName2, 0, playerHand2);
 
   std::cin.ignore();
-  cout << "\nLet's Play!" << std::endl;
+  std::cout << "\nLet's Play!" << std::endl;
 
   // Initialize the board
   Board *board = new Board(); // Instantiate Board

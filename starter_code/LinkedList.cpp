@@ -76,8 +76,7 @@ void LinkedList::displayHand() const
   Node *current = head;
   while (current != nullptr)
   {
-    std::cout << "" << current->tile->getColour() << ""
-              << current->tile->getShape();
+    std::cout << current->tile->toUnicode();
     if (current->nextNodePtr != nullptr)
     {
       std::cout << ",";

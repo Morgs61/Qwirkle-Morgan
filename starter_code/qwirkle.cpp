@@ -185,7 +185,7 @@ void loadGame()
           {
             std::cout << "\nQwirkle game successfully loaded." << std::endl;
             // Continue reading or processing the file content here
-            // loadedGame->launchGame();
+            loadedGame->launchGame();
           }
           else
           {

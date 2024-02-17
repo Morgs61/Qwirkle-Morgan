@@ -125,7 +125,7 @@ std::string Board::getBoardState()
     {
       if (board[i * COLS + j] != nullptr)
       {
-        stateString += board[i * COLS + j]->toUnicode() + "@" + labels[i] +
+        stateString += board[i * COLS + j]->toString() + "@" + labels[i] +
                        std::to_string(j) + ", ";
       }
     }

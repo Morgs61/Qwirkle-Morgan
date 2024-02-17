@@ -23,9 +23,9 @@ public:
     this->name = name;
     this->score = score;
     this->hand = hand ? new LinkedList(*hand) : nullptr;
-  }
+    }
 
-  ~Player() { delete hand; }
+  virtual ~Player() { delete hand; }
 
   std::string getName() { return name; }
 

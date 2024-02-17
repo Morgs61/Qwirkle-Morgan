@@ -6,7 +6,7 @@
       "type": "cppdbg",
       "request": "launch",
       "program": "${workspaceFolder}/starter_code/qwirkle",
-      "args": [],
+      "args": ["--ai"],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
       "environment": [],

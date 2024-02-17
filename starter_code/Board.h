@@ -58,6 +58,8 @@ public:
 
     bool tilesMatch(Tile *tile1, Tile *tile2);
 
+    bool canPlaceTile(Tile *tile, int row, int col);
+
 private:
     std::vector<Tile *>
         board; // Vector to store pointers to tiles representing the board

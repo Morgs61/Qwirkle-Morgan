@@ -574,3 +574,25 @@ bool Board::tilesMatch(Tile *tile1, Tile *tile2)
   // Compare the colour and shape of the two tiles
   return (tile1->getColour() == tile2->getColour()) && (tile1->getShape() == tile2->getShape());
 }
+
+bool Board::canPlaceTile(Tile *tile, int row, int col)
+{
+  // Check if the position is within the board's boundaries
+  if (row < 0 || row >= getHeight() || col < 0 || col >= getWidth())
+  {
+    return false;
+  }
+
+  // Check if the position is already occupied
+  if (getTileAt(row, col) != nullptr)
+  {
+    return false;
+  }
+
+  // Check if the tile can be placed according to the game's rules
+  // This will depend on your specific game. For example, you might need to check
+  // the tiles adjacent to the position, and see if the tile can be placed next to them.
+  // For now, let's assume that a tile can be placed if the position is not occupied.
+
+  return true;
+}

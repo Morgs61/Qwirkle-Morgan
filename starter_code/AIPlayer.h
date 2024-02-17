@@ -1,4 +1,4 @@
-
+#include <set>
 #include <vector>
 #include "Player.h"
 #include "Tile.h"
@@ -11,22 +11,24 @@ private:
 
 public:
     // Constructor
-    AIPlayer(std::string name, int score, LinkedList *hand) : Player(name, score, hand) {}
+    AIPlayer(std::string name, int score, LinkedList *hand);
 
     // Destructor
-    ~AIPlayer() {}
+    ~AIPlayer();
 
     // Function to make a move
     void makeMove(Board *board);
 
     // Function to generate all possible moves for the AI
-    std::vector<std::pair<int, int>> generatePossibleMoves(Board *board);
+    std::vector<std::pair<int, int>> generatePossibleMoves(Board *board, Tile *tile);
 
-    int evaluateMove(std::pair<int, int> move, Board *board);
+    int evaluateMove(Board *board, Tile *tile, int row, int col);
 
     void placeTilesOnBoard(std::pair<int, int> move, Board *board);
 
     void removeTileFromHand(Tile *tile);
 
-    Tile *getTileFromHand();
+    Tile *getBestTileFromHand(Board *board);
+
+    std::set<std::pair<int, int>> getOccupiedPositions(Board *board);
 };

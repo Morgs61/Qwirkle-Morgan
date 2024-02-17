@@ -50,13 +50,17 @@ void Game::launchGame()
     while (!playerTurnComplete)
     {
       // Check if it's the AI player's turn
-      AIPlayer *aiPlayer = nullptr;
-
-      if (aiPlayer != nullptr && currentPlayer == aiPlayer)
+      if (currentPlayer != nullptr && currentPlayer->getName() == "AI")
       {
-        // Invoke AI player's logic to make a move
-        aiPlayer->makeMove(board);
-        playerTurnComplete = true; // For simplicity, assume AI move is always complete in one step
+        // Get the AIPlayer pointer using dynamic_cast
+        AIPlayer *aiPlayer = dynamic_cast<AIPlayer *>(currentPlayer);
+        if (aiPlayer != nullptr)
+        {
+          // Invoke AI player's logic to make a move
+          std::cout << "AI player's turn!" << std::endl;
+          aiPlayer->makeMove(board);
+          playerTurnComplete = true; // For simplicity, assume AI move is always complete in one step
+        }
       }
       else
       {

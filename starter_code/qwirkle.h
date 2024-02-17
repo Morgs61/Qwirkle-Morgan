@@ -14,7 +14,7 @@ struct Tile;
 void initializeTileBag(std::vector<Tile> &tileBag);
 void shuffleTileBag(std::vector<Tile> &tileBag);
 void initializePlayerHand(LinkedList *playerHand, LinkedList *bag);
-void startNewGame();
+void startNewGame(bool isAI);
 void loadGame();
 void loadGameHelp();
 void mainMenuHelp();

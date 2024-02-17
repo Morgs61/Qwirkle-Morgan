@@ -8,16 +8,18 @@
 
 #include "LinkedList.h"
 
-class Player {
- private:
+class Player
+{
+private:
   std::string name;
   int score;
   LinkedList *hand;
 
- public:
-  Player() : name(""), score(0), hand(nullptr) {}  // Default constructor
+public:
+  Player() : name(""), score(0), hand(nullptr) {} // Default constructor
 
-  Player(std::string &name, int score, LinkedList *hand) {
+  Player(std::string &name, int score, LinkedList *hand)
+  {
     this->name = name;
     this->score = score;
     this->hand = hand ? new LinkedList(*hand) : nullptr;
@@ -37,12 +39,16 @@ class Player {
 
   LinkedList *getHand() { return hand; }
 
-  LinkedList *setHand(LinkedList *newHand) {
+  LinkedList *setHand(LinkedList *newHand)
+  {
     LinkedList *oldHand = hand;
     hand = newHand;
     return oldHand;
   }
+
+  bool isAIPlayer() { return false; }
+
   // Player* findStartingPlayer(Player* player1, Player* player2);
 };
 
-#endif  // APT2023_A2_PLAYER_H
+#endif // APT2023_A2_PLAYER_H

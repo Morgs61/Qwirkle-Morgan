@@ -6,7 +6,7 @@
 #include <random>
 #include <cctype>
 #include <sstream>
-
+#include "AIPlayer.h"
 #include "Board.h"
 #include "Game.h"
 #include "LinkedList.h"
@@ -36,7 +36,7 @@ Game::~Game()
 
 void Game::launchGame()
 {
-  // get the current status of the game once its launched
+  // get the current status of the game once it's launched
   bool gameComplete = isGameComplete();
 
   // run until the game is complete.
@@ -45,45 +45,44 @@ void Game::launchGame()
     // Show the current Game status at the start of the players turn
     displayGameStatus();
 
-    // Start the current players turn.
+    // Start the current player's turn.
     bool playerTurnComplete = false;
     while (!playerTurnComplete)
     {
-      int menuChoice = getPlayerMenuSelection();
+      // Check if it's the AI player's turn
+      AIPlayer *aiPlayer = nullptr;
 
-      if (menuChoice == 1)
-      { // Place tiles
-        // placeTiles();
-        playerTurnComplete = placeTiles();
-      }
-      else if (menuChoice == 2)
+      if (aiPlayer != nullptr && currentPlayer == aiPlayer)
       {
-        if (currentPlayer->getHand()->getSize() < 6)
-        {
-          std::cout << "You have already placed a tile. You can not now replace a "
-                       "tile"
-                    << std::endl;
-          // return;
-        }
-        else
-        {
-          playerTurnComplete =
-              replaceTile(); // Use the return value to determine if the turn
-                             // is complete
-        }
-      }
-      else if (menuChoice == 3)
-      {
-        saveGame();
-      }
-      else if (menuChoice == 4)
-      {
-        std::cout << "\nQuitting game..." << std::endl;
-        return;
+        // Invoke AI player's logic to make a move
+        aiPlayer->makeMove(board);
+        playerTurnComplete = true; // For simplicity, assume AI move is always complete in one step
       }
       else
       {
-        std::cout << "Invalid choice. Please enter a valid option." << std::endl;
+        int menuChoice = getPlayerMenuSelection();
+
+        if (menuChoice == 1)
+        { // Place tiles
+          playerTurnComplete = placeTiles();
+        }
+        else if (menuChoice == 2)
+        {
+          playerTurnComplete = replaceTile();
+        }
+        else if (menuChoice == 3)
+        {
+          saveGame();
+        }
+        else if (menuChoice == 4)
+        {
+          std::cout << "\nQuitting game..." << std::endl;
+          return;
+        }
+        else
+        {
+          std::cout << "Invalid choice. Please enter a valid option." << std::endl;
+        }
       }
     }
     // Switch players

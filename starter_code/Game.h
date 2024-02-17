@@ -52,6 +52,7 @@ private:
     Tile *createAndValidateTile(
         const std::string &tileStr);                    // New method declaration
     void replaceTileAndUpdateHand(Tile *tileToReplace); // New method declaration
+    std::vector<Player *> players;
 };
 
 #endif // APT2023_A2_GAME_H

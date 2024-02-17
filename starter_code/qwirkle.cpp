@@ -5,86 +5,102 @@
 #include <random>
 #include <unordered_map>
 #include <vector>
-
+#include <cstring>
 #include "Board.h"
 #include "Game.h"
 #include "LinkedList.h"
 #include "LoadGame.h"
 #include "Node.h"
 #include "Player.h"
+#include "AIPlayer.h"
 #include "Tile.h"
 #include "TileCodes.h"
 #include "qwirkle.h"
+#include <string.h>
 
 #define EXIT_SUCCESS 0
 
-int main(void)
+int main(int argc, char *argv[])
 {
-  LinkedList *list = new LinkedList();
-  delete list;
+  // Check if the program is called with command-line arguments
 
-  // std::cout << "TODO: Implement Qwirkle!" << std::endl;
-  // 2.1 Launch
-  std::cout << "\nWelcome to Qwirkle!" << std::endl;
-  std::cout << "-----------------------" << std::endl;
-
-  int choice = 0;
-  bool quit = false;
-  std::string input;
-
-  while (!quit)
+  if (argc > 1 && std::strcmp(argv[1], "--ai") == 0)
   {
-    displayMenu();
-    std::cout << "> ";
-    std::getline(std::cin, input);
+    std::cout << "Starting game with AI player." << std::endl;
 
-    if (input == "help")
-    {
-      mainMenuHelp();
-    }
+    // Start the game with the created players
+    startNewGame(true);
+  }
+  else
+  {
+    std::cout << "Starting game without AI player." << std::endl;
 
-    else if (std::cin.eof())
-    {
-      std::cout << "\n\nGoodbye" << std::endl;
-      exit(EXIT_SUCCESS);
-    }
-    else if (std::cin.fail())
-    {
-      // Clear the error state
-      std::cin.clear();
+    LinkedList *list = new LinkedList();
+    delete list;
 
-      // Ignore the rest of the line
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    // std::cout << "TODO: Implement Qwirkle!" << std::endl;
+    // 2.1 Launch
+    std::cout << "\nWelcome to Qwirkle!" << std::endl;
+    std::cout << "-----------------------" << std::endl;
 
-      std::cout << "Invalid choice. Please enter a valid option." << std::endl;
-    }
-    else
+    int choice = 0;
+    bool quit = false;
+    std::string input;
+
+    while (!quit)
     {
-      choice = std::stoi(input);
-      if (choice == 1)
+      displayMenu();
+      std::cout << "> ";
+      std::getline(std::cin, input);
+
+      if (input == "help")
       {
-        std::cout << "\nStarting a New Game" << std::endl;
-        startNewGame();
+        mainMenuHelp();
       }
-      else if (choice == 2)
+      else if (std::cin.eof())
       {
-        loadGame();
+        std::cout << "\n\nGoodbye" << std::endl;
+        exit(EXIT_SUCCESS);
       }
-      else if (choice == 3)
+      else if (std::cin.fail())
       {
-        displayStudentInformation();
-      }
-      else if (choice == 4)
-      {
-        std::cout << "\nQuitting the game. Goodbye!" << std::endl;
-        quit = true;
+        // Clear the error state
+        std::cin.clear();
+
+        // Ignore the rest of the line
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        std::cout << "Invalid choice. Please enter a valid option." << std::endl;
       }
       else
       {
-        std::cout << "Invalid choice. Please enter a valid option." << std::endl;
+        choice = std::stoi(input);
+        if (choice == 1)
+        {
+          std::cout << "\nStarting a New Game" << std::endl;
+          startNewGame(false);
+        }
+        else if (choice == 2)
+        {
+          loadGame();
+        }
+        else if (choice == 3)
+        {
+          displayStudentInformation();
+        }
+        else if (choice == 4)
+        {
+          std::cout << "\nQuitting the game. Goodbye!" << std::endl;
+          quit = true;
+        }
+        else
+        {
+          std::cout << "Invalid choice. Please enter a valid option." << std::endl;
+        }
       }
     }
   }
+
   return EXIT_SUCCESS;
 }
 
@@ -210,16 +226,24 @@ void loadGame()
   }
 }
 
-void startNewGame()
+void startNewGame(bool isAI)
 {
   // Initialize and shuffle the tile bag
-  // cout << "making the bag" << std::endl;
   LinkedList *bag = new LinkedList(); // Instantiate LinkedList
   bag->initializeAndShuffleBag();     // Populate the bag
 
   // Create player names
   std::string playerName1, playerName2;
-  do
+
+  // Initialize player hands
+  LinkedList *playerHand1 = new LinkedList();
+  LinkedList *playerHand2 = new LinkedList();
+
+  // Create players
+  Player *player1 = nullptr;
+  Player *player2 = nullptr;
+
+  if (isAI)
   {
     std::cout << "\nEnter a name for player 1 (uppercase characters only): \n";
     std::cout << "> ";
@@ -230,30 +254,48 @@ void startNewGame()
       std::cout << "\n\nGoodbye" << std::endl;
       exit(EXIT_SUCCESS);
     }
-  } while (!isValidPlayerName(playerName1));
 
-  do
+    playerName2 = "AI";
+
+    initializePlayerHand(playerHand1, bag);
+    initializePlayerHand(playerHand2, bag);
+
+    player1 = new Player(playerName1, 0, playerHand1);
+    player2 = new AIPlayer(playerName2, 0, playerHand2);
+  }
+  else
   {
-    std::cout << "\nEnter a name for player 2 (uppercase characters only): \n";
-    std::cout << "> ";
-    std::cin >> playerName2;
-    if (std::cin.eof())
+    do
     {
-      std::cout << "\n\nGoodbye" << std::endl;
-      exit(EXIT_SUCCESS);
-    }
-  } while (!isValidPlayerName(playerName2));
+      std::cout << "\nEnter a name for player 1 (uppercase characters only): \n";
+      std::cout << "> ";
+      std::cin >> playerName1;
 
-  // Create player hands
-  LinkedList *playerHand1 = new LinkedList();
-  initializePlayerHand(playerHand1, bag); // Pass the address of tileBag
+      if (std::cin.eof())
+      {
+        std::cout << "\n\nGoodbye" << std::endl;
+        exit(EXIT_SUCCESS);
+      }
+    } while (!isValidPlayerName(playerName1));
 
-  LinkedList *playerHand2 = new LinkedList();
-  initializePlayerHand(playerHand2, bag); // Pass the address of tileBag
+    do
+    {
+      std::cout << "\nEnter a name for player 2 (uppercase characters only): \n";
+      std::cout << "> ";
+      std::cin >> playerName2;
+      if (std::cin.eof())
+      {
+        std::cout << "\n\nGoodbye" << std::endl;
+        exit(EXIT_SUCCESS);
+      }
+    } while (!isValidPlayerName(playerName2));
 
-  // Create players
-  Player *player1 = new Player(playerName1, 0, playerHand1);
-  Player *player2 = new Player(playerName2, 0, playerHand2);
+    initializePlayerHand(playerHand1, bag);
+    initializePlayerHand(playerHand2, bag);
+
+    player1 = new Player(playerName1, 0, playerHand1);
+    player2 = new Player(playerName2, 0, playerHand2);
+  }
 
   std::cin.ignore();
   std::cout << "\nLet's Play!" << std::endl;
@@ -261,17 +303,8 @@ void startNewGame()
   // Initialize the board
   Board *board = new Board(); // Instantiate Board
 
-  // This will find starting player by Qwirkle Rules
-  // Player *startingPlayer = findStartingPlayer(player1, player2);
-  // std::cout << "Starting player is: " << startingPlayer->getName() <<
-  // std::endl;
-
-  // Determine the starting player
-
   // Instantiate Game with the modified parameters
-  Game *game =
-      new Game(player1, player2, bag, board,
-               player1); // Pass player1, player2, bag, and currentPlayer
+  Game *game = new Game(player1, player2, bag, board, player1); // Pass player1, player2, bag, and currentPlayer
 
   // Call the correct method
   game->launchGame();

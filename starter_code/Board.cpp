@@ -517,3 +517,60 @@ int Board::calculateScore(const std::vector<Tile *> &tilesToPlace,
 
   return totalScore;
 }
+
+// Function to calculate the score based on a pattern on the board
+int Board::calculatePatternScore(int row, int col, int deltaX, int deltaY)
+{
+  // Initialize variables to track the pattern and score
+  int patternLength = 0;
+  int score = 0;
+
+  // Retrieve the tile at the specified position
+  Tile *currentTile = getTileAt(row, col);
+
+  // Check if the current position is empty or if there's no tile at the specified position
+  if (currentTile == nullptr)
+  {
+    return 0; // Return 0 if there's no tile at the specified position
+  }
+
+  // Move along the specified direction (deltaX, deltaY) to check the pattern
+  bool continueLoop = true;
+  while (continueLoop)
+  {
+    // Update the row and column coordinates based on the direction
+    row += deltaY;
+    col += deltaX;
+
+    // Retrieve the tile at the new position
+    Tile *nextTile = getTileAt(row, col);
+
+    // Check if the next position is empty or if the tile at the next position is different
+    if (nextTile == nullptr || !tilesMatch(currentTile, nextTile))
+    {
+      continueLoop = false;
+    }
+    else
+    {
+      // Increment the pattern length and update the current tile
+      patternLength++;
+      currentTile = nextTile;
+    }
+  }
+
+  // Calculate the score based on the pattern length
+  // This is a simple scoring mechanism, you can adjust it based on your game rules
+  if (patternLength >= 2)
+  {
+    score = patternLength * 2; // Each tile in the pattern contributes 2 points to the score
+  }
+
+  return score;
+}
+
+// Function to check if two tiles match (you can adjust this according to your Tile class implementation)
+bool Board::tilesMatch(Tile *tile1, Tile *tile2)
+{
+  // Compare the colour and shape of the two tiles
+  return (tile1->getColour() == tile2->getColour()) && (tile1->getShape() == tile2->getShape());
+}

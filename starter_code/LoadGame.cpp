@@ -93,6 +93,8 @@ Game *LoadGame::loadGame(std::string filename)
 void LoadGame::loadPlayer(LinkedList *bag, std::string playerName, int playerScore,
                           std::string playerHandStr, std::vector<Player *> &players)
 {
+  std::cout << "Debug: Player name: " << playerName << ", Player score string: " << playerScore << std::endl;
+
   // Load player's hand
   LinkedList *playerHand = loadHand(playerHandStr, bag);
 
@@ -289,4 +291,142 @@ void LoadGame::loadBagContents(LinkedList *bag, std::string bagContents)
     // Add the tile to the bag
     bag->push_back(tile);
   }
+}
+
+Game *LoadGame::loadMultiplayerGame(std::string filename, int numPlayers)
+{
+  // Open the file
+  std::ifstream file(filename);
+  if (!file.is_open())
+  {
+    std::cout << "Error: File '" << filename << "' not found." << std::endl;
+    return nullptr;
+  }
+
+  // Check if the file is empty
+  if (file.peek() == std::ifstream::traits_type::eof())
+  {
+    std::cout << "Error: File '" << filename << "' is empty." << std::endl;
+    return nullptr;
+  }
+
+  std::cout << "\nLoading Game..." << std::endl;
+
+  // Initialize game components
+  Board *board = new Board();
+  LinkedList *bag = new LinkedList(); // Bag initialized here
+  bag->initializeAndShuffleBag();     // Reset the linked list
+
+  // Read and store each line of the file
+  std::vector<Player *> players;
+  std::vector<std::string> playerNames;
+  std::vector<std::string> playerScores;
+  std::vector<std::string> playerHands;
+
+  for (int i = 0; i < numPlayers; ++i)
+  {
+    std::string playerName, playerScore, playerHand;
+    getline(file, playerName);
+    getline(file, playerScore);
+    getline(file, playerHand);
+    playerNames.push_back(playerName);
+    playerScores.push_back(playerScore);
+    playerHands.push_back(playerHand);
+  }
+
+  // Load players
+  for (int i = 0; i < numPlayers; ++i)
+  {
+    int score;
+    try
+    {
+      score = std::stoi(playerScores[i]);
+    }
+    catch (std::invalid_argument &e)
+    {
+      std::cerr << "Error: Invalid score for player " << playerNames[i] << ": " << playerScores[i] << std::endl;
+      return nullptr;
+    }
+
+    loadPlayer(bag, playerNames[i], score, playerHands[i], players);
+  }
+
+  // Read remaining game state
+  std::string boardSize, boardState, bagContents, currentPlayer;
+  getline(file, boardSize);
+  getline(file, boardState);
+  getline(file, bagContents);
+  getline(file, currentPlayer);
+
+  // Debugging
+  std::cout << "Debug: Current player read from file: " << currentPlayer << std::endl;
+
+  // Load board state
+  board = loadBoardState(boardState);
+  bag = loadTileBag(bagContents);
+
+  // Find current player
+  Player *currentPlayerPtr = nullptr;
+  for (Player *player : players)
+  {
+    if (player->getName() == currentPlayer)
+    {
+      currentPlayerPtr = player;
+      break;
+    }
+  }
+
+  if (currentPlayerPtr == nullptr)
+  {
+    std::cerr << "Error: Current player not found." << std::endl;
+    return nullptr;
+  }
+
+  // Close the file
+  file.close();
+
+  // Create and return game object
+  return new Game(players, bag, board, currentPlayerPtr);
+}
+
+int LoadGame::getNumPlayers(std::string filename)
+{
+  std::ifstream file(filename);
+  if (!file.is_open())
+  {
+    std::cerr << "Error: Unable to open file." << std::endl;
+    return 0;
+  }
+
+  int numPlayers = 0;
+  std::string line;
+  while (std::getline(file, line))
+  {
+    bool allAlphabetic = true;
+    for (char c : line)
+    {
+      if (!std::isalpha(c) && !std::isspace(c))
+      {
+        allAlphabetic = false;
+        // Skip to the next line if a non-alphabetic character is found
+        continue;
+      }
+    }
+    if (!line.empty() && allAlphabetic)
+    {
+      std::cout << "Debug: Incrementing numPlayers to " << (numPlayers + 1) << std::endl;
+      numPlayers++;
+    }
+  }
+
+  // Exclude the last line as it represents the current player
+  if (numPlayers > 0)
+  {
+    numPlayers--;
+    std::cout << "Debug: Excluding last line. numPlayers is now " << numPlayers << std::endl;
+  }
+
+  file.close();
+
+  return numPlayers;
 }

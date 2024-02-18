@@ -136,7 +136,6 @@ void displayStudentInformation()
   std::cout << "Email: s3858530@student.rmit.edu.au" << std::endl;
   std::cout << "--------------------------------------" << std::endl;
 }
-
 void loadGame()
 {
   bool loaded = false;
@@ -165,46 +164,64 @@ void loadGame()
       // Create an instance of LoadGame
       LoadGame loader;
 
-      // Call the loadGame method with the filename
-      Game *loadedGame = loader.loadGame(filename);
+      // Get the number of players from the file
+      int numPlayers = loader.getNumPlayers(filename);
 
-      // Check if the game is successfully loaded
-      if (loadedGame != nullptr)
+      // Check the number of players and choose the appropriate loader
+      if (numPlayers == 2)
       {
-        // File exists and is open
-
-        // Open the file for reading
-        std::ifstream file(filename);
-
-        // Check if the file is open
-        if (file.is_open())
+        // Call the loadGame method with the filename
+        Game *loadedGame = loader.loadGame(filename);
+        if (loadedGame != nullptr)
         {
-          // File is open, proceed with reading
-          std::string line;
-          if (std::getline(file, line))
-          {
-            std::cout << "\nQwirkle game successfully loaded." << std::endl;
-            // Continue reading or processing the file content here
-            loadedGame->launchGame();
-          }
-          else
-          {
-            std::cout << "\nInvalid file format. Unable to load the game." << std::endl;
-          }
-
-          // Close the file when done
-          file.close();
+          std::cout << "\nQwirkle game successfully loaded." << std::endl;
+          std::cout << "Launching the game..." << std::endl;
+          // Continue reading or processing the file content here
+          loadedGame->launchGame();
+          loaded = true;
         }
         else
         {
-          std::cout << "\nError: Unable to open the file." << std::endl;
+          std::cout << "\nInvalid filename. Please try again or enter 'help' for assistance." << std::endl;
         }
-
-        loaded = true; // Set loaded to true to exit the loop
+      }
+      else if (numPlayers == 3)
+      {
+        // Call the loadMultiplayerGame method with the filename
+        Game *loadedGame = loader.loadMultiplayerGame(filename, numPlayers);
+        if (loadedGame != nullptr)
+        {
+          std::cout << "\nQwirkle multiplayer game successfully loaded." << std::endl;
+          std::cout << "Launching the game..." << std::endl;
+          // Continue reading or processing the file content here
+          loadedGame->launchGame();
+          loaded = true;
+        }
+        else
+        {
+          std::cout << "\nInvalid filename. Please try again or enter 'help' for assistance." << std::endl;
+        }
+      }
+      else if (numPlayers == 4)
+      {
+        // Call the loadFourPlayerGame method with the filename
+        Game *loadedGame = loader.loadMultiplayerGame(filename, numPlayers);
+        if (loadedGame != nullptr)
+        {
+          std::cout << "\nQwirkle four-player game successfully loaded." << std::endl;
+          std::cout << "Launching the game..." << std::endl;
+          // Continue reading or processing the file content here
+          loadedGame->launchGame();
+          loaded = true;
+        }
+        else
+        {
+          std::cout << "\nInvalid filename. Please try again or enter 'help' for assistance." << std::endl;
+        }
       }
       else
       {
-        std::cout << "\nInvalid filename. Please try again or enter 'help' for assistance." << std::endl;
+        std::cout << "\nUnsupported number of players in the game file." << std::endl;
       }
     }
   }
@@ -212,68 +229,85 @@ void loadGame()
 
 void startNewGame()
 {
+  // Prompt the user to select the number of players
+  int numPlayers;
+  do
+  {
+    std::cout << "Enter the number of players (2-4): ";
+    std::cin >> numPlayers;
+  } while (numPlayers < 2 || numPlayers > 4);
+
   // Initialize and shuffle the tile bag
-  // cout << "making the bag" << std::endl;
-  LinkedList *bag = new LinkedList(); // Instantiate LinkedList
-  bag->initializeAndShuffleBag();     // Populate the bag
+  LinkedList *bag = new LinkedList();
+  bag->initializeAndShuffleBag();
 
-  // Create player names
-  std::string playerName1, playerName2;
-  do
+  // Create the game object based on the number of players
+  Game *game;
+  if (numPlayers == 2)
   {
-    std::cout << "\nEnter a name for player 1 (uppercase characters only): \n";
-    std::cout << "> ";
-    std::cin >> playerName1;
-
-    if (std::cin.eof())
+    // Create player names for 2 players
+    std::string playerName1, playerName2;
+    do
     {
-      std::cout << "\n\nGoodbye" << std::endl;
-      exit(EXIT_SUCCESS);
-    }
-  } while (!isValidPlayerName(playerName1));
+      std::cout << "\nEnter a name for player 1 (uppercase characters only): ";
+      std::cin >> playerName1;
+    } while (!isValidPlayerName(playerName1));
+    do
+    {
+      std::cout << "\nEnter a name for player 2 (uppercase characters only): ";
+      std::cin >> playerName2;
+    } while (!isValidPlayerName(playerName2));
 
-  do
+    // Create player hands for 2 players
+    LinkedList *playerHand1 = new LinkedList();
+    initializePlayerHand(playerHand1, bag);
+    LinkedList *playerHand2 = new LinkedList();
+    initializePlayerHand(playerHand2, bag);
+
+    // Create players for 2 players
+    Player *player1 = new Player(playerName1, 0, playerHand1);
+    Player *player2 = new Player(playerName2, 0, playerHand2);
+
+    // Initialize the board
+    Board *board = new Board();
+
+    // Set starting player as player1
+    Player *startingPlayer = player1;
+
+    // Instantiate Game for 2 players
+    game = new Game(player1, player2, bag, board, startingPlayer);
+  }
+  else
   {
-    std::cout << "\nEnter a name for player 2 (uppercase characters only): \n";
-    std::cout << "> ";
-    std::cin >> playerName2;
-    if (std::cin.eof())
+    // Create players for 3 or 4 players
+    std::vector<Player *> players;
+    for (int i = 0; i < numPlayers; ++i)
     {
-      std::cout << "\n\nGoodbye" << std::endl;
-      exit(EXIT_SUCCESS);
+      std::string playerName;
+      do
+      {
+        std::cout << "\nEnter a name for player " << i + 1 << " (uppercase characters only): ";
+        std::cin >> playerName;
+      } while (!isValidPlayerName(playerName));
+
+      LinkedList *playerHand = new LinkedList();
+      initializePlayerHand(playerHand, bag);
+      players.push_back(new Player(playerName, 0, playerHand));
     }
-  } while (!isValidPlayerName(playerName2));
 
-  // Create player hands
-  LinkedList *playerHand1 = new LinkedList();
-  initializePlayerHand(playerHand1, bag); // Pass the address of tileBag
+    // Initialize the board
+    Board *board = new Board();
 
-  LinkedList *playerHand2 = new LinkedList();
-  initializePlayerHand(playerHand2, bag); // Pass the address of tileBag
+    // Set starting player as the first player
+    Player *startingPlayer = players[0];
 
-  // Create players
-  Player *player1 = new Player(playerName1, 0, playerHand1);
-  Player *player2 = new Player(playerName2, 0, playerHand2);
+    // Instantiate Game for 3 or 4 players
+    game = new Game(players, bag, board, startingPlayer);
+  }
 
-  std::cin.ignore();
   std::cout << "\nLet's Play!" << std::endl;
 
-  // Initialize the board
-  Board *board = new Board(); // Instantiate Board
-
-  // This will find starting player by Qwirkle Rules
-  // Player *startingPlayer = findStartingPlayer(player1, player2);
-  // std::cout << "Starting player is: " << startingPlayer->getName() <<
-  // std::endl;
-
-  // Determine the starting player
-
-  // Instantiate Game with the modified parameters
-  Game *game =
-      new Game(player1, player2, bag, board,
-               player1); // Pass player1, player2, bag, and currentPlayer
-
-  // Call the correct method
+  // Launch the game
   game->launchGame();
 }
 

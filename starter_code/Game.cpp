@@ -26,6 +26,49 @@ Game::Game(Player *player1, Player *player2, LinkedList *bag, Board *board,
   playerCount = 2;
 }
 
+// Constructor for starting a new game with a vector of players
+Game::Game(std::vector<Player *> &players, LinkedList *bag, Board *board,
+           Player *currentPlayer)
+{
+  if (players.size() == 2)
+  {
+    // Use the original constructor if there are only two players
+    this->player1 = players[0];
+    this->player2 = players[1];
+    this->bag = bag;
+    this->board = board;
+    this->currentPlayer = currentPlayer;
+    playerCount = 2;
+  }
+  else if (players.size() >= 3 && players.size() <= 4)
+  {
+    // Handle cases with 3 or 4 players
+    // Assign players from the vector to the appropriate player variables
+    this->player1 = players[0];
+    this->player2 = players[1];
+    this->player3 = players[2]; // For 3 players
+    if (players.size() == 4)
+    {
+      this->player4 = players[3]; // For 4 players
+    }
+    else
+    {
+      this->player4 = nullptr; // Set player4 to nullptr if there are only 3 players
+    }
+
+    // Initialize other game components
+    this->bag = bag;
+    this->board = board;
+    this->currentPlayer = currentPlayer;
+    playerCount = players.size();
+  }
+  else
+  {
+    // Handle cases with invalid number of players
+    throw std::invalid_argument("Invalid number of players for starting a new game.");
+  }
+}
+
 Game::~Game()
 {
   delete bag;
@@ -87,7 +130,7 @@ void Game::launchGame()
       }
     }
     // Switch players
-    currentPlayer = (currentPlayer == player1) ? player2 : player1;
+    switchPlayer();
 
     // Check if the game is complete
     gameComplete = isGameComplete();
@@ -110,9 +153,60 @@ void Game::displayGameStatus()
             << std::endl;
   std::cout << "Score for " << player2->getName() << ": " << player2->getScore()
             << std::endl;
+
+  if (playerCount >= 3)
+  {
+    std::cout << "Score for " << player3->getName() << ": " << player3->getScore()
+              << std::endl;
+  }
+
+  if (playerCount == 4)
+  {
+    std::cout << "Score for " << player4->getName() << ": " << player4->getScore()
+              << std::endl;
+  }
+
   board->displayBoard();
   std::cout << currentPlayer->getName() << " Your hand is " << std::endl;
   currentPlayer->getHand()->displayHand();
+}
+
+void Game::switchPlayer()
+{
+  if (currentPlayer == player1)
+  {
+    currentPlayer = player2;
+  }
+  else if (currentPlayer == player2)
+  {
+    if (playerCount == 3)
+    {
+      currentPlayer = player3;
+    }
+    else if (playerCount == 4)
+    {
+      currentPlayer = player4;
+    }
+    else
+    {
+      currentPlayer = player1; // In case of unexpected number of players
+    }
+  }
+  else if (currentPlayer == player3)
+  {
+    if (playerCount == 4)
+    {
+      currentPlayer = player4;
+    }
+    else
+    {
+      currentPlayer = player1; // In case of unexpected number of players
+    }
+  }
+  else if (currentPlayer == player4)
+  {
+    currentPlayer = player1;
+  }
 }
 
 int Game::getPlayerMenuSelection()
@@ -223,6 +317,9 @@ bool Game::validateTilePlacement(std::vector<std::string> &words,
 
   std::string color = std::string(1, tile[0]);
   std::string shape = tile.substr(1);
+
+  std::cout << "Color: " << color << ", Shape: " << shape << ", Row: " << row << ", Column: " << column << std::endl; // Debug output
+
   Tile *tileToCheck = new Tile(color[0], stoi(shape));
 
   if (!currentPlayer->getHand()->containsTile(tileToCheck))
@@ -504,7 +601,30 @@ void Game::saveGame()
   // Prepend the "tests/" folder to the filename
   std::string fullFilename = "tests/" + filename;
 
-  SaveGame::saveGameState(fullFilename, player1, player2, board, bag, currentPlayer);
+  if (playerCount == 2)
+  {
+    // If there are only two players, pass them to saveGameState
+    SaveGame::saveGameState(fullFilename, player1, player2, board, bag, currentPlayer);
+  }
+  else if (playerCount >= 3 && playerCount <= 4)
+  {
+    // If there are three or four players, create a vector of players and pass them
+    std::vector<Player *> players;
+    players.push_back(player1);
+    players.push_back(player2);
+    players.push_back(player3); // Add player3
+    if (playerCount == 4)
+    {
+      players.push_back(player4); // Add player4 if it exists
+    }
+    SaveGame::saveGameStateMultiplayer(fullFilename, players, board, bag, currentPlayer);
+  }
+  else
+  {
+    std::cout << "Invalid number of players. Cannot save game." << std::endl;
+    return;
+  }
+
   std::cout << "Game successfully saved" << std::endl;
 }
 

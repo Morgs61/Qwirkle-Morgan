@@ -130,7 +130,7 @@ void Game::launchGame()
       }
     }
     // Switch players
-    currentPlayer = (currentPlayer == player1) ? player2 : player1;
+    switchPlayer();
 
     // Check if the game is complete
     gameComplete = isGameComplete();
@@ -153,9 +153,60 @@ void Game::displayGameStatus()
             << std::endl;
   std::cout << "Score for " << player2->getName() << ": " << player2->getScore()
             << std::endl;
+
+  if (playerCount >= 3)
+  {
+    std::cout << "Score for " << player3->getName() << ": " << player3->getScore()
+              << std::endl;
+  }
+
+  if (playerCount == 4)
+  {
+    std::cout << "Score for " << player4->getName() << ": " << player4->getScore()
+              << std::endl;
+  }
+
   board->displayBoard();
   std::cout << currentPlayer->getName() << " Your hand is " << std::endl;
   currentPlayer->getHand()->displayHand();
+}
+
+void Game::switchPlayer()
+{
+  if (currentPlayer == player1)
+  {
+    currentPlayer = player2;
+  }
+  else if (currentPlayer == player2)
+  {
+    if (playerCount == 3)
+    {
+      currentPlayer = player3;
+    }
+    else if (playerCount == 4)
+    {
+      currentPlayer = player4;
+    }
+    else
+    {
+      currentPlayer = player1; // In case of unexpected number of players
+    }
+  }
+  else if (currentPlayer == player3)
+  {
+    if (playerCount == 4)
+    {
+      currentPlayer = player4;
+    }
+    else
+    {
+      currentPlayer = player1; // In case of unexpected number of players
+    }
+  }
+  else if (currentPlayer == player4)
+  {
+    currentPlayer = player1;
+  }
 }
 
 int Game::getPlayerMenuSelection()

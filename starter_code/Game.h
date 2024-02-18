@@ -33,6 +33,7 @@ public:
     void saveGame();
     bool isGameComplete();
     void declareWinner();
+    void switchPlayer();
     void saveGameHelp();
     std::string toLower(std::string &str);
     void displayHelpMessageGameMenu();

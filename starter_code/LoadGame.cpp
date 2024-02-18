@@ -8,11 +8,10 @@
 #include "Game.h"
 #include "LoadGame.h"
 #include "Tile.h"
+#include <limits>
 
 Game *LoadGame::loadGame(std::string filename)
 {
-#include <fstream>
-
   std::ifstream file(filename);
   if (!file.is_open())
   {
@@ -29,45 +28,66 @@ Game *LoadGame::loadGame(std::string filename)
 
   std::cout << "\nLoading Game..." << std::endl;
 
-  std::string line;
+  // Read the number of players from the file
+  int numPlayers = 0;
+  file >> numPlayers;
+  file.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignore rest of the line
+
+  if (numPlayers < 2 || numPlayers > 4)
+  {
+    std::cout << "Error: Invalid number of players in the file." << std::endl;
+    return nullptr;
+  }
 
   // Initialize game components
   Board *board = new Board();
   LinkedList *bag = new LinkedList(); // Bag initialized here
   bag->initializeAndShuffleBag();     // Reset the linked list
 
-  // Read and store each line of the file
-  std::string plyr1Name, plyr1Score, plyr1Hand, plyr2Name, plyr2Score, plyr2Hand,
-      boardSize, boardState, bagContents, currentPlyr;
-  getline(file, plyr1Name);
-  getline(file, plyr1Score);
-  getline(file, plyr1Hand);
-  getline(file, plyr2Name);
-  getline(file, plyr2Score);
-  getline(file, plyr2Hand);
-  getline(file, boardSize);
-  getline(file, boardState);
-  getline(file, bagContents);
-  getline(file, currentPlyr);
-
-  // Load tile bag contents
-  loadBagContents(bag, bagContents);
-  // bag = loadTileBag(bagContents);
-
   // Initialize vector to store players
   std::vector<Player *> players;
 
-  // Load player 1
-  loadPlayer(bag, plyr1Name, stoi(plyr1Score), plyr1Hand, players);
+  // Load player information from the file
+  for (int i = 0; i < numPlayers; ++i)
+  {
+    std::string playerName, playerScoreStr, playerHandStr;
+    int playerScore;
 
-  // Load player 2
-  loadPlayer(bag, plyr2Name, stoi(plyr2Score), plyr2Hand, players);
+    getline(file, playerName);
+    getline(file, playerScoreStr);
+    getline(file, playerHandStr);
+
+    // Convert player score string to integer
+    try
+    {
+      playerScore = std::stoi(playerScoreStr);
+    }
+    catch (const std::invalid_argument &ia)
+    {
+      std::cerr << "Error: Invalid player score in the file." << std::endl;
+      return nullptr;
+    }
+
+    // Load player's hand
+    LinkedList *playerHand = loadHand(playerHandStr, bag);
+
+    // Create player object and add to vector
+    players.push_back(new Player(playerName, playerScore, playerHand));
+  }
 
   // Load board state
+  std::string boardState;
+  getline(file, boardState);
   board = loadBoardState(boardState);
-  bag = loadTileBag(bagContents);
+
+  // Load tile bag contents
+  std::string bagContents;
+  getline(file, bagContents);
+  loadBagContents(bag, bagContents);
 
   // Load current player
+  std::string currentPlyr;
+  getline(file, currentPlyr);
   Player *currentPlayer = nullptr;
   for (Player *player : players)
   {
@@ -87,7 +107,18 @@ Game *LoadGame::loadGame(std::string filename)
   file.close();
 
   // Create and return game object
-  return new Game(players[0], players[1], bag, board, currentPlayer);
+  if (numPlayers == 2)
+  {
+    return new Game(players[0], players[1], bag, board, currentPlayer);
+  }
+  else if (numPlayers == 3)
+  {
+    return new Game(players[0], players[1], players[2], bag, board, currentPlayer);
+  }
+  else // numPlayers == 4
+  {
+    return new Game(players[0], players[1], players[2], players[3], bag, board, currentPlayer);
+  }
 }
 
 void LoadGame::loadPlayer(LinkedList *bag, std::string playerName, int playerScore,

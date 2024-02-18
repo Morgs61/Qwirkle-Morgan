@@ -212,66 +212,76 @@ void loadGame()
 
 void startNewGame()
 {
+  int numPlayers = 0;
+  bool validInput = false;
+  bool isEnhanced = false;
+
+  // Prompt the user to enter the number of players
+  do
+  {
+    std::cout << "\nEnter the number of players (2-4): ";
+    std::cin >> numPlayers;
+
+    if (std::cin.fail() || numPlayers < 2 || numPlayers > 4)
+    {
+      std::cout << "Invalid input. Please enter a number between 2 and 4." << std::endl;
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+    else
+    {
+      validInput = true;
+    }
+  } while (!validInput);
+
   // Initialize and shuffle the tile bag
-  // cout << "making the bag" << std::endl;
-  LinkedList *bag = new LinkedList(); // Instantiate LinkedList
-  bag->initializeAndShuffleBag();     // Populate the bag
-
-  // Create player names
-  std::string playerName1, playerName2;
-  do
-  {
-    std::cout << "\nEnter a name for player 1 (uppercase characters only): \n";
-    std::cout << "> ";
-    std::cin >> playerName1;
-
-    if (std::cin.eof())
-    {
-      std::cout << "\n\nGoodbye" << std::endl;
-      exit(EXIT_SUCCESS);
-    }
-  } while (!isValidPlayerName(playerName1));
-
-  do
-  {
-    std::cout << "\nEnter a name for player 2 (uppercase characters only): \n";
-    std::cout << "> ";
-    std::cin >> playerName2;
-    if (std::cin.eof())
-    {
-      std::cout << "\n\nGoodbye" << std::endl;
-      exit(EXIT_SUCCESS);
-    }
-  } while (!isValidPlayerName(playerName2));
-
-  // Create player hands
-  LinkedList *playerHand1 = new LinkedList();
-  initializePlayerHand(playerHand1, bag); // Pass the address of tileBag
-
-  LinkedList *playerHand2 = new LinkedList();
-  initializePlayerHand(playerHand2, bag); // Pass the address of tileBag
+  LinkedList *bag = new LinkedList();
+  bag->initializeAndShuffleBag();
 
   // Create players
-  Player *player1 = new Player(playerName1, 0, playerHand1);
-  Player *player2 = new Player(playerName2, 0, playerHand2);
+  std::vector<Player *> players;
+  for (int i = 0; i < numPlayers; ++i)
+  {
+    std::string playerName;
+    do
+    {
+      std::cout << "\nEnter a name for player " << (i + 1) << " (uppercase characters only): ";
+      std::cin >> playerName;
 
-  std::cin.ignore();
+      if (std::cin.eof())
+      {
+        std::cout << "\n\nGoodbye" << std::endl;
+        exit(EXIT_SUCCESS);
+      }
+    } while (!isValidPlayerName(playerName));
+
+    LinkedList *playerHand = new LinkedList();
+    initializePlayerHand(playerHand, bag);
+    players.push_back(new Player(playerName, 0, playerHand));
+  }
+
+  std::cin.ignore(); // Clear the input buffer
   std::cout << "\nLet's Play!" << std::endl;
 
   // Initialize the board
-  Board *board = new Board(); // Instantiate Board
+  Board *board = new Board();
 
-  // This will find starting player by Qwirkle Rules
-  // Player *startingPlayer = findStartingPlayer(player1, player2);
-  // std::cout << "Starting player is: " << startingPlayer->getName() <<
-  // std::endl;
-
-  // Determine the starting player
-
-  // Instantiate Game with the modified parameters
-  Game *game =
-      new Game(player1, player2, bag, board,
-               player1); // Pass player1, player2, bag, and currentPlayer
+  // Instantiate Game with the correct parameters
+  Game *game = nullptr;
+  if (numPlayers == 2)
+  {
+    game = new Game(players[0], players[1], bag, board, players[0], isEnhanced);
+  }
+  else if (numPlayers == 3)
+  {
+    isEnhanced = true;
+    game = new Game(players[0], players[1], players[2], bag, board, players[0], isEnhanced);
+  }
+  else if (numPlayers == 4)
+  {
+    isEnhanced = true;
+    game = new Game(players[0], players[1], players[2], players[3], bag, board, players[0], isEnhanced);
+  }
 
   // Call the correct method
   game->launchGame();

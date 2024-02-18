@@ -15,8 +15,7 @@
 #include "Tile.h"
 #include "qwirkle.h"
 
-Game::Game(Player *player1, Player *player2, LinkedList *bag, Board *board,
-           Player *currentPlayer)
+Game::Game(Player *player1, Player *player2, LinkedList *bag, Board *board, Player *currentPlayer, bool isEnhanced)
 {
   this->player1 = player1;
   this->player2 = player2;
@@ -24,13 +23,49 @@ Game::Game(Player *player1, Player *player2, LinkedList *bag, Board *board,
   this->board = board;
   this->currentPlayer = currentPlayer;
   playerCount = 2;
+  this->isEnhanced = isEnhanced;
+}
+
+Game::Game(Player *player1, Player *player2, Player *player3, LinkedList *bag, Board *board, Player *currentPlayer, bool isEnhanced)
+{
+  this->player1 = player1;
+  this->player2 = player2;
+  this->player3 = player3;
+  this->bag = bag;
+  this->board = board;
+  this->currentPlayer = currentPlayer;
+  playerCount = 3;
+  this->isEnhanced = isEnhanced;
+}
+
+Game::Game(Player *player1, Player *player2, Player *player3, Player *player4, LinkedList *bag, Board *board, Player *currentPlayer, bool isEnhanced)
+{
+  this->player1 = player1;
+  this->player2 = player2;
+  this->player3 = player3;
+  this->player4 = player4;
+  this->bag = bag;
+  this->board = board;
+  this->currentPlayer = currentPlayer;
+  playerCount = 4;
+  this->isEnhanced = isEnhanced;
 }
 
 Game::~Game()
 {
-  delete bag;
   delete player1;
   delete player2;
+
+  if (player3 != nullptr)
+  {
+    delete player3;
+  }
+  if (player4 != nullptr)
+  {
+    delete player4;
+  }
+
+  delete bag;
   delete board;
 }
 

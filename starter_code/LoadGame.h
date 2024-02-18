@@ -12,6 +12,7 @@ class LoadGame
 {
 public:
   Game *loadGame(std::string filename);
+  Game *loadMultiplayerGame(std::string filename);
   LinkedList *loadTileBag(std::string tileBagLine);
   LinkedList *loadHand(std::string handString, LinkedList *bag);
   void loadPlayer(LinkedList *bag, std::string playerName, int playerScore,

@@ -290,3 +290,74 @@ void LoadGame::loadBagContents(LinkedList *bag, std::string bagContents)
     bag->push_back(tile);
   }
 }
+
+Game *LoadGame::loadMultiplayerGame(std::string filename)
+{
+  // Open the file
+  std::ifstream file(filename);
+  if (!file.is_open())
+  {
+    std::cout << "Error: File '" << filename << "' not found." << std::endl;
+    return nullptr;
+  }
+
+  // Check if the file is empty
+  if (file.peek() == std::ifstream::traits_type::eof())
+  {
+    std::cout << "Error: File '" << filename << "' is empty." << std::endl;
+    return nullptr;
+  }
+
+  std::cout << "\nLoading Game..." << std::endl;
+
+  // Initialize game components
+  Board *board = new Board();
+  LinkedList *bag = new LinkedList(); // Bag initialized here
+  bag->initializeAndShuffleBag();     // Reset the linked list
+
+  // Read and store each line of the file
+  std::string playerName, playerScore, playerHand, boardSize, boardState, bagContents, currentPlayer;
+  std::vector<Player *> players;
+
+  while (getline(file, playerName))
+  {
+    // Read player details
+    getline(file, playerScore);
+    getline(file, playerHand);
+    // Load player
+    loadPlayer(bag, playerName, std::stoi(playerScore), playerHand, players);
+  }
+
+  // Read remaining game state
+  getline(file, boardSize);
+  getline(file, boardState);
+  getline(file, bagContents);
+  getline(file, currentPlayer);
+
+  // Load board state
+  board = loadBoardState(boardState);
+  bag = loadTileBag(bagContents);
+
+  // Find current player
+  Player *currentPlayerPtr = nullptr;
+  for (Player *player : players)
+  {
+    if (player->getName() == currentPlayer)
+    {
+      currentPlayerPtr = player;
+      break;
+    }
+  }
+
+  if (currentPlayerPtr == nullptr)
+  {
+    std::cerr << "Error: Current player not found." << std::endl;
+    return nullptr;
+  }
+
+  // Close the file
+  file.close();
+
+  // Create and return game object
+  return new Game(players, bag, board, currentPlayerPtr);
+}

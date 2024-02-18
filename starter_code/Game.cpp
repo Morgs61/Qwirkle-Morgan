@@ -26,6 +26,49 @@ Game::Game(Player *player1, Player *player2, LinkedList *bag, Board *board,
   playerCount = 2;
 }
 
+// Constructor for starting a new game with a vector of players
+Game::Game(std::vector<Player *> &players, LinkedList *bag, Board *board,
+           Player *currentPlayer)
+{
+  if (players.size() == 2)
+  {
+    // Use the original constructor if there are only two players
+    this->player1 = players[0];
+    this->player2 = players[1];
+    this->bag = bag;
+    this->board = board;
+    this->currentPlayer = currentPlayer;
+    playerCount = 2;
+  }
+  else if (players.size() >= 3 && players.size() <= 4)
+  {
+    // Handle cases with 3 or 4 players
+    // Assign players from the vector to the appropriate player variables
+    this->player1 = players[0];
+    this->player2 = players[1];
+    this->player3 = players[2]; // For 3 players
+    if (players.size() == 4)
+    {
+      this->player4 = players[3]; // For 4 players
+    }
+    else
+    {
+      this->player4 = nullptr; // Set player4 to nullptr if there are only 3 players
+    }
+
+    // Initialize other game components
+    this->bag = bag;
+    this->board = board;
+    this->currentPlayer = currentPlayer;
+    playerCount = players.size();
+  }
+  else
+  {
+    // Handle cases with invalid number of players
+    throw std::invalid_argument("Invalid number of players for starting a new game.");
+  }
+}
+
 Game::~Game()
 {
   delete bag;

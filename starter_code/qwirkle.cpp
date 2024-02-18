@@ -212,68 +212,85 @@ void loadGame()
 
 void startNewGame()
 {
+  // Prompt the user to select the number of players
+  int numPlayers;
+  do
+  {
+    std::cout << "Enter the number of players (2-4): ";
+    std::cin >> numPlayers;
+  } while (numPlayers < 2 || numPlayers > 4);
+
   // Initialize and shuffle the tile bag
-  // cout << "making the bag" << std::endl;
-  LinkedList *bag = new LinkedList(); // Instantiate LinkedList
-  bag->initializeAndShuffleBag();     // Populate the bag
+  LinkedList *bag = new LinkedList();
+  bag->initializeAndShuffleBag();
 
-  // Create player names
-  std::string playerName1, playerName2;
-  do
+  // Create the game object based on the number of players
+  Game *game;
+  if (numPlayers == 2)
   {
-    std::cout << "\nEnter a name for player 1 (uppercase characters only): \n";
-    std::cout << "> ";
-    std::cin >> playerName1;
-
-    if (std::cin.eof())
+    // Create player names for 2 players
+    std::string playerName1, playerName2;
+    do
     {
-      std::cout << "\n\nGoodbye" << std::endl;
-      exit(EXIT_SUCCESS);
-    }
-  } while (!isValidPlayerName(playerName1));
+      std::cout << "\nEnter a name for player 1 (uppercase characters only): ";
+      std::cin >> playerName1;
+    } while (!isValidPlayerName(playerName1));
+    do
+    {
+      std::cout << "\nEnter a name for player 2 (uppercase characters only): ";
+      std::cin >> playerName2;
+    } while (!isValidPlayerName(playerName2));
 
-  do
+    // Create player hands for 2 players
+    LinkedList *playerHand1 = new LinkedList();
+    initializePlayerHand(playerHand1, bag);
+    LinkedList *playerHand2 = new LinkedList();
+    initializePlayerHand(playerHand2, bag);
+
+    // Create players for 2 players
+    Player *player1 = new Player(playerName1, 0, playerHand1);
+    Player *player2 = new Player(playerName2, 0, playerHand2);
+
+    // Initialize the board
+    Board *board = new Board();
+
+    // Set starting player as player1
+    Player *startingPlayer = player1;
+
+    // Instantiate Game for 2 players
+    game = new Game(player1, player2, bag, board, startingPlayer);
+  }
+  else
   {
-    std::cout << "\nEnter a name for player 2 (uppercase characters only): \n";
-    std::cout << "> ";
-    std::cin >> playerName2;
-    if (std::cin.eof())
+    // Create players for 3 or 4 players
+    std::vector<Player *> players;
+    for (int i = 0; i < numPlayers; ++i)
     {
-      std::cout << "\n\nGoodbye" << std::endl;
-      exit(EXIT_SUCCESS);
+      std::string playerName;
+      do
+      {
+        std::cout << "\nEnter a name for player " << i + 1 << " (uppercase characters only): ";
+        std::cin >> playerName;
+      } while (!isValidPlayerName(playerName));
+
+      LinkedList *playerHand = new LinkedList();
+      initializePlayerHand(playerHand, bag);
+      players.push_back(new Player(playerName, 0, playerHand));
     }
-  } while (!isValidPlayerName(playerName2));
 
-  // Create player hands
-  LinkedList *playerHand1 = new LinkedList();
-  initializePlayerHand(playerHand1, bag); // Pass the address of tileBag
+    // Initialize the board
+    Board *board = new Board();
 
-  LinkedList *playerHand2 = new LinkedList();
-  initializePlayerHand(playerHand2, bag); // Pass the address of tileBag
+    // Set starting player as the first player
+    Player *startingPlayer = players[0];
 
-  // Create players
-  Player *player1 = new Player(playerName1, 0, playerHand1);
-  Player *player2 = new Player(playerName2, 0, playerHand2);
+    // Instantiate Game for 3 or 4 players
+    game = new Game(players, bag, board, startingPlayer);
+  }
 
-  std::cin.ignore();
   std::cout << "\nLet's Play!" << std::endl;
 
-  // Initialize the board
-  Board *board = new Board(); // Instantiate Board
-
-  // This will find starting player by Qwirkle Rules
-  // Player *startingPlayer = findStartingPlayer(player1, player2);
-  // std::cout << "Starting player is: " << startingPlayer->getName() <<
-  // std::endl;
-
-  // Determine the starting player
-
-  // Instantiate Game with the modified parameters
-  Game *game =
-      new Game(player1, player2, bag, board,
-               player1); // Pass player1, player2, bag, and currentPlayer
-
-  // Call the correct method
+  // Launch the game
   game->launchGame();
 }
 

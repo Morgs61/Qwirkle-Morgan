@@ -12,8 +12,8 @@ public:
                             Player *player2, Board *board, LinkedList *bag,
                             Player *currentPlayer);
 
-  void saveGameStateMultiplayer(std::string filename, std::vector<Player *> &players,
-                                Board *board, LinkedList *bag, Player *currentPlayer);
+  static void saveGameStateMultiplayer(std::string filename, std::vector<Player *> &players,
+                                       Board *board, LinkedList *bag, Player *currentPlayer);
 
 private:
   static void savePlayerDetails(std::ofstream &file, Player *player);

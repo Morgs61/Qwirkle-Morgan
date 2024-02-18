@@ -136,7 +136,6 @@ void displayStudentInformation()
   std::cout << "Email: s3858530@student.rmit.edu.au" << std::endl;
   std::cout << "--------------------------------------" << std::endl;
 }
-
 void loadGame()
 {
   bool loaded = false;
@@ -165,46 +164,64 @@ void loadGame()
       // Create an instance of LoadGame
       LoadGame loader;
 
-      // Call the loadGame method with the filename
-      Game *loadedGame = loader.loadGame(filename);
+      // Get the number of players from the file
+      int numPlayers = loader.getNumPlayers(filename);
 
-      // Check if the game is successfully loaded
-      if (loadedGame != nullptr)
+      // Check the number of players and choose the appropriate loader
+      if (numPlayers == 2)
       {
-        // File exists and is open
-
-        // Open the file for reading
-        std::ifstream file(filename);
-
-        // Check if the file is open
-        if (file.is_open())
+        // Call the loadGame method with the filename
+        Game *loadedGame = loader.loadGame(filename);
+        if (loadedGame != nullptr)
         {
-          // File is open, proceed with reading
-          std::string line;
-          if (std::getline(file, line))
-          {
-            std::cout << "\nQwirkle game successfully loaded." << std::endl;
-            // Continue reading or processing the file content here
-            loadedGame->launchGame();
-          }
-          else
-          {
-            std::cout << "\nInvalid file format. Unable to load the game." << std::endl;
-          }
-
-          // Close the file when done
-          file.close();
+          std::cout << "\nQwirkle game successfully loaded." << std::endl;
+          std::cout << "Launching the game..." << std::endl;
+          // Continue reading or processing the file content here
+          loadedGame->launchGame();
+          loaded = true;
         }
         else
         {
-          std::cout << "\nError: Unable to open the file." << std::endl;
+          std::cout << "\nInvalid filename. Please try again or enter 'help' for assistance." << std::endl;
         }
-
-        loaded = true; // Set loaded to true to exit the loop
+      }
+      else if (numPlayers == 3)
+      {
+        // Call the loadMultiplayerGame method with the filename
+        Game *loadedGame = loader.loadMultiplayerGame(filename, numPlayers);
+        if (loadedGame != nullptr)
+        {
+          std::cout << "\nQwirkle multiplayer game successfully loaded." << std::endl;
+          std::cout << "Launching the game..." << std::endl;
+          // Continue reading or processing the file content here
+          loadedGame->launchGame();
+          loaded = true;
+        }
+        else
+        {
+          std::cout << "\nInvalid filename. Please try again or enter 'help' for assistance." << std::endl;
+        }
+      }
+      else if (numPlayers == 4)
+      {
+        // Call the loadFourPlayerGame method with the filename
+        Game *loadedGame = loader.loadMultiplayerGame(filename, numPlayers);
+        if (loadedGame != nullptr)
+        {
+          std::cout << "\nQwirkle four-player game successfully loaded." << std::endl;
+          std::cout << "Launching the game..." << std::endl;
+          // Continue reading or processing the file content here
+          loadedGame->launchGame();
+          loaded = true;
+        }
+        else
+        {
+          std::cout << "\nInvalid filename. Please try again or enter 'help' for assistance." << std::endl;
+        }
       }
       else
       {
-        std::cout << "\nInvalid filename. Please try again or enter 'help' for assistance." << std::endl;
+        std::cout << "\nUnsupported number of players in the game file." << std::endl;
       }
     }
   }

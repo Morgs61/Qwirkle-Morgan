@@ -317,6 +317,9 @@ bool Game::validateTilePlacement(std::vector<std::string> &words,
 
   std::string color = std::string(1, tile[0]);
   std::string shape = tile.substr(1);
+
+  std::cout << "Color: " << color << ", Shape: " << shape << ", Row: " << row << ", Column: " << column << std::endl; // Debug output
+
   Tile *tileToCheck = new Tile(color[0], stoi(shape));
 
   if (!currentPlayer->getHand()->containsTile(tileToCheck))
@@ -598,7 +601,30 @@ void Game::saveGame()
   // Prepend the "tests/" folder to the filename
   std::string fullFilename = "tests/" + filename;
 
-  SaveGame::saveGameState(fullFilename, player1, player2, board, bag, currentPlayer);
+  if (playerCount == 2)
+  {
+    // If there are only two players, pass them to saveGameState
+    SaveGame::saveGameState(fullFilename, player1, player2, board, bag, currentPlayer);
+  }
+  else if (playerCount >= 3 && playerCount <= 4)
+  {
+    // If there are three or four players, create a vector of players and pass them
+    std::vector<Player *> players;
+    players.push_back(player1);
+    players.push_back(player2);
+    players.push_back(player3); // Add player3
+    if (playerCount == 4)
+    {
+      players.push_back(player4); // Add player4 if it exists
+    }
+    SaveGame::saveGameStateMultiplayer(fullFilename, players, board, bag, currentPlayer);
+  }
+  else
+  {
+    std::cout << "Invalid number of players. Cannot save game." << std::endl;
+    return;
+  }
+
   std::cout << "Game successfully saved" << std::endl;
 }
 

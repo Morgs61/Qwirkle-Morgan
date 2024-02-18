@@ -93,7 +93,6 @@ Game *LoadGame::loadGame(std::string filename)
 void LoadGame::loadPlayer(LinkedList *bag, std::string playerName, int playerScore,
                           std::string playerHandStr, std::vector<Player *> &players)
 {
-  std::cout << "Debug: Player name: " << playerName << ", Player score string: " << playerScore << std::endl;
 
   // Load player's hand
   LinkedList *playerHand = loadHand(playerHandStr, bag);
@@ -358,9 +357,6 @@ Game *LoadGame::loadMultiplayerGame(std::string filename, int numPlayers)
   getline(file, bagContents);
   getline(file, currentPlayer);
 
-  // Debugging
-  std::cout << "Debug: Current player read from file: " << currentPlayer << std::endl;
-
   // Load board state
   board = loadBoardState(boardState);
   bag = loadTileBag(bagContents);
@@ -414,7 +410,7 @@ int LoadGame::getNumPlayers(std::string filename)
     }
     if (!line.empty() && allAlphabetic)
     {
-      std::cout << "Debug: Incrementing numPlayers to " << (numPlayers + 1) << std::endl;
+
       numPlayers++;
     }
   }
@@ -423,7 +419,6 @@ int LoadGame::getNumPlayers(std::string filename)
   if (numPlayers > 0)
   {
     numPlayers--;
-    std::cout << "Debug: Excluding last line. numPlayers is now " << numPlayers << std::endl;
   }
 
   file.close();

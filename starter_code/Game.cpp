@@ -148,26 +148,33 @@ bool Game::isGameComplete()
 void Game::displayGameStatus()
 {
   std::cout << "\n"
-            << currentPlayer->getName() << ", it's your turn" << std::endl;
-  std::cout << "Score for " << player1->getName() << ": " << player1->getScore()
+            << currentPlayer->getName() << std::endl;
+  std::cout << "It's your turn!" << std::endl;
+  std::cout << "Score for " << player1->getName()
             << std::endl;
-  std::cout << "Score for " << player2->getName() << ": " << player2->getScore()
+  std::cout << player1->getScore() << std::endl;
+  std::cout << "Score for " << player2->getName()
             << std::endl;
+  std::cout << player2->getScore() << std::endl;
 
   if (playerCount >= 3)
   {
-    std::cout << "Score for " << player3->getName() << ": " << player3->getScore()
+    std::cout << "Score for " << player3->getName()
               << std::endl;
+    std::cout << player3->getScore() << std::endl;
   }
 
   if (playerCount == 4)
   {
-    std::cout << "Score for " << player4->getName() << ": " << player4->getScore()
+    std::cout << "Score for " << player4->getName()
               << std::endl;
+    std::cout << player4->getScore() << std::endl;
   }
 
   board->displayBoard();
-  std::cout << currentPlayer->getName() << " Your hand is " << std::endl;
+  std::cout << "\n"
+            << currentPlayer->getName() << std::endl;
+  std::cout << "Your hand: ";
   currentPlayer->getHand()->displayHand();
 }
 

@@ -1,0 +1,27 @@
+Welcome to Qwirkle!
+-----------------------
+
+Menu
+-----
+1. New Game
+2. Load Game
+3. Credits (Show student information)
+4. Quit
+Type 'help' for help on using the menu
+> 
+=== Main Menu Help ===
+To navigate the main menu, follow these steps:
+1. Enter the number corresponding to your desired action.
+2. For each option:
+   - New Game: Start a new game.
+   - Load Game: Load a previously saved game.
+   - Credits: Display information about the developers.
+   - Quit: Exit the game.
+
+Menu
+-----
+1. New Game
+2. Load Game
+3. Credits (Show student information)
+4. Quit
+Type 'help' for help on using the menu
